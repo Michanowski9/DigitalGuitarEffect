@@ -1,12 +1,12 @@
-import pyaudio as pyaudio
-
-
-def print_devices():
-    p = pyaudio.PyAudio()
+from src.readInputPyAudio import ReadInput as ReadInputPyAudio
+from src.readInputSoundDevice import ReadInput as ReadInputSoundDevice
 
 
 def main():
-    print("hello world")
+    py_audio = ReadInputPyAudio()
+    sc = ReadInputSoundDevice()
+    print(py_audio.get_devices())
+    print(sc.get_devices())
 
 
 if __name__ == "__main__":

@@ -1,6 +1,9 @@
 file(GLOB_RECURSE SOURCES LIST_DIRECTORIES true *.h *.cpp)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+IF(WIN32)
+    set(CMAKE_GENERATOR "Visual Studio 17 2022 Win64")
+    message("Generator is set to ${CMAKE_GENERATOR}")
+ENDIF()
 
 add_library(${CMAKE_PROJECT_NAME}_lib SHARED ${SOURCES})
 

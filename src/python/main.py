@@ -1,13 +1,30 @@
 import ctypes
 import os
+import sys
 
-if os.name == 'nt':
-    cpplib_path = os.path.join("bin", "Release", "app_lib.dll")
-else:
-    cpplib_path = os.path.join("bin", "libapp_lib.so")
+from PyQt6.QtWidgets import QApplication
 
-cpplib = ctypes.CDLL(cpplib_path)
+from MainWindow import MainWindow
 
-cpplib.main()
+def initLibrary():
+    if os.name == 'nt':
+        cpplib_path = os.path.join("bin", "Release", "app_lib.dll")
+    else:
+        cpplib_path = os.path.join("bin", "libapp_lib.so")
 
+    cpplib = ctypes.CDLL(cpplib_path)
+
+#    cpplib.main()
+
+
+def main():
+    #initLibrary()
+
+    app = QApplication([])#sys.argv)
+    mainWindow = MainWindow()
+    sys.exit(app.exec())
+
+
+if __name__ == "__main__":
+    main()
 

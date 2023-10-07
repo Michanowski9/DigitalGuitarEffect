@@ -88,6 +88,7 @@ class MainWindow(QWidget):
         self.bypass = False
         self.bypass_button.setStyleSheet("background-color: light gray")
         self.bypass_button.setEnabled(False)
+        self.cpplib.BypassSwitch(self.bypass)
 
         self.cpplib.Stop()
 

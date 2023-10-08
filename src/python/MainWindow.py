@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QTabWidget, QWidget, QPush
 
 from CppLibWrapper import CppLib
 from SettingsTab import SettingsTab
+from Effects.OverdriveTab import OverdriveTab
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -43,6 +44,14 @@ class MainWindow(QWidget):
         self.bypass_button = self.MakeButton('ByPass', self.bypass_button_on_click)
         self.bypass_button.setEnabled(False)
 
+        self.add_effect_button = self.MakeButton('Add Efect', self.add_effect_button_on_click)
+        self.remove_effect_button = self.MakeButton('Remove Efect', self.remove_effect_button_on_click)
+        self.remove_effect_button.setEnabled(False)
+        self.move_left_effect_button = self.MakeButton('< Move Left', self.move_left_effect_button_on_click)
+        self.move_left_effect_button.setEnabled(False)
+        self.move_right_effect_button = self.MakeButton('Move Right >', self.move_right_effect_button_on_click)
+        self.move_right_effect_button.setEnabled(False)
+
 
     def SetLayout(self):
         mainLayout = QVBoxLayout()
@@ -52,7 +61,14 @@ class MainWindow(QWidget):
         mainButtons.addWidget(self.stop_button)
         mainButtons.addWidget(self.bypass_button)
 
+        effectButtons = QHBoxLayout()
+        effectButtons.addWidget(self.add_effect_button)
+        effectButtons.addWidget(self.remove_effect_button)
+        effectButtons.addWidget(self.move_left_effect_button)
+        effectButtons.addWidget(self.move_right_effect_button)
+
         mainLayout.addLayout(mainButtons)
+        mainLayout.addLayout(effectButtons)
         mainLayout.addWidget(self.tab)
 
         self.setLayout(mainLayout)
@@ -101,4 +117,21 @@ class MainWindow(QWidget):
             self.bypass_button.setStyleSheet("background-color: light gray")
         self.cpplib.BypassSwitch(self.bypass)
 
+
+    def add_effect_button_on_click(self):
+        effectPtr = self.cpplib.AddEffect("overdrive")
+        indexTab = self.tab.addTab(OverdriveTab(effectPtr, self.cpplib), "Overdrive")
+        self.tab.setCurrentIndex(indexTab)
+
+
+    def remove_effect_button_on_click(self):
+        raise NotImplementedError
+
+
+    def move_left_effect_button_on_click(self):
+        raise NotImplementedError
+
+
+    def move_right_effect_button_on_click(self):
+        raise NotImplementedError
 

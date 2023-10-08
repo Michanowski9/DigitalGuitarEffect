@@ -1,4 +1,5 @@
 #include "cInterface.h"
+#include "IEffect.h"
 
 void InitPA()
 {
@@ -81,4 +82,25 @@ void Stop()
 void BypassSwitch(bool value)
 {
     mainProgram->SetBypass(value);
+}
+
+void* AddEffectOverdrive()
+{
+    return mainProgram->AddEffect(new Overdrive());
+}
+
+void SetEffectOn(void* ptr, bool value)
+{
+    static_cast<IEffect*>(ptr)->SetOn(value);
+}
+
+void CalculateExampleData(void* ptr, int size, float* data)
+{
+    for(auto i = 0; i < size; i++)
+    {
+        StereoSample input{data[i], 0};
+        StereoSample output{0, 0};
+        static_cast<IEffect*>(ptr)->Calculate(output,input);
+        data[i] = output.left;
+    }
 }

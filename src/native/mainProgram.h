@@ -26,6 +26,7 @@ public:
     StereoSample AudioEffectHandler(const StereoSample &input) override;
     void SetBypass(bool value);
 
+    void* AddEffect(IEffect* effect);
 private:
     bool IsBypassOn();
 

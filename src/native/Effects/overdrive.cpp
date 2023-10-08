@@ -2,7 +2,14 @@
 
 void Overdrive::Calculate(StereoSample &output, const StereoSample &input)
 {
-    HardClipping(output, input);
+    if(isOn)
+    {
+        HardClipping(output, input);
+    }
+    else
+    {
+        output = {input.left, input.right};
+    }
 }
 
 void Overdrive::HardClipping(StereoSample &output, const StereoSample &input)
@@ -26,6 +33,11 @@ void Overdrive::HardClipping(StereoSample &output, const StereoSample &input)
     {
         output.right = minValue;
     }
+}
+
+void Overdrive::SetOn(const bool value)
+{
+    isOn = value;
 }
 
 void Overdrive::Fuzz(StereoSample &output, const StereoSample &input)

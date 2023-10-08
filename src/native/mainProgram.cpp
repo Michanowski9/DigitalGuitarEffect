@@ -1,8 +1,6 @@
 #include "mainProgram.h"
-#include "Effects/overdrive.h"
 
 MainProgram::MainProgram(){
-    loadedEffects.push_back(new Overdrive());
 }
 
 int MainProgram::GetDevicesNumber()
@@ -52,4 +50,10 @@ StereoSample MainProgram::AudioEffectHandler(const StereoSample &input){
 void MainProgram::SetBypass(bool value)
 {
     bypass = value;
+}
+
+void* MainProgram::AddEffect(IEffect* effect)
+{
+    loadedEffects.push_back(effect);
+    return effect;
 }

@@ -12,11 +12,12 @@ public:
     ~Overdrive() = default;
 
     void Calculate(StereoSample &output, const StereoSample &input) override;
+    void SetOn(const bool value) override;
 private:
     void HardClipping(StereoSample &output, const StereoSample &input);
     void Fuzz(StereoSample &output, const StereoSample &input);
 
-    bool isOn = true;
+    bool isOn = false;
     float multiplier = 5;
     float minValue = -1.0f;
     float maxValue = 1.0f;

@@ -1,6 +1,6 @@
 import ctypes
 import os
-#import sys
+import numpy as np
 
 class CppLib:
     def __init__(self):
@@ -87,3 +87,20 @@ class CppLib:
         self.cpplib.BypassSwitch.argtypes = [ctypes.c_bool]
         self.cpplib.BypassSwitch(value)
 
+    def AddEffect(self, effect):
+        if effect == "overdrive":
+            self.cpplib.AddEffectOverdrive.restype = ctypes.c_void_p
+            return self.cpplib.AddEffectOverdrive()
+
+    def SetEffectOn(self, effectPtr, value):
+        self.cpplib.SetEffectOn.argtypes = [ctypes.c_void_p, ctypes.c_bool]
+        self.cpplib.SetEffectOn(effectPtr, value)
+
+    def CalculateExampleData(self, effectPtr, data):
+        self.cpplib.CalculateExampleData.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.POINTER(ctypes.c_float)]
+        dataArray = (ctypes.c_float * len(data))(*data)
+
+        self.cpplib.CalculateExampleData(effectPtr, len(data), dataArray)
+
+        for i in range(len(data)):
+            data[i] = dataArray[i]

@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "mainProgram.h"
+#include "Effects/overdrive.h"
 
 std::unique_ptr<MainProgram> mainProgram;
 
@@ -54,6 +55,18 @@ extern "C"
 
     __declspec(dllexport)
         void BypassSwitch(bool value);
+
+    __declspec(dllexport)
+        void* AddEffectOverdrive();
+
+    __declspec(dllexport)
+        void SetEffectOn(void* ptr, bool value);
+
+    __declspec(dllexport)
+        void CalculateExampleData(void* ptr, int size, float* data);
+
+
+
 }
 
 #endif

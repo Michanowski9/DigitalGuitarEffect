@@ -6,6 +6,8 @@
 
 #include "mainProgram.h"
 #include "Effects/overdrive.h"
+#include "IEffect.h"
+#include <memory>
 
 std::unique_ptr<MainProgram> mainProgram;
 
@@ -65,8 +67,20 @@ extern "C"
     __declspec(dllexport)
         void CalculateExampleData(void* ptr, int size, float* data);
 
+    __declspec(dllexport)
+        void RemoveEffect(void* ptr);
 
+    __declspec(dllexport)
+        void Overdrive_SetGain(void* ptr, float data);
 
+    __declspec(dllexport)
+        void Overdrive_SetMinMaxValue(void* ptr, float minValue, float maxValue);
+
+    __declspec(dllexport)
+        void Overdrive_SetSoftCutValue(void* ptr, float value);
+
+    __declspec(dllexport)
+        void Overdrive_SetAlgorithm(void* ptr, int algorithm);
 }
 
 #endif

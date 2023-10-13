@@ -25,6 +25,8 @@ class MainWindow(QWidget):
         self.SetButtons()
         self.SetLayout()
 
+        self.tab.currentChanged.connect(self.tab_current_changed)
+
         self.show()
 
 
@@ -39,18 +41,13 @@ class MainWindow(QWidget):
 
     def SetButtons(self):
         self.start_button = self.MakeButton('Start', self.start_button_on_click)
-        self.stop_button = self.MakeButton('Stop', self.stop_button_on_click)
-        self.stop_button.setEnabled(False)
-        self.bypass_button = self.MakeButton('ByPass', self.bypass_button_on_click)
-        self.bypass_button.setEnabled(False)
+        self.stop_button = self.MakeButton('Stop', self.stop_button_on_click, enabled=False)
+        self.bypass_button = self.MakeButton('ByPass', self.bypass_button_on_click, enabled=False)
 
         self.add_effect_button = self.MakeButton('Add Efect', self.add_effect_button_on_click)
-        self.remove_effect_button = self.MakeButton('Remove Efect', self.remove_effect_button_on_click)
-        self.remove_effect_button.setEnabled(False)
-        self.move_left_effect_button = self.MakeButton('< Move Left', self.move_left_effect_button_on_click)
-        self.move_left_effect_button.setEnabled(False)
-        self.move_right_effect_button = self.MakeButton('Move Right >', self.move_right_effect_button_on_click)
-        self.move_right_effect_button.setEnabled(False)
+        self.remove_effect_button = self.MakeButton('Remove Efect', self.remove_effect_button_on_click, enabled=False)
+        self.move_left_effect_button = self.MakeButton('< Move Left', self.move_left_effect_button_on_click, enabled=False)
+        self.move_right_effect_button = self.MakeButton('Move Right >', self.move_right_effect_button_on_click, enabled=False)
 
 
     def SetLayout(self):
@@ -74,11 +71,18 @@ class MainWindow(QWidget):
         self.setLayout(mainLayout)
 
 
-    def MakeButton(self, text, func):
+    def MakeButton(self, text, func, enabled=True):
         result = QPushButton(text, self)
         result.clicked.connect(func)
+        result.setEnabled(enabled)
         return result
 
+
+    def tab_current_changed(self, i):
+        if i == 0:
+            self.remove_effect_button.setEnabled(False)
+        else:
+            self.remove_effect_button.setEnabled(True)
 
 #######################################################
 ###                 buttons handlers                ###
@@ -125,7 +129,9 @@ class MainWindow(QWidget):
 
 
     def remove_effect_button_on_click(self):
-        raise NotImplementedError
+        currentTab = self.tab.currentWidget()
+        currentTab.RemoveEffect()
+        self.tab.removeTab(self.tab.currentIndex())
 
 
     def move_left_effect_button_on_click(self):

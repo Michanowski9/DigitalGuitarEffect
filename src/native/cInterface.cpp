@@ -1,5 +1,5 @@
 #include "cInterface.h"
-#include "IEffect.h"
+#include "Effects/overdrive.h"
 
 void InitPA()
 {
@@ -86,7 +86,7 @@ void BypassSwitch(bool value)
 
 void* AddEffectOverdrive()
 {
-    return mainProgram->AddEffect(new Overdrive());
+    return mainProgram->AddEffect(std::make_shared<Overdrive>());
 }
 
 void SetEffectOn(void* ptr, bool value)
@@ -103,4 +103,30 @@ void CalculateExampleData(void* ptr, int size, float* data)
         static_cast<IEffect*>(ptr)->Calculate(output,input);
         data[i] = output.left;
     }
+}
+
+void RemoveEffect(void* ptr)
+{
+    mainProgram->RemoveEffect(ptr);
+}
+
+void Overdrive_SetGain(void* ptr, float value)
+{
+    static_cast<Overdrive*>(ptr)->SetGain(value);
+}
+
+void Overdrive_SetMinMaxValue(void* ptr, float minValue, float maxValue)
+{
+    static_cast<Overdrive*>(ptr)->SetMinValue(minValue);
+    static_cast<Overdrive*>(ptr)->SetMaxValue(maxValue);
+}
+
+void Overdrive_SetSoftCutValue(void* ptr, float value)
+{
+    static_cast<Overdrive*>(ptr)->SetSoftCutValue(value);
+}
+
+void Overdrive_SetAlgorithm(void* ptr, int algorithm)
+{
+    static_cast<Overdrive*>(ptr)->SetAlgorithm((Overdrive::Algorithm)algorithm);
 }

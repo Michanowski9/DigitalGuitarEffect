@@ -5,6 +5,7 @@
 #include "IAudioCallbackWrapper.h"
 #include "IEffect.h"
 
+#include <memory>
 #include <vector>
 
 class MainProgram : public IAudioCallbackWrapper
@@ -26,11 +27,12 @@ public:
     StereoSample AudioEffectHandler(const StereoSample &input) override;
     void SetBypass(bool value);
 
-    void* AddEffect(IEffect* effect);
+    void* AddEffect(std::shared_ptr<IEffect> effect);
+    void RemoveEffect(void* effectPtr);
 private:
     bool IsBypassOn();
 
     PortaudioWrapper paWrapper;
     bool bypass = false;
-    std::vector<IEffect*> loadedEffects;
+    std::vector<std::shared_ptr<IEffect>> loadedEffects;
 };

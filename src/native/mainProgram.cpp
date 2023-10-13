@@ -34,15 +34,16 @@ bool MainProgram::IsBypassOn()
 }
 
 StereoSample MainProgram::AudioEffectHandler(const StereoSample &input){
-
-    StereoSample output{input.left, input.right};
+    auto output = input;
 
     if(IsBypassOn()){
         return output;
     }
 
+    StereoSample temp_input{};
     for(auto effect : loadedEffects){
-        effect->Calculate(output, input);
+        temp_input = output;
+        effect->Calculate(output, temp_input);
     }
     return output;
 }
@@ -52,8 +53,20 @@ void MainProgram::SetBypass(bool value)
     bypass = value;
 }
 
-void* MainProgram::AddEffect(IEffect* effect)
+void* MainProgram::AddEffect(std::shared_ptr<IEffect> effect)
 {
     loadedEffects.push_back(effect);
-    return effect;
+    return effect.get();
+}
+
+void MainProgram::RemoveEffect(void* effectPtr)
+{
+    for(auto i = 0; i < loadedEffects.size(); i++)
+    {
+        if(loadedEffects[i].get() == effectPtr)
+        {
+            loadedEffects.erase(loadedEffects.begin() + i);
+            return;
+        }
+    }
 }

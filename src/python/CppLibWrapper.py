@@ -104,3 +104,37 @@ class CppLib:
 
         for i in range(len(data)):
             data[i] = dataArray[i]
+
+
+    def RemoveEffect(self, ptr):
+        self.cpplib.RemoveEffect.argtypes = [ctypes.c_void_p]
+        self.cpplib.RemoveEffect.restype = None
+
+        self.cpplib.RemoveEffect(ptr)
+
+
+    def Overdrive_SetGain(self, ptr, value):
+        self.cpplib.Overdrive_SetGain.argtypes = [ctypes.c_void_p, ctypes.c_float]
+        self.cpplib.Overdrive_SetGain.restype = None
+
+        self.cpplib.Overdrive_SetGain(ptr, value)
+
+
+    def Overdrive_SetMinMaxValue(self, ptr, minValue, maxValue):
+        self.cpplib.Overdrive_SetMinMaxValue.argtypes = [ctypes.c_void_p, ctypes.c_float, ctypes.c_float]
+        self.cpplib.Overdrive_SetMinMaxValue.restype = None
+
+        self.cpplib.Overdrive_SetMinMaxValue(ptr, minValue, maxValue)
+
+
+    def Overdrive_SetSoftCutValue(self, ptr, value):
+        self.cpplib.Overdrive_SetSoftCutValue.argtypes = [ctypes.c_void_p, ctypes.c_float]
+        self.cpplib.Overdrive_SetSoftCutValue.restype = None
+
+        self.cpplib.Overdrive_SetSoftCutValue(ptr, value)
+
+    def Overdrive_SetAlgorithm(self, ptr, value):
+        self.cpplib.Overdrive_SetAlgorithm.argtypes = [ctypes.c_void_p, ctypes.c_int]
+        self.cpplib.Overdrive_SetAlgorithm.restype = None
+
+        self.cpplib.Overdrive_SetAlgorithm(ptr, value)

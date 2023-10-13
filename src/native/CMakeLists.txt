@@ -8,3 +8,5 @@ ENDIF()
 add_library(${CMAKE_PROJECT_NAME}_lib SHARED ${SOURCES})
 
 target_link_libraries(${CMAKE_PROJECT_NAME}_lib PUBLIC ${CMAKE_SOURCE_DIR}/lib/portaudio/portaudio.lib)
+
+add_library(${CMAKE_PROJECT_NAME}_lib_static STATIC ${SOURCES})

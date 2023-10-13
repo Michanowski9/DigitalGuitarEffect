@@ -2,9 +2,14 @@ cmake_minimum_required(VERSION 3.15)
 
 project(app)
 
+set(CMAKE_CXX_STANDARD 20)
+#set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#set(CMAKE_BUILD_TYPE release)
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 include_directories("${CMAKE_SOURCE_DIR}/lib/portaudio/include")
 
 add_subdirectory(src)
-#add_subdirectory(test)
+add_subdirectory(test)

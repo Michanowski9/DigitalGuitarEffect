@@ -28,6 +28,6 @@ public:
     }
 
     std::string GetName() override {
-        return "Hyperbolic Tangent (correct: min & max values)";
+        return "Hyperbolic Tangent";
     };
 };

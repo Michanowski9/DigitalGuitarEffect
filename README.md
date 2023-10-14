@@ -1,10 +1,10 @@
 # DigitalGuitarEffect
 
-##Compilation and run:
+## Compilation and run:
 At the moment, the project only works on Windows<br>
 Tests are disabled in this version
 
-###Windows:
+### Windows:
 (in root directory)
 Compilation & run:
 ```
@@ -16,7 +16,7 @@ Only Run:
 py src/python/main.py
 ```
 
-##Requirements:
+## Requirements:
 - cmake
 - python 3.11+
 *packages:*
@@ -25,7 +25,7 @@ py src/python/main.py
 - Visual Studio 17 2022
 - Compiled portaudio library
 
-###Portaudio Compilation:
+### Portaudio Compilation:
 - clone portaudio repository: https://github.com/PortAudio/portaudio.git
 ```
 git clone https://github.com/PortAudio/portaudio.git

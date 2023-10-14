@@ -11,75 +11,90 @@
 
 std::unique_ptr<MainProgram> mainProgram;
 
+#if defined (WIN32)
+    #define DLL_EXPORT __declspec(dllexport)
+#else
+    #define DLL_EXPORT
+#endif
+
 extern "C"
 {
-    __declspec(dllexport)
+    DLL_EXPORT
         void InitPA();
 
-    __declspec(dllexport)
+    DLL_EXPORT
         void FreePA();
 
-    __declspec(dllexport)
+    DLL_EXPORT
         int GetDeviceNumber();
 
-    __declspec(dllexport)
+    DLL_EXPORT
         const char* GetDeviceName(int device);
 
-    __declspec(dllexport)
+    DLL_EXPORT
         int GetInputChannelsCount(int device);
 
-    __declspec(dllexport)
+    DLL_EXPORT
         int GetOutputChannelsCount(int device);
 
-    __declspec(dllexport)
+    DLL_EXPORT
         double GetInputLowLatency(int inputDevice);
 
-    __declspec(dllexport)
+    DLL_EXPORT
         double GetOutputLowLatency(int outputDevice);
 
-    __declspec(dllexport)
+    DLL_EXPORT
         double GetInputHighLatency(int inputDevice);
 
-    __declspec(dllexport)
+    DLL_EXPORT
         double GetOutputHighLatency(int outputDevice);
 
-    __declspec(dllexport)
+    DLL_EXPORT
         int* GetSampleRates(int inputDevice, int outputDevice);
 
-    __declspec(dllexport)
+    DLL_EXPORT
         void FreeArray(int* ptr);
 
-    __declspec(dllexport)
+    DLL_EXPORT
         void Start(int inputDevice, int outputDevice, int sampleRate);
 
-    __declspec(dllexport)
+    DLL_EXPORT
         void Stop();
 
-    __declspec(dllexport)
+    DLL_EXPORT
         void BypassSwitch(bool value);
 
-    __declspec(dllexport)
+    DLL_EXPORT
         void* AddEffectOverdrive();
 
-    __declspec(dllexport)
+    DLL_EXPORT
         void SetEffectOn(void* ptr, bool value);
 
-    __declspec(dllexport)
+    DLL_EXPORT
         void CalculateExampleData(void* ptr, int size, float* data);
 
-    __declspec(dllexport)
+    DLL_EXPORT
         void RemoveEffect(void* ptr);
 
-    __declspec(dllexport)
+
+
+    DLL_EXPORT
+        int Overdrive_GetAlgorithmsNo(void* ptr);
+
+    std::shared_ptr<std::string> result;
+    DLL_EXPORT
+        const char* Overdrive_GetAlgorithmName(void* ptr, int id);
+
+    DLL_EXPORT
         void Overdrive_SetGain(void* ptr, float data);
 
-    __declspec(dllexport)
+    DLL_EXPORT
         void Overdrive_SetMinMaxValue(void* ptr, float minValue, float maxValue);
 
-    __declspec(dllexport)
+    DLL_EXPORT
         void Overdrive_SetSoftCutValue(void* ptr, float value);
 
-    __declspec(dllexport)
+    DLL_EXPORT
         void Overdrive_SetAlgorithm(void* ptr, int algorithm);
 }
 

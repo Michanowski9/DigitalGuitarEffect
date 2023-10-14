@@ -1,28 +1,21 @@
 #include "overdrive.h"
 
+Overdrive::Overdrive()
+{
+    algorithms.push_back(std::make_shared<HardClipping>());
+    algorithms.push_back(std::make_shared<HyperbolicTangent>());
+};
+
+void Overdrive::SetOn(const bool value)
+{
+    this->isOn = value;
+}
+
 void Overdrive::Calculate(StereoSample &output, const StereoSample &input)
 {
     if(isOn)
     {
-        //TODO: remove this switch and use i.e. array, vector. Not use enum
-        switch(algorithm)
-        {
-            case Algorithm::HardClipping:
-                HardClipping(output, input);
-                break;
-            case Algorithm::SoftClipping:
-                SoftClipping(output, input);
-                break;
-            case Algorithm::Fuzz:
-                Fuzz(output, input);
-                break;
-            case Algorithm::HyperbolicTangent:
-                HyperbolicTangent(output, input);
-                break;
-            default:
-                output = {input.left, input.right};
-                break;
-        }
+        (*this->algorithms[this->currentAlgorithm])(output, input);
     }
     else
     {
@@ -30,114 +23,40 @@ void Overdrive::Calculate(StereoSample &output, const StereoSample &input)
     }
 }
 
-// TODO: algorithms should be in another classes
-void Overdrive::HardClipping(StereoSample &output, const StereoSample &input)
+void Overdrive::SetAlgorithm(const int value)
 {
-    output.left = input.left * gain;
-    if(output.left > maxValue)
-    {
-        output.left = maxValue;
-    }
-    else if(output.left < minValue)
-    {
-        output.left = minValue;
-    }
-
-    output.right = input.right * gain;
-    if(output.right > maxValue)
-    {
-        output.right = maxValue;
-    }
-    else if(output.right < minValue)
-    {
-        output.right = minValue;
-    }
+    this->currentAlgorithm = value;
 }
 
-// TODO: correct algorithm
-void Overdrive::SoftClipping(StereoSample &output, const StereoSample &input)
+int Overdrive::GetAlgorithmsNo()
 {
-    output.left = input.left * gain;
-    if(output.left > maxValue)
-    {
-        output.left = maxValue + (output.left - maxValue) * softCut;
-    }
-    else if(output.left < minValue)
-    {
-        output.left = minValue + (output.left + maxValue) * softCut;
-    }
-
-    output.right = input.right * gain;
-    if(output.right > maxValue)
-    {
-        output.right = maxValue + (output.right - maxValue) * softCut;
-    }
-    else if(output.right < minValue)
-    {
-        output.right = minValue + (output.right + maxValue) * softCut;
-    }
+    return this->algorithms.size();
 }
 
-// TODO: correct algorithm
-void Overdrive::Fuzz(StereoSample &output, const StereoSample &input)
+std::string Overdrive::GetAlgorithmName(int id)
 {
-    auto fuzz = [](const float &in){
-        auto temp_fuzz = [](const float &in){
-            if(in < 0.0){
-                auto temp = in + 1.0f;
-                return temp * temp * temp - 1.0f;
-            }
-            else{
-                auto temp = in - 1.0f;
-                return temp * temp * temp + 1.0f;
-            }
-        };
-//        return temp_fuzz(temp_fuzz(temp_fuzz(temp_fuzz(in))));
-        return temp_fuzz(in);
-    };
-
-    output.left = fuzz(input.left);
-    output.right = fuzz(input.right);
-}
-
-void Overdrive::HyperbolicTangent(StereoSample &output, const StereoSample &input)
-{
-    if (gain == 0)
-    {
-        output = { .left=0.0f, .right=0.0f };
-        return;
-    }
-    output.left = std::tanh(gain * (input.left >= 0 ? maxValue : -minValue) * input.left) / std::tanh(gain);
-    output.right = std::tanh(gain * (input.right >= 0 ? maxValue : -minValue) * input.right) / std::tanh(gain);
-}
-
-void Overdrive::SetOn(const bool value)
-{
-    this->isOn = value;
+    return this->algorithms[id]->GetName();
 }
 
 void Overdrive::SetGain(const float value)
 {
-    this->gain = value;
+    for(auto alg : algorithms)
+    {
+        if(auto gainAlg = dynamic_cast<IGain*>(alg.get()))
+        {
+            gainAlg->SetGain(value);
+        }
+    }
 }
 
-// TODO: this should be two functions
-void Overdrive::SetMinValue(const float value)
+void Overdrive::SetMinMaxValue(const float minValue, const float maxValue)
 {
-    this->minValue = value;
-}
-
-void Overdrive::SetMaxValue(const float value)
-{
-    this->maxValue = value;
-}
-
-void Overdrive::SetSoftCutValue(const float value)
-{
-    this->softCut = value;
-}
-
-void Overdrive::SetAlgorithm(const Algorithm algorithm)
-{
-    this->algorithm = algorithm;
+    for(auto alg : algorithms)
+    {
+        if(auto gainAlg = dynamic_cast<IMinMaxValue*>(alg.get()))
+        {
+            gainAlg->SetMinValue(minValue);
+            gainAlg->SetMaxValue(maxValue);
+        }
+    }
 }

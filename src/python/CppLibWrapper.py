@@ -112,6 +112,19 @@ class CppLib:
 
         self.cpplib.RemoveEffect(ptr)
 
+    def Overdrive_GetAlgorithmsNo(self, ptr):
+        self.cpplib.Overdrive_GetAlgorithmsNo.argtypes = [ctypes.c_void_p]
+        self.cpplib.Overdrive_GetAlgorithmsNo.restype = ctypes.c_int
+
+        return self.cpplib.Overdrive_GetAlgorithmsNo(ptr)
+
+    def Overdrive_GetAlgorithmName(self, ptr, id):
+        self.cpplib.Overdrive_GetAlgorithmName.argtypes = [ctypes.c_void_p, ctypes.c_int]
+        self.cpplib.Overdrive_GetAlgorithmName.restype = ctypes.POINTER(ctypes.c_char_p)
+
+        result_ptr = self.cpplib.Overdrive_GetAlgorithmName(ptr, id)
+        result = ctypes.c_char_p.from_buffer(result_ptr).value.decode('utf-8')
+        return result
 
     def Overdrive_SetGain(self, ptr, value):
         self.cpplib.Overdrive_SetGain.argtypes = [ctypes.c_void_p, ctypes.c_float]

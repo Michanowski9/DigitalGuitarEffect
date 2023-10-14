@@ -1,44 +1,37 @@
 #pragma once
 
-#include <cmath>
+#include <memory>
+#include <vector>
+
 #include "../IEffect.h"
+#include "OverdriveAlgorithms/IOverdriveAlgorithm.h"
+#include "OverdriveAlgorithms/HardClipping.h"
+#include "OverdriveAlgorithms/HyperbolicTangent.h"
 
 class Overdrive : public IEffect {
 public:
-    enum class Algorithm {
-        HardClipping,
-        SoftClipping,
-        Fuzz,
-        SavShape,
-        HyperbolicTangent
-    };
-    Overdrive() = default;
+    Overdrive();
     Overdrive(Overdrive &&) = default;
     Overdrive(const Overdrive &) = default;
     Overdrive &operator=(Overdrive &&) = default;
     Overdrive &operator=(const Overdrive &) = default;
     ~Overdrive() = default;
 
-    void Calculate(StereoSample &output, const StereoSample &input) override;
     void SetOn(const bool value) override;
+    void Calculate(StereoSample &output, const StereoSample &input) override;
 
+    void SetAlgorithm(const int value);
+    int GetAlgorithmsNo();
+    std::string GetAlgorithmName(int id);
+
+    // Sets properties in algorithms
+    void SetMinMaxValue(const float minValue, const float maxValue);
     void SetGain(const float value);
-    void SetMinValue(const float value);
-    void SetMaxValue(const float value);
-    void SetSoftCutValue(const float value);
-    void SetAlgorithm(const Algorithm algorithm);
 private:
-    void HardClipping(StereoSample &output, const StereoSample &input);
-    void SoftClipping(StereoSample &output, const StereoSample &input);
-    void HyperbolicTangent(StereoSample &output, const StereoSample &input);
-    void Fuzz(StereoSample &output, const StereoSample &input);
+    std::vector<std::shared_ptr<IOverdriveAlgorithm>> algorithms;
+    int currentAlgorithm = 0;
 
-    Algorithm algorithm = Algorithm::SoftClipping;
     bool isOn = false;
-    float gain = 1;
-    float softCut = 0.0f;
-    float minValue = -1.0f;
-    float maxValue = 1.0f;
 };
 
 

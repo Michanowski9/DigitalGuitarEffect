@@ -110,6 +110,17 @@ void RemoveEffect(void* ptr)
     mainProgram->RemoveEffect(ptr);
 }
 
+int Overdrive_GetAlgorithmsNo(void* ptr)
+{
+    return static_cast<Overdrive*>(ptr)->GetAlgorithmsNo();
+}
+
+const char* Overdrive_GetAlgorithmName(void* ptr, int id)
+{
+    result = std::make_shared<std::string>(static_cast<Overdrive*>(ptr)->GetAlgorithmName(id));
+    return result->c_str();
+}
+
 void Overdrive_SetGain(void* ptr, float value)
 {
     static_cast<Overdrive*>(ptr)->SetGain(value);
@@ -117,16 +128,15 @@ void Overdrive_SetGain(void* ptr, float value)
 
 void Overdrive_SetMinMaxValue(void* ptr, float minValue, float maxValue)
 {
-    static_cast<Overdrive*>(ptr)->SetMinValue(minValue);
-    static_cast<Overdrive*>(ptr)->SetMaxValue(maxValue);
+    static_cast<Overdrive*>(ptr)->SetMinMaxValue(minValue, maxValue);
 }
 
 void Overdrive_SetSoftCutValue(void* ptr, float value)
 {
-    static_cast<Overdrive*>(ptr)->SetSoftCutValue(value);
+//    static_cast<Overdrive*>(ptr)->SetSoftCutValue(value);
 }
 
 void Overdrive_SetAlgorithm(void* ptr, int algorithm)
 {
-    static_cast<Overdrive*>(ptr)->SetAlgorithm((Overdrive::Algorithm)algorithm);
+    static_cast<Overdrive*>(ptr)->SetAlgorithm(algorithm);
 }

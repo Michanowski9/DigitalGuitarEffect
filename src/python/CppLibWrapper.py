@@ -1,6 +1,5 @@
 import ctypes
 import os
-import numpy as np
 
 class CppLib:
     def __init__(self):

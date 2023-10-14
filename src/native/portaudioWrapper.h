@@ -9,7 +9,6 @@
 #include "device.h"
 #include "IAudioCallbackWrapper.h"
 
-// TODO: remove define!
 #define SAMPLE_FORMAT paFloat32
 #define FRAMES_PER_BUFFER   (64)
 using SAMPLE = float;

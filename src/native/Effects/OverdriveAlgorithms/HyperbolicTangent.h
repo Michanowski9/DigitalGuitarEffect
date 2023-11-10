@@ -20,7 +20,7 @@ public:
                 output = 0.0f;
                 return;
             }
-            output = std::tanh(obj->gain * (input >= 0 ? obj->maxValue : -(obj->minValue)) * input) / std::tanh(obj->gain);
+            output = std::tanh(obj->gain * input) / std::tanh(obj->gain) * (input >= 0 ? obj->maxValue : -(obj->minValue));
         };
 
         calc(this, output.left, input.left);

@@ -48,6 +48,7 @@ class OverdriveTab(Effect):
 
         mainLayout.addLayout(self.dials)
         mainLayout.addWidget(self.canvas)
+        mainLayout.addWidget(self.visualizationInput_combo)
 
         self.setLayout(mainLayout)
 

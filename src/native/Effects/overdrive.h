@@ -17,9 +17,11 @@ public:
     Overdrive &operator=(const Overdrive &) = default;
     ~Overdrive() = default;
 
+    void operator()(StereoSample &output, const StereoSample &input) override;
     void SetOn(const bool value) override;
-    void Calculate(StereoSample &output, const StereoSample &input) override;
+    void CalculateForVisualization(StereoSample &output, const StereoSample &input) override;
 
+    void Calculate(StereoSample &output, const StereoSample &input);
     void SetAlgorithm(const int value);
     int GetAlgorithmsNo();
     std::string GetAlgorithmName(int id);

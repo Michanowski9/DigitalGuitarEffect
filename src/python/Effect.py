@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QDial, QLabel, QLineEdit
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QComboBox, QPushButton, QDial, QLabel, QLineEdit
 from PyQt6.QtCore import Qt
 
 import matplotlib.pyplot as plt
@@ -16,6 +16,10 @@ class Effect(QWidget):
         # creating plot
         self.figure = plt.figure()
         self.canvas = FigureCanvasQTAgg(self.figure)
+
+        self.visualizationInput_combo = QComboBox()
+        self.visualizationInput_combo.addItems(["sin", "tone"])
+        self.visualizationInput_combo.currentTextChanged.connect(self.visualizationInput_combo_changed)
 
         self.SetButtons()
 
@@ -70,8 +74,17 @@ class Effect(QWidget):
 
 
     def draw_plot(self):
-        x = [math.sin(x/1000.0*4*math.pi) for x in range(0,1000)]
-        y = [math.sin(x/1000.0*4*math.pi) for x in range(0,1000)]
+        x = []
+        y = []
+        probes_no = 5000 # in ms
+        if self.visualizationInput_combo.currentIndex() == 1:
+            periods_no = 10
+            damping_coefficient = 5
+            x = [math.sin(x / float(probes_no) * periods_no * 2 * math.pi) * (math.e / math.exp(1 + damping_coefficient * x / float(probes_no))) for x in range(0, probes_no)]
+        else:
+            periods_no = 2
+            x = [math.sin(x / float(probes_no) * periods_no * 2 * math.pi) for x in range(0, probes_no)]
+        y = [y for y in x]
 
         self.cpplib.CalculateExampleData(self.effectPtr, y)
         self.figure.clear()
@@ -79,6 +92,7 @@ class Effect(QWidget):
         ax = self.figure.add_subplot(111)
         ax.plot(x, color="r", alpha=0.2)
         ax.plot(y, color="b")
+        ax.set_ylim([-1.05,1.05])
         ax.legend(['input', 'output'], loc=1)
 
         self.canvas.draw()
@@ -93,3 +107,5 @@ class Effect(QWidget):
         self.cpplib.SetEffectOn(self.effectPtr, self.isOn);
         self.draw_plot()
 
+    def visualizationInput_combo_changed(self):
+        self.draw_plot()

@@ -100,7 +100,7 @@ void CalculateExampleData(void* ptr, int size, float* data)
     {
         StereoSample input{data[i], 0};
         StereoSample output{0, 0};
-        static_cast<IEffect*>(ptr)->Calculate(output,input);
+        static_cast<IEffect*>(ptr)->CalculateForVisualization(output,input);
         data[i] = output.left;
     }
 }

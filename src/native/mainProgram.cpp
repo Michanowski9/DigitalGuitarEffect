@@ -43,7 +43,7 @@ StereoSample MainProgram::AudioEffectHandler(const StereoSample &input){
     StereoSample temp_input{};
     for(auto effect : loadedEffects){
         temp_input = output;
-        effect->Calculate(output, temp_input);
+        (*effect)(output, temp_input);
     }
     return output;
 }

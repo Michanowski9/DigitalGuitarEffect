@@ -11,16 +11,24 @@ void Overdrive::SetOn(const bool value)
     this->isOn = value;
 }
 
-void Overdrive::Calculate(StereoSample &output, const StereoSample &input)
+void Overdrive::operator()(StereoSample &output, const StereoSample &input)
 {
     if(isOn)
     {
-        (*this->algorithms[this->currentAlgorithm])(output, input);
+        Calculate(output, input);
     }
     else
     {
         output = {input.left, input.right};
     }
+}
+
+void Overdrive::CalculateForVisualization(StereoSample &output, const StereoSample &input){
+    Calculate(output, input);
+}
+
+void Overdrive::Calculate(StereoSample &output, const StereoSample &input){
+    (*this->algorithms[this->currentAlgorithm])(output, input);
 }
 
 void Overdrive::SetAlgorithm(const int value)

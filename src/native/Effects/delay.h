@@ -1,12 +1,14 @@
 #pragma once
 
+#include <memory>
 #include <queue>
 
+#include "../ISettings.h"
 #include "../IEffect.h"
 
 class Delay : public IEffect {
 public:
-    Delay() = default;
+    Delay(std::weak_ptr<ISettings> settings);
     Delay(Delay &&) = default;
     Delay(const Delay &) = default;
     Delay &operator=(Delay &&) = default;
@@ -26,6 +28,7 @@ private:
     bool isOn = false;
     float alpha = 0.5f;
     int bufforMaxSize = 1;
+    std::weak_ptr<ISettings> settings;
 };
 
 

@@ -11,7 +11,7 @@
 #include "IEffect.h"
 #include <memory>
 
-std::unique_ptr<MainProgram> mainProgram;
+std::shared_ptr<MainProgram> mainProgram;
 
 #if defined (WIN32)
     #define DLL_EXPORT __declspec(dllexport)

@@ -4,11 +4,12 @@
 
 #include "IAudioCallbackWrapper.h"
 #include "IEffect.h"
+#include "ISettings.h"
 
 #include <memory>
 #include <vector>
 
-class MainProgram : public IAudioCallbackWrapper
+class MainProgram : public IAudioCallbackWrapper, public ISettings
 {
 public:
     MainProgram();
@@ -27,7 +28,7 @@ public:
     StereoSample AudioEffectHandler(const StereoSample &input) override;
     void SetBypass(bool value);
 
-    int GetCurrentSampleRate();
+    int GetCurrentSampleRate() override;
 
     void* AddEffect(std::shared_ptr<IEffect> effect);
     void RemoveEffect(void* effectPtr);

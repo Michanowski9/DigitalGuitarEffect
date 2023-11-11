@@ -1,5 +1,10 @@
 #include "delay.h"
 
+Delay::Delay(std::weak_ptr<ISettings> settings) : settings(settings)
+{
+
+}
+
 void Delay::SetOn(const bool value)
 {
     this->isOn = value;
@@ -21,7 +26,8 @@ void Delay::operator()(StereoSample &output, const StereoSample &input)
 void Delay::CalculateForVisualization(StereoSample &output, const StereoSample &input)
 {
     static std::queue<StereoSample> _buffor;
-    int _bufforMaxSize = this->bufforMaxSize * 1000 / 192000;
+    auto settingsLocked = settings.lock();
+    int _bufforMaxSize = this->bufforMaxSize * 1000 / settingsLocked->GetCurrentSampleRate();
 
     AddToBuffor(input, _buffor, _bufforMaxSize);
     Calculate(output, input, _buffor, _bufforMaxSize);
@@ -48,7 +54,8 @@ void Delay::Calculate(StereoSample &output, const StereoSample &input, std::queu
 
 void Delay::SetDelay(const int value)
 {
-    this->bufforMaxSize = static_cast<float>(value) / 1000 * 192000;
+    auto settingsLocked = settings.lock();
+    this->bufforMaxSize = static_cast<float>(value) / 1000 * settingsLocked->GetCurrentSampleRate();
 }
 
 void Delay::SetAlpha(const float value)

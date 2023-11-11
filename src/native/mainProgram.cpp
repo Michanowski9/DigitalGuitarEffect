@@ -4,6 +4,10 @@ MainProgram::MainProgram(){
 }
 
 int MainProgram::GetCurrentSampleRate(){
+    if(currentSampleRate == 0)
+    {
+        return 192000;
+    }
     return currentSampleRate;
 }
 

@@ -2,12 +2,12 @@
 
 void InitPA()
 {
-    mainProgram = std::make_unique<MainProgram>();
+    mainProgram = std::make_shared<MainProgram>();
 }
 
 void FreePA()
 {
-    mainProgram.reset(nullptr);
+    mainProgram.reset();
 }
 
 int GetDeviceNumber()
@@ -90,7 +90,7 @@ void* AddEffectOverdrive()
 
 void* AddEffectDelay()
 {
-    return mainProgram->AddEffect(std::make_shared<Delay>());
+    return mainProgram->AddEffect(std::make_shared<Delay>(mainProgram));
 }
 
 void SetEffectOn(void* ptr, bool value)

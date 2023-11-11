@@ -1,6 +1,4 @@
 #include "cInterface.h"
-#include "Effects/overdrive.h"
-#include "Effects/delay.h"
 
 void InitPA()
 {

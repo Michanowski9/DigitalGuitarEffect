@@ -6,6 +6,8 @@
 
 #include "mainProgram.h"
 #include "Effects/overdrive.h"
+#include "Effects/delay.h"
+
 #include "IEffect.h"
 #include <memory>
 

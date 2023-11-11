@@ -12,7 +12,7 @@
 class MainProgram : public IAudioCallbackWrapper, public ISettings
 {
 public:
-    MainProgram();
+    MainProgram() = default;
     MainProgram(MainProgram &&) = default;
     MainProgram(const MainProgram &) = default;
     MainProgram &operator=(MainProgram &&) = default;
@@ -32,6 +32,8 @@ public:
 
     void* AddEffect(std::shared_ptr<IEffect> effect);
     void RemoveEffect(void* effectPtr);
+
+    void SwapEffects(int firstId, int secondId);
 private:
     bool IsBypassOn();
     int currentSampleRate = 0;

@@ -1,8 +1,5 @@
 #include "mainProgram.h"
 
-MainProgram::MainProgram(){
-}
-
 int MainProgram::GetCurrentSampleRate(){
     if(currentSampleRate == 0)
     {
@@ -66,6 +63,11 @@ void* MainProgram::AddEffect(std::shared_ptr<IEffect> effect)
 {
     loadedEffects.push_back(effect);
     return effect.get();
+}
+
+void MainProgram::SwapEffects(int firstId, int secondId)
+{
+    std::swap(loadedEffects[firstId], loadedEffects[secondId]);
 }
 
 void MainProgram::RemoveEffect(void* effectPtr)

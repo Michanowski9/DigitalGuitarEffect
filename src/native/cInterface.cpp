@@ -114,6 +114,11 @@ void RemoveEffect(void* ptr)
     mainProgram->RemoveEffect(ptr);
 }
 
+void SwapEffects(int firstId, int secondId)
+{
+    mainProgram->SwapEffects(firstId, secondId);
+}
+
 int Overdrive_GetAlgorithmsNo(void* ptr)
 {
     return static_cast<Overdrive*>(ptr)->GetAlgorithmsNo();

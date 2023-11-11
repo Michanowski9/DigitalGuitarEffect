@@ -81,6 +81,9 @@ extern "C"
     DLL_EXPORT
         void RemoveEffect(void* ptr);
 
+    DLL_EXPORT
+        void SwapEffects(int firstId, int secondId);
+
 
 
     DLL_EXPORT

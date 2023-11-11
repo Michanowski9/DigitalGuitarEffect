@@ -115,6 +115,12 @@ class CppLib:
 
         self.cpplib.RemoveEffect(ptr)
 
+    def SwapEffects(self, firstId, secondId):
+        self.cpplib.SwapEffects.argtypes = [ctypes.c_int32, ctypes.c_int32]
+        self.cpplib.SwapEffects.restype = None
+
+        self.cpplib.SwapEffects(firstId, secondId)
+
     def Overdrive_GetAlgorithmsNo(self, ptr):
         self.cpplib.Overdrive_GetAlgorithmsNo.argtypes = [ctypes.c_void_p]
         self.cpplib.Overdrive_GetAlgorithmsNo.restype = ctypes.c_int

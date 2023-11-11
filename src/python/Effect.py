@@ -27,7 +27,7 @@ class Effect(QWidget):
         self.canvas = FigureCanvasQTAgg(self.figure)
 
         self.visualizationInput_combo = QComboBox()
-        self.visualizationInput_combo.addItems(["sin", "tone 5Hz", "tone 20Hz"])
+        self.visualizationInput_combo.addItems(["sin", "impulse", "tone 5Hz", "tone 20Hz"])
         self.visualizationInput_combo.currentTextChanged.connect(self.visualizationInput_combo_changed)
 
 
@@ -96,9 +96,19 @@ class Effect(QWidget):
         y = []
         time = 5 # sec
         sampling = 1000 # in 1 sec
+
         if self.visualizationInput_combo.currentIndex() == 1:
-            x = self.GetDampingSin(hz=5, damping_coefficient=5, time=time, sampling=sampling)
+            x = [0 for _ in range(0, sampling * time)]
+            for i in range(0, len(x)):
+                if i <= 10:
+                    x[i] = i * 0.1
+                elif i <= 20:
+                    x[i] = 1 - 0.5 * i * 0.1
+                else:
+                    break
         elif self.visualizationInput_combo.currentIndex() == 2:
+            x = self.GetDampingSin(hz=5, damping_coefficient=5, time=time, sampling=sampling)
+        elif self.visualizationInput_combo.currentIndex() == 3:
             x = self.GetDampingSin(hz=20, damping_coefficient=5, time=time, sampling=sampling)
         else:
             periods_no = 2

@@ -1,7 +1,8 @@
-from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QTabWidget, QWidget, QPushButton
+from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QTabWidget, QWidget, QPushButton, QDialog
 
 from CppLibWrapper import CppLib
 from SettingsTab import SettingsTab
+from ChooseEffectDialog import ChooseEffectDialog
 from Effects.OverdriveTab import OverdriveTab
 from Effects.DelayTab import DelayTab
 
@@ -124,12 +125,18 @@ class MainWindow(QWidget):
 
 
     def add_effect_button_on_click(self):
-        effectPtr = self.cpplib.AddEffect("overdrive")
-        indexTab = self.tab.addTab(OverdriveTab(effectPtr, self.cpplib), "Overdrive")
+        dialog = ChooseEffectDialog()
 
-        effectPtr = self.cpplib.AddEffect("delay")
-        indexTab = self.tab.addTab(DelayTab(effectPtr, self.cpplib), "Delay")
+        if not dialog.exec():
+            return
 
+        match dialog.result:
+            case "Overdrive":
+                effectPtr = self.cpplib.AddEffect("overdrive")
+                indexTab = self.tab.addTab(OverdriveTab(effectPtr, self.cpplib), "Overdrive")
+            case "Delay":
+                effectPtr = self.cpplib.AddEffect("delay")
+                indexTab = self.tab.addTab(DelayTab(effectPtr, self.cpplib), "Delay")
         self.tab.setCurrentIndex(indexTab)
 
 

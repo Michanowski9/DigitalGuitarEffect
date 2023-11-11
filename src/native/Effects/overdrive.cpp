@@ -50,9 +50,9 @@ void Overdrive::SetGain(const float value)
 {
     for(auto alg : algorithms)
     {
-        if(auto gainAlg = dynamic_cast<IGain*>(alg.get()))
+        if(alg->IsUsingGain())
         {
-            gainAlg->SetGain(value);
+            alg->SetGain(value);
         }
     }
 }
@@ -61,10 +61,13 @@ void Overdrive::SetMinMaxValue(const float minValue, const float maxValue)
 {
     for(auto alg : algorithms)
     {
-        if(auto gainAlg = dynamic_cast<IMinMaxValue*>(alg.get()))
+        if(alg->IsUsingMinValue())
         {
-            gainAlg->SetMinValue(minValue);
-            gainAlg->SetMaxValue(maxValue);
+            alg->SetMinValue(minValue);
+        }
+        if(alg->IsUsingMaxValue())
+        {
+            alg->SetMaxValue(maxValue);
         }
     }
 }

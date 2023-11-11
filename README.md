@@ -19,12 +19,14 @@ py src/python/main.py
 ## Requirements:
 - cmake
 - python 3.11+
-*packages:*
- - PyQt6
-  - matplotlib
+
+    *packages:*
+    - PyQt6
+    - matplotlib
 - Visual Studio 17 2022
 - Compiled portaudio library
 
+------------
 ### Portaudio Compilation:
 - clone portaudio repository: https://github.com/PortAudio/portaudio.git
 ```

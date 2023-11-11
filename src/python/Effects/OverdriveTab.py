@@ -1,6 +1,6 @@
 import sys
 
-from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QLabel, QComboBox
+from PyQt6.QtWidgets import QLabel, QComboBox
 
 sys.path.append("..")
 from Effect import Effect

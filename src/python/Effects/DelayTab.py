@@ -1,7 +1,5 @@
 import sys
 
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout
-
 sys.path.append("..")
 from Effect import Effect
 
@@ -10,6 +8,8 @@ class DelayTab(Effect):
         Effect.__init__(self, effectPtr, cpplib)
 
         self.SetDials()
+
+        self.delay_edit_changed_value()
 
 
     def SetDials(self):

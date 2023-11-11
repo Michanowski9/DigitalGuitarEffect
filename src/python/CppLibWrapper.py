@@ -90,6 +90,10 @@ class CppLib:
         if effect == "overdrive":
             self.cpplib.AddEffectOverdrive.restype = ctypes.c_void_p
             return self.cpplib.AddEffectOverdrive()
+        elif effect == "delay":
+            self.cpplib.AddEffectDelay.restype = ctypes.c_void_p
+            return self.cpplib.AddEffectDelay()
+
 
     def SetEffectOn(self, effectPtr, value):
         self.cpplib.SetEffectOn.argtypes = [ctypes.c_void_p, ctypes.c_bool]
@@ -150,3 +154,17 @@ class CppLib:
         self.cpplib.Overdrive_SetAlgorithm.restype = None
 
         self.cpplib.Overdrive_SetAlgorithm(ptr, value)
+
+    def Delay_SetDelay(self, ptr, value):
+        self.cpplib.Delay_SetDelay.argtypes = [ctypes.c_void_p, ctypes.c_int]
+        self.cpplib.Delay_SetDelay.restype = None
+
+        self.cpplib.Delay_SetDelay(ptr, int(value))
+
+    def Delay_SetAlpha(self, ptr, value):
+        self.cpplib.Delay_SetAlpha.argtypes = [ctypes.c_void_p, ctypes.c_float]
+        self.cpplib.Delay_SetAlpha.restype = None
+
+        self.cpplib.Delay_SetAlpha(ptr, value)
+
+

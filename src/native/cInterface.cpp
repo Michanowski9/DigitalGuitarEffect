@@ -1,5 +1,6 @@
 #include "cInterface.h"
 #include "Effects/overdrive.h"
+#include "Effects/delay.h"
 
 void InitPA()
 {
@@ -89,6 +90,11 @@ void* AddEffectOverdrive()
     return mainProgram->AddEffect(std::make_shared<Overdrive>());
 }
 
+void* AddEffectDelay()
+{
+    return mainProgram->AddEffect(std::make_shared<Delay>());
+}
+
 void SetEffectOn(void* ptr, bool value)
 {
     static_cast<IEffect*>(ptr)->SetOn(value);
@@ -139,4 +145,14 @@ void Overdrive_SetSoftCutValue(void* ptr, float value)
 void Overdrive_SetAlgorithm(void* ptr, int algorithm)
 {
     static_cast<Overdrive*>(ptr)->SetAlgorithm(algorithm);
+}
+
+void Delay_SetDelay(void* ptr, int value)
+{
+    static_cast<Delay*>(ptr)->SetDelay(value);
+}
+
+void Delay_SetAlpha(void* ptr, float value)
+{
+    static_cast<Delay*>(ptr)->SetAlpha(value);
 }

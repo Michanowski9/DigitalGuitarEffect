@@ -68,6 +68,9 @@ extern "C"
         void* AddEffectOverdrive();
 
     DLL_EXPORT
+        void* AddEffectDelay();
+
+    DLL_EXPORT
         void SetEffectOn(void* ptr, bool value);
 
     DLL_EXPORT
@@ -96,6 +99,14 @@ extern "C"
 
     DLL_EXPORT
         void Overdrive_SetAlgorithm(void* ptr, int algorithm);
+
+
+    DLL_EXPORT
+        void Delay_SetDelay(void* ptr, int value);
+
+    DLL_EXPORT
+        void Delay_SetAlpha(void* ptr, float value);
+
 }
 
 #endif

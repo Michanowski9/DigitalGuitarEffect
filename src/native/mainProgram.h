@@ -27,10 +27,13 @@ public:
     StereoSample AudioEffectHandler(const StereoSample &input) override;
     void SetBypass(bool value);
 
+    int GetCurrentSampleRate();
+
     void* AddEffect(std::shared_ptr<IEffect> effect);
     void RemoveEffect(void* effectPtr);
 private:
     bool IsBypassOn();
+    int currentSampleRate = 0;
 
     PortaudioWrapper paWrapper;
     bool bypass = false;

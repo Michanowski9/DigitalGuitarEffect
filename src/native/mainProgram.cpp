@@ -3,6 +3,10 @@
 MainProgram::MainProgram(){
 }
 
+int MainProgram::GetCurrentSampleRate(){
+    return currentSampleRate;
+}
+
 int MainProgram::GetDevicesNumber()
 {
     return paWrapper.GetDeviceCount();
@@ -20,7 +24,8 @@ std::vector<int> MainProgram::GetSampleRates(int inputDeviceId, int outputDevice
 
 void MainProgram::StartStream(int inputDeviceId, int outputDeviceId, int sampleRate)
 {
-    paWrapper.StartStream(inputDeviceId, outputDeviceId, sampleRate, this);
+    currentSampleRate = sampleRate;
+    paWrapper.StartStream(inputDeviceId, outputDeviceId, currentSampleRate, this);
 }
 
 void MainProgram::StopStream()

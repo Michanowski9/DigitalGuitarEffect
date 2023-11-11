@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QTabWidget, QWidget, QPush
 from CppLibWrapper import CppLib
 from SettingsTab import SettingsTab
 from Effects.OverdriveTab import OverdriveTab
+from Effects.DelayTab import DelayTab
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -125,6 +126,10 @@ class MainWindow(QWidget):
     def add_effect_button_on_click(self):
         effectPtr = self.cpplib.AddEffect("overdrive")
         indexTab = self.tab.addTab(OverdriveTab(effectPtr, self.cpplib), "Overdrive")
+
+        effectPtr = self.cpplib.AddEffect("delay")
+        indexTab = self.tab.addTab(DelayTab(effectPtr, self.cpplib), "Delay")
+
         self.tab.setCurrentIndex(indexTab)
 
 

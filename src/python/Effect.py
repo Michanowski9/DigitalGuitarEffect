@@ -18,7 +18,7 @@ class Effect(QWidget):
         self.canvas = FigureCanvasQTAgg(self.figure)
 
         self.visualizationInput_combo = QComboBox()
-        self.visualizationInput_combo.addItems(["sin", "tone"])
+        self.visualizationInput_combo.addItems(["sin", "tone 5Hz", "tone 20Hz"])
         self.visualizationInput_combo.currentTextChanged.connect(self.visualizationInput_combo_changed)
 
         self.SetButtons()
@@ -39,8 +39,7 @@ class Effect(QWidget):
         return result
 
 
-    def CreateDial(self, label, minValue, maxValue, value):
-        multiplier = 100
+    def CreateDial(self, label, minValue, maxValue, value, multiplier=100):
 
         result_label = QLabel(label, alignment=Qt.AlignmentFlag.AlignCenter)
 
@@ -76,17 +75,24 @@ class Effect(QWidget):
     def draw_plot(self):
         x = []
         y = []
-        probes_no = 5000 # in ms
+        time = 5 # sec
+        sampling = 1000 # in 1 sec
         if self.visualizationInput_combo.currentIndex() == 1:
-            periods_no = 10
-            damping_coefficient = 5
-            x = [math.sin(x / float(probes_no) * periods_no * 2 * math.pi) * (math.e / math.exp(1 + damping_coefficient * x / float(probes_no))) for x in range(0, probes_no)]
+            x = self.GetDampingSin(hz=5, damping_coefficient=5, time=time, sampling=sampling)
+        elif self.visualizationInput_combo.currentIndex() == 2:
+            x = self.GetDampingSin(hz=20, damping_coefficient=5, time=time, sampling=sampling)
         else:
             periods_no = 2
-            x = [math.sin(x / float(probes_no) * periods_no * 2 * math.pi) for x in range(0, probes_no)]
-        y = [y for y in x]
+            x = [math.sin(x / float(sampling * time) * periods_no * 2 * math.pi) for x in range(0, sampling * time)]
+
+        y1 = [0 for _ in range(sampling * time)]
+        y2 = [y for y in x]
+        y = y1 + y2
 
         self.cpplib.CalculateExampleData(self.effectPtr, y)
+
+        y = y[(sampling * time):]
+
         self.figure.clear()
 
         ax = self.figure.add_subplot(111)
@@ -97,6 +103,11 @@ class Effect(QWidget):
 
         self.canvas.draw()
 
+
+    def GetDampingSin(self, hz, damping_coefficient, time, sampling):
+        periods_no = time * hz
+        probes_no = sampling * time
+        return [math.sin(x / float(probes_no) * periods_no * 2 * math.pi) * (math.e / math.exp(1 + damping_coefficient * x / float(probes_no))) for x in range(0, probes_no)]
 
     def on_off_button_on_click(self):
         self.isOn = not self.isOn

@@ -10,7 +10,6 @@ class DelayTab(Effect):
         Effect.__init__(self, effectPtr, cpplib)
 
         self.SetDials()
-        self.SetLayout()
 
 
     def SetDials(self):
@@ -20,20 +19,8 @@ class DelayTab(Effect):
         _, _, self.alpha_edit, alpha_layout = self.CreateDial("Alpha", 0, 1, 0.5)
         self.alpha_edit.textChanged.connect(self.alpha_edit_changed_value)
 
-        self.dials = QHBoxLayout()
         self.dials.addLayout(delay_layout)
         self.dials.addLayout(alpha_layout)
-
-
-    def SetLayout(self):
-        mainLayout = QVBoxLayout()
-
-        mainLayout.addWidget(self.on_off_button)
-        mainLayout.addLayout(self.dials)
-        mainLayout.addWidget(self.canvas)
-        mainLayout.addWidget(self.visualizationInput_combo)
-
-        self.setLayout(mainLayout)
 
 
     def delay_edit_changed_value(self):

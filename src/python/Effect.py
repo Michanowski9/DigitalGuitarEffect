@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QComboBox, QPushButton, QDial, QLabel, QLineEdit
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QComboBox, QPushButton, QDial, QLabel, QLineEdit
 from PyQt6.QtCore import Qt
 
 import matplotlib.pyplot as plt
@@ -13,6 +13,15 @@ class Effect(QWidget):
         self.effectPtr = effectPtr
         self.cpplib = cpplib
 
+        self.SetPlotWindow()
+        self.SetButtons()
+        self.SetLayout()
+
+        self.draw_plot()
+        self.isOn = False
+
+
+    def SetPlotWindow(self):
         # creating plot
         self.figure = plt.figure()
         self.canvas = FigureCanvasQTAgg(self.figure)
@@ -21,10 +30,20 @@ class Effect(QWidget):
         self.visualizationInput_combo.addItems(["sin", "tone 5Hz", "tone 20Hz"])
         self.visualizationInput_combo.currentTextChanged.connect(self.visualizationInput_combo_changed)
 
-        self.SetButtons()
 
-        self.draw_plot()
-        self.isOn = False
+    def SetLayout(self):
+        mainLayout = QVBoxLayout()
+
+        self.dials = QHBoxLayout()
+        self.effect_settings = QVBoxLayout()
+
+        mainLayout.addWidget(self.on_off_button)
+        mainLayout.addLayout(self.effect_settings)
+        mainLayout.addLayout(self.dials)
+        mainLayout.addWidget(self.canvas)
+        mainLayout.addWidget(self.visualizationInput_combo)
+
+        self.setLayout(mainLayout)
 
 
     def SetButtons(self):

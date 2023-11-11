@@ -24,7 +24,7 @@ public:
 private:
     std::queue<StereoSample> buffor;
     bool isOn = false;
-    float alpha = 0;
+    float alpha = 0.5f;
     int bufforMaxSize = 1;
 };
 

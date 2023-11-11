@@ -13,7 +13,7 @@ class DelayTab(Effect):
 
 
     def SetDials(self):
-        _, _, self.delay_edit, delay_layout = self.CreateDial("Delay", 0, 5, 100, multiplier=1000)
+        _, _, self.delay_edit, delay_layout = self.CreateDial("Delay", 0, 5, 0.1, multiplier=1000)
         self.delay_edit.textChanged.connect(self.delay_edit_changed_value)
 
         _, _, self.alpha_edit, alpha_layout = self.CreateDial("Alpha", 0, 1, 0.5)

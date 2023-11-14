@@ -1,4 +1,9 @@
 #include "cInterface.h"
+#include "Effects/OverdriveAlgorithms/HyperbolicTangent.h"
+#include "Effects/OverdriveAlgorithms/HardClipping.h"
+#include "Effects/OverdriveAlgorithms/IOverdriveAlgorithm.h"
+#include "Effects/overdrive.h"
+#include <memory>
 
 void InitPA()
 {
@@ -85,12 +90,21 @@ void BypassSwitch(bool value)
 
 void* AddEffectOverdrive()
 {
-    return mainProgram->AddEffect(std::make_shared<Overdrive>());
+    auto effect = std::make_shared<Overdrive>();
+
+    Overdrive::AlgorithmsContainer algorithms {
+        std::make_shared<HardClipping>(),
+        std::make_shared<HyperbolicTangent>()
+    };
+
+    effect->SetAlgorithms(algorithms);
+
+    return mainProgram->AddEffect(effect);
 }
 
 void* AddEffectDelay()
 {
-    return mainProgram->AddEffect(std::make_shared<Delay>(mainProgram));
+    return mainProgram->AddEffect(std::make_shared<Delay>());
 }
 
 void SetEffectOn(void* ptr, bool value)
@@ -138,11 +152,6 @@ void Overdrive_SetGain(void* ptr, float value)
 void Overdrive_SetMinMaxValue(void* ptr, float minValue, float maxValue)
 {
     static_cast<Overdrive*>(ptr)->SetMinMaxValue(minValue, maxValue);
-}
-
-void Overdrive_SetSoftCutValue(void* ptr, float value)
-{
-//    static_cast<Overdrive*>(ptr)->SetSoftCutValue(value);
 }
 
 void Overdrive_SetAlgorithm(void* ptr, int algorithm)

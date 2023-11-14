@@ -13,12 +13,13 @@ public:
     void operator()(StereoSample &output, const StereoSample &input) override
     {
         auto calc = [](const auto obj, auto& output, auto& input) {
-            if (obj->gain == 0)
+            if(obj->gain == 0)
             {
-                output = 0.0f;
+                output = 0;
                 return;
             }
-            output = std::tanh(obj->gain * input) / std::tanh(obj->gain) * (input >= 0 ? obj->maxValue : -(obj->minValue));
+            output = std::tanh(obj->gain * input) / std::tanh(obj->gain);
+            output *= (input >= 0 ? obj->maxValue : -obj->minValue);
         };
 
         calc(this, output.left, input.left);

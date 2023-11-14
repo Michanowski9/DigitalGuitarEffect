@@ -15,4 +15,4 @@ ENDIF()
 include_directories("${CMAKE_SOURCE_DIR}/lib/portaudio/include")
 
 add_subdirectory(src)
-#add_subdirectory(test)
+add_subdirectory(test)

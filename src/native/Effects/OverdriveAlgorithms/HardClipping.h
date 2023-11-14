@@ -10,7 +10,7 @@ public:
 
     void operator()(StereoSample &output, const StereoSample &input) override
     {
-        auto calc = [](const auto obj, auto& output, auto& input) {
+        auto calc = [](const auto obj, auto& output, auto& input){
             output = input * obj->gain;
             if(output > obj->maxValue)
             {

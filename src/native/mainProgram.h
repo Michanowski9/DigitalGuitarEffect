@@ -3,16 +3,18 @@
 #include "portaudioWrapper.h"
 
 #include "IAudioCallbackWrapper.h"
-#include "IEffect.h"
-#include "ISettings.h"
+#include "Effects/IEffect.h"
+#include "Settings.h"
 
 #include <memory>
 #include <vector>
 
-class MainProgram : public IAudioCallbackWrapper, public ISettings
+class MainProgram : public IAudioCallbackWrapper
 {
 public:
-    MainProgram() = default;
+    MainProgram() {
+        settings = std::make_shared<Settings>();
+    };
     MainProgram(MainProgram &&) = default;
     MainProgram(const MainProgram &) = default;
     MainProgram &operator=(MainProgram &&) = default;
@@ -28,15 +30,13 @@ public:
     StereoSample AudioEffectHandler(const StereoSample &input) override;
     void SetBypass(bool value);
 
-    int GetCurrentSampleRate() override;
-
     void* AddEffect(std::shared_ptr<IEffect> effect);
     void RemoveEffect(void* effectPtr);
 
     void SwapEffects(int firstId, int secondId);
 private:
     bool IsBypassOn();
-    int currentSampleRate = 0;
+    std::shared_ptr<Settings> settings;
 
     PortaudioWrapper paWrapper;
     bool bypass = false;

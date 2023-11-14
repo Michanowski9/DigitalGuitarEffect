@@ -8,7 +8,7 @@
 #include "Effects/overdrive.h"
 #include "Effects/delay.h"
 
-#include "IEffect.h"
+#include "Effects/IEffect.h"
 #include <memory>
 
 std::shared_ptr<MainProgram> mainProgram;
@@ -85,7 +85,6 @@ extern "C"
         void SwapEffects(int firstId, int secondId);
 
 
-
     DLL_EXPORT
         int Overdrive_GetAlgorithmsNo(void* ptr);
 
@@ -98,9 +97,6 @@ extern "C"
 
     DLL_EXPORT
         void Overdrive_SetMinMaxValue(void* ptr, float minValue, float maxValue);
-
-    DLL_EXPORT
-        void Overdrive_SetSoftCutValue(void* ptr, float value);
 
     DLL_EXPORT
         void Overdrive_SetAlgorithm(void* ptr, int algorithm);

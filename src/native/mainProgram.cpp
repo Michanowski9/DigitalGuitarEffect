@@ -1,13 +1,5 @@
 #include "mainProgram.h"
 
-int MainProgram::GetCurrentSampleRate(){
-    if(currentSampleRate == 0)
-    {
-        return 192000;
-    }
-    return currentSampleRate;
-}
-
 int MainProgram::GetDevicesNumber()
 {
     return paWrapper.GetDeviceCount();
@@ -25,8 +17,8 @@ std::vector<int> MainProgram::GetSampleRates(int inputDeviceId, int outputDevice
 
 void MainProgram::StartStream(int inputDeviceId, int outputDeviceId, int sampleRate)
 {
-    currentSampleRate = sampleRate;
-    paWrapper.StartStream(inputDeviceId, outputDeviceId, currentSampleRate, this);
+    settings->SetCurrentSampleRate(sampleRate);
+    paWrapper.StartStream(inputDeviceId, outputDeviceId, settings->GetCurrentSampleRate(), this);
 }
 
 void MainProgram::StopStream()
@@ -61,6 +53,7 @@ void MainProgram::SetBypass(bool value)
 
 void* MainProgram::AddEffect(std::shared_ptr<IEffect> effect)
 {
+    effect->SetSettings(settings);
     loadedEffects.push_back(effect);
     return effect.get();
 }

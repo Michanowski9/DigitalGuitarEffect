@@ -1,14 +1,11 @@
 #include "overdrive.h"
 
-Overdrive::Overdrive()
+void Overdrive::SetAlgorithms(AlgorithmsContainer algorithmsContainer)
 {
-    algorithms.push_back(std::make_shared<HardClipping>());
-    algorithms.push_back(std::make_shared<HyperbolicTangent>());
-};
-
-void Overdrive::SetOn(const bool value)
-{
-    this->isOn = value;
+    for(auto algorithm : algorithmsContainer)
+    {
+        algorithms.push_back(algorithm);
+    }
 }
 
 void Overdrive::operator()(StereoSample &output, const StereoSample &input)

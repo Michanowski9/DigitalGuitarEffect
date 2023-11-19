@@ -92,12 +92,8 @@ void* AddEffectOverdrive()
 {
     auto effect = std::make_shared<Overdrive>();
 
-    Overdrive::AlgorithmsContainer algorithms {
-        std::make_shared<HardClipping>(),
-        std::make_shared<HyperbolicTangent>()
-    };
-
-    effect->SetAlgorithms(algorithms);
+    effect->AddAlgorithm(std::make_shared<HardClipping>());
+    effect->AddAlgorithm(std::make_shared<HyperbolicTangent>());
 
     return mainProgram->AddEffect(effect);
 }
@@ -151,7 +147,8 @@ void Overdrive_SetGain(void* ptr, float value)
 
 void Overdrive_SetMinMaxValue(void* ptr, float minValue, float maxValue)
 {
-    static_cast<Overdrive*>(ptr)->SetMinMaxValue(minValue, maxValue);
+    static_cast<Overdrive*>(ptr)->SetMinValue(minValue);
+    static_cast<Overdrive*>(ptr)->SetMaxValue(maxValue);
 }
 
 void Overdrive_SetAlgorithm(void* ptr, int algorithm)
@@ -161,7 +158,7 @@ void Overdrive_SetAlgorithm(void* ptr, int algorithm)
 
 void Delay_SetDelay(void* ptr, int value)
 {
-    static_cast<Delay*>(ptr)->SetDelay(value);
+    static_cast<Delay*>(ptr)->SetDelayInMilliseconds(value);
 }
 
 void Delay_SetAlpha(void* ptr, float value)

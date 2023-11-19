@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include <functional>
 
 #include "IEffect.h"
 #include "OverdriveAlgorithms/IOverdriveAlgorithm.h"
@@ -23,17 +24,19 @@ public:
     void operator()(StereoSample &output, const StereoSample &input) override;
     void CalculateForVisualization(StereoSample &output, const StereoSample &input) override;
 
-    void SetAlgorithms(AlgorithmsContainer algorithmsContainer);
+    void AddAlgorithm(std::shared_ptr<IOverdriveAlgorithm> algorithm);
 
     void SetAlgorithm(const int value);
     int GetAlgorithmsNo();
     std::string GetAlgorithmName(int id);
 
-    void SetMinMaxValue(const float minValue, const float maxValue);
+    void SetMinValue(const float value);
+    void SetMaxValue(const float value);
     void SetGain(const float value);
 
 private:
     void Calculate(StereoSample &output, const StereoSample &input);
+    void SetPropertyInAlgorithms(std::function<bool(std::shared_ptr<IOverdriveAlgorithm>)> IsImplemeting, std::function<void(std::shared_ptr<IOverdriveAlgorithm>)> SetProperty);
 
     AlgorithmsContainer algorithms;
     int currentAlgorithm = 0;

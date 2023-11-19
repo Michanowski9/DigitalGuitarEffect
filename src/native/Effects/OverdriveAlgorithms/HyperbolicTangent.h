@@ -10,8 +10,9 @@ public:
     HyperbolicTangent() = default;
     ~HyperbolicTangent() = default;
 
-    void operator()(StereoSample &output, const StereoSample &input) override
+    StereoSample Calculate(const StereoSample &input) override
     {
+        StereoSample output;
         auto calc = [](const auto obj, auto& output, auto& input) {
             if(obj->gain == 0)
             {
@@ -24,6 +25,7 @@ public:
 
         calc(this, output.left, input.left);
         calc(this, output.right, input.right);
+        return output;
     }
 
     std::string GetName() override {

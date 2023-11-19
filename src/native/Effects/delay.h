@@ -17,7 +17,7 @@ public:
     void operator()(StereoSample &output, const StereoSample &input) override;
     void CalculateForVisualization(StereoSample &output, const StereoSample &input) override;
 
-    void SetDelay(const int value);
+    void SetDelayInMilliseconds(const int value);
     void SetAlpha(const float value);
 
 private:
@@ -25,7 +25,7 @@ private:
     void AddToBuffor(const StereoSample &input, std::queue<StereoSample> &buffor, const int &bufforMaxSize);
 
     std::queue<StereoSample> buffor;
-    float alpha = 0.5f;
+    float alpha = 1.0f;
     int bufforMaxSize = 1;
 };
 

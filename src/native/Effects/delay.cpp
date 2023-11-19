@@ -2,15 +2,16 @@
 
 void Delay::operator()(StereoSample &output, const StereoSample &input)
 {
-    AddToBuffor(input, this->buffor, this->bufforMaxSize / 1000 * settings->GetCurrentSampleRate());
+    auto bufforMaxSizeInProbes = bufforMaxSize / 1000 * settings->GetCurrentSampleRate();
     if(isOn)
     {
-        Calculate(output, input, this->buffor, this->bufforMaxSize / 1000 * settings->GetCurrentSampleRate());
+        Calculate(output, input, this->buffor, bufforMaxSizeInProbes);
     }
     else
     {
         output = {input.left, input.right};
     }
+    AddToBuffor(input, this->buffor, bufforMaxSizeInProbes);
 }
 
 void Delay::CalculateForVisualization(StereoSample &output, const StereoSample &input)
@@ -18,30 +19,30 @@ void Delay::CalculateForVisualization(StereoSample &output, const StereoSample &
     static std::queue<StereoSample> _buffor;
     int _bufforMaxSize = this->bufforMaxSize;
 
-    AddToBuffor(input, _buffor, _bufforMaxSize);
     Calculate(output, input, _buffor, _bufforMaxSize);
+    AddToBuffor(input, _buffor, _bufforMaxSize);
 }
 
-void Delay::AddToBuffor(const StereoSample &input, std::queue<StereoSample> &buffor, const int &bufforMaxSize)
+void Delay::AddToBuffor(const StereoSample &input, std::queue<StereoSample> &buff, const int &maxSize)
 {
-    buffor.push(input);
-    while(buffor.size() > bufforMaxSize)
+    buff.push(input);
+    while(buff.size() > maxSize)
     {
-        buffor.pop();
+        buff.pop();
     }
 }
 
-void Delay::Calculate(StereoSample &output, const StereoSample &input, std::queue<StereoSample> &buffor, const int &bufforMaxSize)
+void Delay::Calculate(StereoSample &output, const StereoSample &input, std::queue<StereoSample> &buff, const int &maxSize)
 {
-    auto calc = [](const auto obj, auto& output, auto& input, auto& buffor, auto& bufforMaxSize) {
-        output = input + (buffor.size() < bufforMaxSize ? 0 : obj->alpha * buffor.front().left);
+    auto calc = [=, this](auto& out, const auto& in, auto& bufforFront){
+        out = in + (buff.size() >= maxSize ? alpha * bufforFront : 0);
     };
 
-    calc(this, output.left, input.left, buffor, bufforMaxSize);
-    calc(this, output.right, input.right, buffor, bufforMaxSize);
+    calc(output.left, input.left, buff.front().left);
+    calc(output.right, input.right, buff.front().right);
 }
 
-void Delay::SetDelay(const int value)
+void Delay::SetDelayInMilliseconds(const int value)
 {
     this->bufforMaxSize = value;
 }

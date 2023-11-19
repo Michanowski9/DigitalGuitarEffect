@@ -27,6 +27,7 @@ set_target_properties(libgmock PROPERTIES
 include_directories("${CMAKE_SOURCE_DIR}/googletest/include"
                     "${CMAKE_SOURCE_DIR}/googlemock/include")
 include_directories("${CMAKE_SOURCE_DIR}/src/native")
+include_directories("${CMAKE_SOURCE_DIR}/test")
 
 file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false *.h *.cpp)
 set(SOURCES ${TEST_SOURCES})

@@ -6,7 +6,7 @@
 class IOverdriveAlgorithm
 {
     public:
-        virtual void operator()(StereoSample &output, const StereoSample &input) = 0;
+        virtual StereoSample Calculate(const StereoSample &input) = 0;
         virtual std::string GetName() = 0;
 
 

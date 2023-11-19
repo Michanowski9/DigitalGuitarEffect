@@ -1,5 +1,5 @@
-#pragma once
 #include "gtest/gtest.h"
+#include "TestUtils.h"
 
 #include "Effects/OverdriveAlgorithms/HyperbolicTangent.h"
 
@@ -26,71 +26,77 @@ namespace {
 
     TEST_F(HyperbolicTangentTest, operator_inputZeros_returnsZero){
         StereoSample input {0.0f, 0.0f};
+        StereoSample expected {0.0f, 0.0f};
 
-        sut(output, input);
+        output = sut.Calculate(input);
 
-        EXPECT_FLOAT_EQ(output.left, 0);
-        EXPECT_FLOAT_EQ(output.right, 0);
+        EXPECT_STEREOSAMPLE_EQ(output, expected);
     }
 
     TEST_F(HyperbolicTangentTest, operator_inputOnes_returnsOnes){
         StereoSample input {1.0f, 1.0f};
+        StereoSample expected {1.0f, 1.0f};
 
-        sut(output, input);
+        output = sut.Calculate(input);
 
-        EXPECT_FLOAT_EQ(output.left, 1.0f);
-        EXPECT_FLOAT_EQ(output.right, 1.0f);
+        EXPECT_STEREOSAMPLE_EQ(output, expected);
     }
 
     TEST_F(HyperbolicTangentTest, operator_correctInput_returnsCorrectNormalizedTanh){
         StereoSample input {0.5f, 0.5f};
+        StereoSample expected {
+            static_cast<float>(std::tanh(0.5f) / std::tanh(1)),
+            static_cast<float>(std::tanh(0.5f) / std::tanh(1))
+        };
 
-        sut(output, input);
+        output = sut.Calculate(input);
 
-        EXPECT_FLOAT_EQ(output.left, std::tanh(0.5f) / std::tanh(1));
-        EXPECT_FLOAT_EQ(output.right, std::tanh(0.5f) / std::tanh(1));
+        EXPECT_STEREOSAMPLE_EQ(output, expected);
     }
 
     TEST_F(HyperbolicTangentTest, operator_correctInputWithGain_returnsCorrectNormalizedTanh){
         StereoSample input {0.5f, 0.5f};
+        StereoSample expected {
+            static_cast<float>(std::tanh(2 * 0.5f) / std::tanh(2)),
+            static_cast<float>(std::tanh(2 * 0.5f) / std::tanh(2))
+        };
 
         sut.SetGain(2.0f);
-        sut(output, input);
+        output = sut.Calculate(input);
 
-        EXPECT_FLOAT_EQ(output.left, std::tanh(2 * 0.5f) / std::tanh(2));
-        EXPECT_FLOAT_EQ(output.right, std::tanh(2 * 0.5f) / std::tanh(2));
+        EXPECT_STEREOSAMPLE_EQ(output, expected);
     }
 
     TEST_F(HyperbolicTangentTest, operator_correctInputWithMaxValue_returnsMaxValue){
-        StereoSample input {1.0f, 1.0f};
         const float maxValue = 0.5f;
+        StereoSample input {1.0f, 1.0f};
+        StereoSample expected {maxValue, maxValue};
 
         sut.SetMaxValue(maxValue);
-        sut(output, input);
+        output = sut.Calculate(input);
 
-        EXPECT_FLOAT_EQ(output.left, maxValue);
-        EXPECT_FLOAT_EQ(output.right, maxValue);
+        EXPECT_STEREOSAMPLE_EQ(output, expected);
     }
 
     TEST_F(HyperbolicTangentTest, operator_correctInputWithMinValue_returnsMinValue){
-        StereoSample input {-1.0f, -1.0f};
         const float minValue = -0.5f;
+        StereoSample input {-1.0f, -1.0f};
+        StereoSample expected {minValue, minValue};
 
         sut.SetMinValue(minValue);
-        sut(output, input);
+        output = sut.Calculate(input);
 
-        EXPECT_FLOAT_EQ(output.left, minValue);
-        EXPECT_FLOAT_EQ(output.right, minValue);
+        EXPECT_STEREOSAMPLE_EQ(output, expected);
     }
 
     TEST_F(HyperbolicTangentTest, operator_correctInputWithGainZeros_returnsZeros){
         StereoSample input {0.0f, 0.0f};
+        StereoSample expected {0.0f, 0.0f};
 
         sut.SetGain(0.0f);
-        sut(output, input);
+        output = sut.Calculate(input);
 
-        EXPECT_FLOAT_EQ(output.left, 0.0f);
-        EXPECT_FLOAT_EQ(output.right, 0.0f);
+        EXPECT_STEREOSAMPLE_EQ(output, expected);
     }
 
 } // namespace

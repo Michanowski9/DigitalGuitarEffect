@@ -34,12 +34,12 @@ void Delay::AddToBuffor(const StereoSample &input, std::queue<StereoSample> &buf
 
 void Delay::Calculate(StereoSample &output, const StereoSample &input, std::queue<StereoSample> &buff, const int &maxSize)
 {
-    auto calc = [=, this](auto& out, const auto& in, auto& bufforFront){
-        out = in + (buff.size() >= maxSize ? alpha * bufforFront : 0);
+    auto calc = [](auto& out, const auto& in, auto buffSize, auto& buffFront, auto& maxSize, auto& alpha){
+        out = in + (buffSize >= maxSize ? alpha * buffFront : 0);
     };
 
-    calc(output.left, input.left, buff.front().left);
-    calc(output.right, input.right, buff.front().right);
+    calc(output.left, input.left, buff.size(), buff.front().left, maxSize, alpha);
+    calc(output.right, input.right, buff.size(), buff.front().right, maxSize, alpha);
 }
 
 void Delay::SetDelayInMilliseconds(const int value)

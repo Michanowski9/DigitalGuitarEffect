@@ -6,10 +6,12 @@
 
 #include "mainProgram.h"
 #include "Effects/overdrive.h"
-#include "IEffect.h"
+#include "Effects/delay.h"
+
+#include "Effects/IEffect.h"
 #include <memory>
 
-std::unique_ptr<MainProgram> mainProgram;
+std::shared_ptr<MainProgram> mainProgram;
 
 #if defined (WIN32)
     #define DLL_EXPORT __declspec(dllexport)
@@ -68,6 +70,9 @@ extern "C"
         void* AddEffectOverdrive();
 
     DLL_EXPORT
+        void* AddEffectDelay();
+
+    DLL_EXPORT
         void SetEffectOn(void* ptr, bool value);
 
     DLL_EXPORT
@@ -76,6 +81,8 @@ extern "C"
     DLL_EXPORT
         void RemoveEffect(void* ptr);
 
+    DLL_EXPORT
+        void SwapEffects(int firstId, int secondId);
 
 
     DLL_EXPORT
@@ -92,10 +99,15 @@ extern "C"
         void Overdrive_SetMinMaxValue(void* ptr, float minValue, float maxValue);
 
     DLL_EXPORT
-        void Overdrive_SetSoftCutValue(void* ptr, float value);
+        void Overdrive_SetAlgorithm(void* ptr, int algorithm);
+
 
     DLL_EXPORT
-        void Overdrive_SetAlgorithm(void* ptr, int algorithm);
+        void Delay_SetDelay(void* ptr, int value);
+
+    DLL_EXPORT
+        void Delay_SetAlpha(void* ptr, float value);
+
 }
 
 #endif

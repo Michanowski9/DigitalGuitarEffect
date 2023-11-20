@@ -72,8 +72,12 @@ class SettingsTab(QWidget):
 
 
     def inputOutputDevice_combobox_changed(self):
-        inputIndex = list(self.cpplib.GetInputDevices().keys())[self.input_device_comboBox.currentIndex()]
-        outputIndex = list(self.cpplib.GetOutputDevices().keys())[self.output_device_comboBox.currentIndex()]
+        try:
+            inputIndex = list(self.cpplib.GetInputDevices().keys())[self.input_device_comboBox.currentIndex()]
+            outputIndex = list(self.cpplib.GetOutputDevices().keys())[self.output_device_comboBox.currentIndex()]
+        except:
+            return
+
         self.sample_rates_comboBox.clear()
         self.sample_rates_comboBox.addItems([str(x) for x in self.cpplib.GetSampleRates(inputIndex, outputIndex)])
 

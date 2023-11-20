@@ -27,17 +27,20 @@ set_target_properties(libgmock PROPERTIES
 include_directories("${CMAKE_SOURCE_DIR}/googletest/include"
                     "${CMAKE_SOURCE_DIR}/googlemock/include")
 include_directories("${CMAKE_SOURCE_DIR}/src/native")
+include_directories("${CMAKE_SOURCE_DIR}/test")
 
 file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false *.h *.cpp)
 set(SOURCES ${TEST_SOURCES})
 
+enable_testing()
+
 add_executable(${CMAKE_PROJECT_NAME}_test ${TEST_SOURCES})
 target_link_libraries(${CMAKE_PROJECT_NAME}_test PUBLIC ${CMAKE_PROJECT_NAME}_lib gtest gmock)
 
-add_custom_target(
-    run_tests ALL
-    COMMAND ${CMAKE_SOURCE_DIR}/bin/Release/${CMAKE_PROJECT_NAME}_test.exe 
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-)
-add_dependencies(run_tests ${CMAKE_PROJECT_NAME}_test)
+#add_custom_target(
+#    run_tests ALL
+#    COMMAND ${CMAKE_SOURCE_DIR}/bin/Release/${CMAKE_PROJECT_NAME}_test.exe
+#    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+#)
+#add_dependencies(run_tests ${CMAKE_PROJECT_NAME}_test)
 

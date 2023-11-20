@@ -1,6 +1,6 @@
 import sys
 
-from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QLabel, QComboBox
+from PyQt6.QtWidgets import QLabel, QComboBox
 
 sys.path.append("..")
 from Effect import Effect
@@ -9,6 +9,12 @@ class OverdriveTab(Effect):
     def __init__(self, effectPtr, cpplib):
         Effect.__init__(self, effectPtr, cpplib)
 
+        self.SetEffectSettings()
+        self.SetDials()
+        self.algorithm_combo_changed()
+
+
+    def SetEffectSettings(self):
         self.algorithm_combo = QComboBox()
 
         algorithms = []
@@ -17,9 +23,12 @@ class OverdriveTab(Effect):
         self.algorithm_combo.addItems(algorithms)
         self.algorithm_combo.currentTextChanged.connect(self.algorithm_combo_changed)
 
-        self.SetDials()
-        self.SetLayout()
-        self.algorithm_combo_changed()
+        self.SetEffectLayout()
+
+
+    def SetEffectLayout(self):
+        self.effect_settings.addWidget(QLabel("Algorithm"))
+        self.effect_settings.addWidget(self.algorithm_combo)
 
 
     def SetDials(self):
@@ -32,24 +41,9 @@ class OverdriveTab(Effect):
         _, _, self.maxValue_edit, maxValue_layout = self.CreateDial("Max Value", -1, 1, 1)
         self.maxValue_edit.textChanged.connect(self.min_max_refresh)
 
-        self.dials = QHBoxLayout()
         self.dials.addLayout(gain_layout)
         self.dials.addLayout(minValue_layout)
         self.dials.addLayout(maxValue_layout)
-
-
-    def SetLayout(self):
-        mainLayout = QVBoxLayout()
-
-        mainLayout.addWidget(self.on_off_button)
-
-        mainLayout.addWidget(QLabel("Algorithm"))
-        mainLayout.addWidget(self.algorithm_combo)
-
-        mainLayout.addLayout(self.dials)
-        mainLayout.addWidget(self.canvas)
-
-        self.setLayout(mainLayout)
 
 
     def gain_edit_changed_value(self):

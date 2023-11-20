@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IEffect.h"
+#include "Effects/IEffect.h"
 
 class IAudioCallbackWrapper
 {

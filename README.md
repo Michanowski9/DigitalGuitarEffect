@@ -1,31 +1,43 @@
 # DigitalGuitarEffect
 
 ## Compilation and run:
-At the moment, the project only works on Windows<br>
-Tests are disabled in this version
-
-### Windows:
 (in root directory)
-Compilation & run:
+
 ```
 cmake -B build
 cmake --build build --config Release
 ```
-Only Run:
+### Linux:
+Run app:
+```
+python3 src/python/main.py
+```
+Run tests:
+```
+./bin/app_test
+```
+### Windows:
+Run app:
 ```
 py src/python/main.py
 ```
-
+Run tests:
+```
+.\bin\Release\app_test.exe
+```
 ## Requirements:
 - cmake
 - python 3.11+
-*packages:*
- - PyQt6
-  - matplotlib
-- Visual Studio 17 2022
+
+    *packages:*
+    - PyQt6
+    - matplotlib
+- Visual Studio 17 2022 (Windows) / G++ (Linux)
 - Compiled portaudio library
 
+------------
 ### Portaudio Compilation:
+#### Windows:
 - clone portaudio repository: https://github.com/PortAudio/portaudio.git
 ```
 git clone https://github.com/PortAudio/portaudio.git
@@ -57,3 +69,18 @@ cmake -G "Visual Studio 17 2022" -A x64 -DPA_USE_ASIO=ON ..
 - in ***C/C++*** -> ***Code Generation*** set 'Runtime Library' to '/MD'
 - build Solution (Release)
 - Copy folder portaudio/include and lib file portaudio/build/Release/portaudio.lib to DigitalGuitarEffect/lib/portaudio
+
+#### Linux:
+- clone portaudio repository: https://github.com/PortAudio/portaudio.git
+```
+git clone https://github.com/PortAudio/portaudio.git
+```
+- change directory to portaudio
+```
+cd portaudio
+```
+- compile project:
+```
+cmake -B build && cmake --build build
+```
+- Copy folder portaudio/include and lib file portaudio/build/libportaudio.a to DigitalGuitarEffect/lib/portaudio

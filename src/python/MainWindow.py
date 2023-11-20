@@ -1,8 +1,10 @@
-from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QTabWidget, QWidget, QPushButton
+from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QTabWidget, QWidget, QPushButton, QDialog
 
 from CppLibWrapper import CppLib
 from SettingsTab import SettingsTab
+from ChooseEffectDialog import ChooseEffectDialog
 from Effects.OverdriveTab import OverdriveTab
+from Effects.DelayTab import DelayTab
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -79,10 +81,10 @@ class MainWindow(QWidget):
 
 
     def tab_current_changed(self, i):
-        if i == 0:
-            self.remove_effect_button.setEnabled(False)
-        else:
-            self.remove_effect_button.setEnabled(True)
+        self.remove_effect_button.setEnabled(False if i == 0 else True)
+        self.move_left_effect_button.setEnabled(False if i == 0 or i == 1 else True)
+        self.move_right_effect_button.setEnabled(False if i == 0 or i == self.tab.count() - 1 else True)
+
 
 #######################################################
 ###                 buttons handlers                ###
@@ -123,8 +125,18 @@ class MainWindow(QWidget):
 
 
     def add_effect_button_on_click(self):
-        effectPtr = self.cpplib.AddEffect("overdrive")
-        indexTab = self.tab.addTab(OverdriveTab(effectPtr, self.cpplib), "Overdrive")
+        dialog = ChooseEffectDialog()
+
+        if not dialog.exec():
+            return
+
+        match dialog.result:
+            case "Overdrive":
+                effectPtr = self.cpplib.AddEffect("overdrive")
+                indexTab = self.tab.addTab(OverdriveTab(effectPtr, self.cpplib), "Overdrive")
+            case "Delay":
+                effectPtr = self.cpplib.AddEffect("delay")
+                indexTab = self.tab.addTab(DelayTab(effectPtr, self.cpplib), "Delay")
         self.tab.setCurrentIndex(indexTab)
 
 
@@ -135,9 +147,28 @@ class MainWindow(QWidget):
 
 
     def move_left_effect_button_on_click(self):
-        raise NotImplementedError
+        currentTab, currentTabIndex, currentTabText = self.GetCurrentTabInfo()
+
+        self.cpplib.SwapEffects(currentTabIndex - 1, currentTabIndex - 2)
+
+        self.tab.removeTab(currentTabIndex)
+        self.tab.insertTab(currentTabIndex - 1, currentTab, currentTabText)
+        self.tab.setCurrentIndex(currentTabIndex - 1)
 
 
     def move_right_effect_button_on_click(self):
-        raise NotImplementedError
+        currentTab, currentTabIndex, currentTabText = self.GetCurrentTabInfo()
 
+        self.cpplib.SwapEffects(currentTabIndex - 1, currentTabIndex)
+
+        self.tab.removeTab(currentTabIndex)
+        self.tab.insertTab(currentTabIndex + 1, currentTab, currentTabText)
+        self.tab.setCurrentIndex(currentTabIndex + 1)
+
+
+    def GetCurrentTabInfo(self):
+        index = self.tab.currentIndex()
+        tab = self.tab.currentWidget()
+        text = self.tab.tabText(index)
+
+        return tab, index, text

@@ -2,36 +2,44 @@
 
 #include <memory>
 #include <vector>
+#include <functional>
 
-#include "../IEffect.h"
+#include "IEffect.h"
 #include "OverdriveAlgorithms/IOverdriveAlgorithm.h"
 #include "OverdriveAlgorithms/HardClipping.h"
 #include "OverdriveAlgorithms/HyperbolicTangent.h"
 
+
 class Overdrive : public IEffect {
 public:
-    Overdrive();
+    using AlgorithmsContainer = std::vector<std::shared_ptr<IOverdriveAlgorithm>>;
+
+    Overdrive() = default;
     Overdrive(Overdrive &&) = default;
     Overdrive(const Overdrive &) = default;
     Overdrive &operator=(Overdrive &&) = default;
     Overdrive &operator=(const Overdrive &) = default;
     ~Overdrive() = default;
 
-    void SetOn(const bool value) override;
-    void Calculate(StereoSample &output, const StereoSample &input) override;
+    void operator()(StereoSample &output, const StereoSample &input) override;
+    void CalculateForVisualization(StereoSample &output, const StereoSample &input) override;
+
+    void AddAlgorithm(std::shared_ptr<IOverdriveAlgorithm> algorithm);
 
     void SetAlgorithm(const int value);
     int GetAlgorithmsNo();
     std::string GetAlgorithmName(int id);
 
-    // Sets properties in algorithms
-    void SetMinMaxValue(const float minValue, const float maxValue);
+    void SetMinValue(const float value);
+    void SetMaxValue(const float value);
     void SetGain(const float value);
-private:
-    std::vector<std::shared_ptr<IOverdriveAlgorithm>> algorithms;
-    int currentAlgorithm = 0;
 
-    bool isOn = false;
+private:
+    void Calculate(StereoSample &output, const StereoSample &input);
+    void SetPropertyInAlgorithms(std::function<bool(std::shared_ptr<IOverdriveAlgorithm>)> IsImplemeting, std::function<void(std::shared_ptr<IOverdriveAlgorithm>)> SetProperty);
+
+    AlgorithmsContainer algorithms;
+    int currentAlgorithm = 0;
 };
 
 

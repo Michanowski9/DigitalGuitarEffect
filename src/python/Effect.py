@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QDial, QLabel, QLineEdit
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QComboBox, QPushButton, QDial, QLabel, QLineEdit
 from PyQt6.QtCore import Qt
 
 import matplotlib.pyplot as plt
@@ -13,14 +13,37 @@ class Effect(QWidget):
         self.effectPtr = effectPtr
         self.cpplib = cpplib
 
+        self.SetPlotWindow()
+        self.SetButtons()
+        self.SetLayout()
+
+        self.draw_plot()
+        self.isOn = False
+
+
+    def SetPlotWindow(self):
         # creating plot
         self.figure = plt.figure()
         self.canvas = FigureCanvasQTAgg(self.figure)
 
-        self.SetButtons()
+        self.visualizationInput_combo = QComboBox()
+        self.visualizationInput_combo.addItems(["sin", "impulse", "tone 5Hz", "tone 20Hz"])
+        self.visualizationInput_combo.currentTextChanged.connect(self.visualizationInput_combo_changed)
 
-        self.draw_plot()
-        self.isOn = False
+
+    def SetLayout(self):
+        mainLayout = QVBoxLayout()
+
+        self.dials = QHBoxLayout()
+        self.effect_settings = QVBoxLayout()
+
+        mainLayout.addWidget(self.on_off_button)
+        mainLayout.addLayout(self.effect_settings)
+        mainLayout.addLayout(self.dials)
+        mainLayout.addWidget(self.canvas)
+        mainLayout.addWidget(self.visualizationInput_combo)
+
+        self.setLayout(mainLayout)
 
 
     def SetButtons(self):
@@ -35,8 +58,7 @@ class Effect(QWidget):
         return result
 
 
-    def CreateDial(self, label, minValue, maxValue, value):
-        multiplier = 100
+    def CreateDial(self, label, minValue, maxValue, value, multiplier=100):
 
         result_label = QLabel(label, alignment=Qt.AlignmentFlag.AlignCenter)
 
@@ -70,19 +92,51 @@ class Effect(QWidget):
 
 
     def draw_plot(self):
-        x = [math.sin(x/1000.0*4*math.pi) for x in range(0,1000)]
-        y = [math.sin(x/1000.0*4*math.pi) for x in range(0,1000)]
+        x = []
+        y = []
+        time = 5 # sec
+        sampling = 1000 # in 1 sec
+
+        if self.visualizationInput_combo.currentIndex() == 1:
+            x = [0 for _ in range(0, sampling * time)]
+            for i in range(0, len(x)):
+                if i <= 10:
+                    x[i] = i * 0.1
+                elif i <= 20:
+                    x[i] = 1 - 0.5 * i * 0.1
+                else:
+                    break
+        elif self.visualizationInput_combo.currentIndex() == 2:
+            x = self.GetDampingSin(hz=5, damping_coefficient=5, time=time, sampling=sampling)
+        elif self.visualizationInput_combo.currentIndex() == 3:
+            x = self.GetDampingSin(hz=20, damping_coefficient=5, time=time, sampling=sampling)
+        else:
+            periods_no = 2
+            x = [math.sin(x / float(sampling * time) * periods_no * 2 * math.pi) for x in range(0, sampling * time)]
+
+        y1 = [0 for _ in range(sampling * time)]
+        y2 = [y for y in x]
+        y = y1 + y2
 
         self.cpplib.CalculateExampleData(self.effectPtr, y)
+
+        y = y[(sampling * time):]
+
         self.figure.clear()
 
         ax = self.figure.add_subplot(111)
         ax.plot(x, color="r", alpha=0.2)
         ax.plot(y, color="b")
+        ax.set_ylim([-1.05,1.05])
         ax.legend(['input', 'output'], loc=1)
 
         self.canvas.draw()
 
+
+    def GetDampingSin(self, hz, damping_coefficient, time, sampling):
+        periods_no = time * hz
+        probes_no = sampling * time
+        return [math.sin(x / float(probes_no) * periods_no * 2 * math.pi) * (math.e / math.exp(1 + damping_coefficient * x / float(probes_no))) for x in range(0, probes_no)]
 
     def on_off_button_on_click(self):
         self.isOn = not self.isOn
@@ -93,3 +147,5 @@ class Effect(QWidget):
         self.cpplib.SetEffectOn(self.effectPtr, self.isOn);
         self.draw_plot()
 
+    def visualizationInput_combo_changed(self):
+        self.draw_plot()

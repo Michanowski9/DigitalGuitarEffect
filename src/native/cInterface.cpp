@@ -1,14 +1,18 @@
 #include "cInterface.h"
+#include "Effects/OverdriveAlgorithms/HyperbolicTangent.h"
+#include "Effects/OverdriveAlgorithms/HardClipping.h"
+#include "Effects/OverdriveAlgorithms/IOverdriveAlgorithm.h"
 #include "Effects/overdrive.h"
+#include <memory>
 
 void InitPA()
 {
-    mainProgram = std::make_unique<MainProgram>();
+    mainProgram = std::make_shared<MainProgram>();
 }
 
 void FreePA()
 {
-    mainProgram.reset(nullptr);
+    mainProgram.reset();
 }
 
 int GetDeviceNumber()
@@ -86,7 +90,17 @@ void BypassSwitch(bool value)
 
 void* AddEffectOverdrive()
 {
-    return mainProgram->AddEffect(std::make_shared<Overdrive>());
+    auto effect = std::make_shared<Overdrive>();
+
+    effect->AddAlgorithm(std::make_shared<HardClipping>());
+    effect->AddAlgorithm(std::make_shared<HyperbolicTangent>());
+
+    return mainProgram->AddEffect(effect);
+}
+
+void* AddEffectDelay()
+{
+    return mainProgram->AddEffect(std::make_shared<Delay>());
 }
 
 void SetEffectOn(void* ptr, bool value)
@@ -100,7 +114,7 @@ void CalculateExampleData(void* ptr, int size, float* data)
     {
         StereoSample input{data[i], 0};
         StereoSample output{0, 0};
-        static_cast<IEffect*>(ptr)->Calculate(output,input);
+        static_cast<IEffect*>(ptr)->CalculateForVisualization(output,input);
         data[i] = output.left;
     }
 }
@@ -108,6 +122,11 @@ void CalculateExampleData(void* ptr, int size, float* data)
 void RemoveEffect(void* ptr)
 {
     mainProgram->RemoveEffect(ptr);
+}
+
+void SwapEffects(int firstId, int secondId)
+{
+    mainProgram->SwapEffects(firstId, secondId);
 }
 
 int Overdrive_GetAlgorithmsNo(void* ptr)
@@ -128,15 +147,21 @@ void Overdrive_SetGain(void* ptr, float value)
 
 void Overdrive_SetMinMaxValue(void* ptr, float minValue, float maxValue)
 {
-    static_cast<Overdrive*>(ptr)->SetMinMaxValue(minValue, maxValue);
-}
-
-void Overdrive_SetSoftCutValue(void* ptr, float value)
-{
-//    static_cast<Overdrive*>(ptr)->SetSoftCutValue(value);
+    static_cast<Overdrive*>(ptr)->SetMinValue(minValue);
+    static_cast<Overdrive*>(ptr)->SetMaxValue(maxValue);
 }
 
 void Overdrive_SetAlgorithm(void* ptr, int algorithm)
 {
     static_cast<Overdrive*>(ptr)->SetAlgorithm(algorithm);
+}
+
+void Delay_SetDelay(void* ptr, int value)
+{
+    static_cast<Delay*>(ptr)->SetDelayInMilliseconds(value);
+}
+
+void Delay_SetAlpha(void* ptr, float value)
+{
+    static_cast<Delay*>(ptr)->SetAlpha(value);
 }

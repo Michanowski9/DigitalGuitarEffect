@@ -2,7 +2,7 @@
 
 ## Compilation and run:
 (in root directory)
-Compilation:
+
 ```
 cmake -B build
 cmake --build build --config Release
@@ -23,7 +23,7 @@ py src/python/main.py
 ```
 Run tests:
 ```
-.\bin\Release\app_tests.exe
+.\bin\Release\app_test.exe
 ```
 ## Requirements:
 - cmake

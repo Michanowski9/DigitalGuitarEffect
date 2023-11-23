@@ -11,8 +11,9 @@ public:
     StereoSample Calculate(const StereoSample &input) override
     {
         StereoSample output;
-        auto calc = [](const auto obj, auto& output, auto& input){
-            output = input * obj->gain;
+        output = input * this->gain;
+
+        auto calc = [](const auto obj, auto& output){
             if(output > obj->maxValue)
             {
                 output = obj->maxValue;
@@ -23,8 +24,8 @@ public:
             }
         };
 
-        calc(this, output.left, input.left);
-        calc(this, output.right, input.right);
+        calc(this, output.left);
+        calc(this, output.right);
         return output;
     };
 

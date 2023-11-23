@@ -30,7 +30,7 @@ namespace {
 
         output = sut.Calculate(input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, expected);
+        EXPECT_EQ(output, expected);
     }
 
     TEST_F(HyperbolicTangentTest, operator_inputOnes_returnsOnes){
@@ -39,7 +39,7 @@ namespace {
 
         output = sut.Calculate(input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, expected);
+        EXPECT_EQ(output, expected);
     }
 
     TEST_F(HyperbolicTangentTest, operator_correctInput_returnsCorrectNormalizedTanh){
@@ -51,7 +51,7 @@ namespace {
 
         output = sut.Calculate(input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, expected);
+        EXPECT_EQ(output, expected);
     }
 
     TEST_F(HyperbolicTangentTest, operator_correctInputWithGain_returnsCorrectNormalizedTanh){
@@ -64,7 +64,7 @@ namespace {
         sut.SetGain(2.0f);
         output = sut.Calculate(input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, expected);
+        EXPECT_EQ(output, expected);
     }
 
     TEST_F(HyperbolicTangentTest, operator_correctInputWithMaxValue_returnsMaxValue){
@@ -75,7 +75,7 @@ namespace {
         sut.SetMaxValue(maxValue);
         output = sut.Calculate(input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, expected);
+        EXPECT_EQ(output, expected);
     }
 
     TEST_F(HyperbolicTangentTest, operator_correctInputWithMinValue_returnsMinValue){
@@ -86,7 +86,7 @@ namespace {
         sut.SetMinValue(minValue);
         output = sut.Calculate(input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, expected);
+        EXPECT_EQ(output, expected);
     }
 
     TEST_F(HyperbolicTangentTest, operator_correctInputWithGainZeros_returnsZeros){
@@ -96,7 +96,7 @@ namespace {
         sut.SetGain(0.0f);
         output = sut.Calculate(input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, expected);
+        EXPECT_EQ(output, expected);
     }
 
 } // namespace

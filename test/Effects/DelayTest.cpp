@@ -7,15 +7,14 @@
 #include "Effects/delay.cpp"
 
 #include <cmath>
+#include <ostream>
 
 namespace {
-
     class DelayTest : public testing::Test
     {
     protected:
         std::shared_ptr<Settings> settings;
         Delay sut;
-        StereoSample output;
 
         // runs before each test
         void SetUp() override
@@ -23,31 +22,68 @@ namespace {
             settings = std::make_shared<Settings>();
             sut = Delay();
             sut.SetSettings(settings);
-
-            output = {
-                std::nanf(" "),
-                std::nanf(" ")
-            };
         }
     };
 
+    std::vector<StereoSample> GetNanArray(size_t size){
+        std::vector<StereoSample> result;
+        for (size_t i = 0; i < size; i++) {
+            result.push_back({ std::nanf(" "), std::nanf(" ") });
+        }
+        return result;
+    }
+
+    TEST(TestUtils, GetNanArray_generateCorrectData)
+    {
+        auto output = GetNanArray(3);
+
+        EXPECT_TRUE(std::isnan(output[0].left));
+        EXPECT_TRUE(std::isnan(output[0].right));
+        EXPECT_TRUE(std::isnan(output[1].left));
+        EXPECT_TRUE(std::isnan(output[1].right));
+        EXPECT_TRUE(std::isnan(output[2].left));
+        EXPECT_TRUE(std::isnan(output[2].right));
+    }
+
+    std::vector<StereoSample> GetInputArray(size_t size){
+        std::vector<StereoSample> result;
+        for (size_t i = 0; i < size; i++) {
+            result.push_back({
+                    static_cast<float>(i + 1)/10,
+                    - static_cast<float>(i + 1)/10
+                    });
+        }
+        return result;
+    }
+
+    TEST(TestUtils, GetInputArray_generateCorrectData)
+    {
+        StereoSample expected[] = {
+             { 0.1f, -0.1f },
+             { 0.2f, -0.2f },
+             { 0.3f, -0.3f }
+        };
+
+        auto output = GetInputArray(3);
+
+        EXPECT_THAT(output, testing::ElementsAreArray(expected));
+    }
+
     TEST_F(DelayTest, operator_effectIsOff_returnsInput)
     {
+        StereoSample output = { std::nanf(" "), std::nanf(" ") };
         StereoSample input = { 0.5f, -0.5f };
 
         sut.SetOn(false);
         sut(output, input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, input);
+        EXPECT_EQ(output, input);
     }
 
     TEST_F(DelayTest, operator_addingToBufforWithSize1_correctlyAddBufforedSignal)
     {
-        StereoSample input[] = {
-            {0.10f, -0.10f},
-            {0.20f, -0.20f},
-            {0.30f, -0.30f}
-        };
+        auto output = GetNanArray(3);
+        auto input = GetInputArray(3);
         StereoSample expected[] = {
             { input[0] },
             { input[1] + input[0] },
@@ -55,30 +91,21 @@ namespace {
         };
         settings->SetCurrentSampleRate(1);
         sut.SetDelayInMilliseconds(1000);
-
         sut.SetOn(true);
 
-        sut(output, input[0]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[0]);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut(output, input[1]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[1]);
+        sut(output[0], input[0]);
+        sut(output[1], input[1]);
+        sut(output[2], input[2]);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut(output, input[2]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[2]);
+
+        EXPECT_THAT(output, testing::ElementsAreArray(expected));
     }
 
     TEST_F(DelayTest, operator_addingToBufforWithSize2_correctlyAddBufforedSignal)
     {
-        StereoSample input[] = {
-            {0.10f, -0.10f},
-            {0.20f, -0.20f},
-            {0.30f, -0.30f},
-            {0.40f, -0.40f},
-            {0.50f, -0.50f}
-        };
+        auto output = GetNanArray(5);
+        auto input = GetInputArray(5);
         StereoSample expected[] = {
             { input[0] },
             { input[1] },
@@ -91,35 +118,21 @@ namespace {
 
         sut.SetOn(true);
 
-        sut(output, input[0]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[0]);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut(output, input[1]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[1]);
+        sut(output[0], input[0]);
+        sut(output[1], input[1]);
+        sut(output[2], input[2]);
+        sut(output[3], input[3]);
+        sut(output[4], input[4]);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut(output, input[2]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[2]);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut(output, input[3]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[3]);
-
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut(output, input[4]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[4]);
+        EXPECT_THAT(output, testing::ElementsAreArray(expected));
     }
 
     TEST_F(DelayTest, operator_addingToBufforWithSize2SetOnDuringCalculating_correctlyAddBufforedSignal)
     {
-        StereoSample input[] = {
-            {0.10f, -0.10f},
-            {0.20f, -0.20f},
-            {0.30f, -0.30f},
-            {0.40f, -0.40f},
-            {0.50f, -0.50f}
-        };
+        auto output = GetNanArray(5);
+        auto input = GetInputArray(5);
         StereoSample expected[] = {
             { input[0] },
             { input[1] },
@@ -131,36 +144,22 @@ namespace {
         sut.SetDelayInMilliseconds(2000);
 
 
-        sut(output, input[0]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[0]);
-
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut(output, input[1]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[1]);
-
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut(output, input[2]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[2]);
-
+        sut(output[0], input[0]);
+        sut(output[1], input[1]);
+        sut(output[2], input[2]);
         sut.SetOn(true);
+        sut(output[3], input[3]);
+        sut(output[4], input[4]);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut(output, input[3]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[3]);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut(output, input[4]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[4]);
+        EXPECT_THAT(output, testing::ElementsAreArray(expected));
     }
 
     TEST_F(DelayTest, operator_addingToBufforWithAlphaNotEq1_correctlyAddBufforedScaledSignal)
     {
         float alpha = 0.5f;
-        StereoSample input[] = {
-            {0.10f, -0.10f},
-            {0.20f, -0.20f},
-            {0.30f, -0.30f}
-        };
+        auto output = GetNanArray(3);
+        auto input = GetInputArray(5);
         StereoSample expected[] = {
             { input[0] },
             { input[1] + input[0] * alpha },
@@ -172,28 +171,20 @@ namespace {
         sut.SetAlpha(alpha);
         sut.SetOn(true);
 
-        sut(output, input[0]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[0]);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut(output, input[1]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[1]);
+        sut(output[0], input[0]);
+        sut(output[1], input[1]);
+        sut(output[2], input[2]);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut(output, input[2]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[2]);
+
+        EXPECT_THAT(output, testing::ElementsAreArray(expected));
     }
 
     TEST_F(DelayTest, CalculateForVisualization_correctInput_correctOutput)
     {
         auto alpha = 0.5f;
-        StereoSample input[] = {
-            {0.10f, -0.10f},
-            {0.20f, -0.20f},
-            {0.30f, -0.30f},
-            {0.40f, -0.40f},
-            {0.50f, -0.50f}
-        };
+        auto output = GetNanArray(5);
+        auto input = GetInputArray(5);
         StereoSample expected[] = {
             { input[0] },
             { input[1] },
@@ -206,38 +197,21 @@ namespace {
         sut.SetAlpha(alpha);
 
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut.CalculateForVisualization(output, input[0]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[0]);
+        sut.CalculateForVisualization(output[0], input[0]);
+        sut.CalculateForVisualization(output[1], input[1]);
+        sut.CalculateForVisualization(output[2], input[2]);
+        sut.CalculateForVisualization(output[3], input[3]);
+        sut.CalculateForVisualization(output[4], input[4]);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut.CalculateForVisualization(output, input[1]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[1]);
-
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut.CalculateForVisualization(output, input[2]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[2]);
-
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut.CalculateForVisualization(output, input[3]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[3]);
-
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut.CalculateForVisualization(output, input[4]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[4]);
+        EXPECT_THAT(output, testing::ElementsAreArray(expected));
     }
 
     TEST_F(DelayTest, CalculateForVisualization_audioMixedWithVisualization_correctOutput)
     {
-        GTEST_SKIP() << "skipped - a static variable make this test depends on another test";
+        //GTEST_SKIP() << "skipped - a static variable make this test depends on another test";
         constexpr auto alpha = 0.5f;
-        StereoSample input[] = {
-            {0.10f, -0.10f},
-            {0.20f, -0.20f},
-            {0.30f, -0.30f},
-            {0.40f, -0.40f},
-            {0.50f, -0.50f}
-        };
+        auto output = GetNanArray(5);
+        auto input = GetInputArray(5);
         StereoSample expected[] = {
             { input[0] },
             { input[1] },
@@ -250,42 +224,28 @@ namespace {
         sut.SetAlpha(alpha);
         sut.SetOn(true);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut.CalculateForVisualization(output, input[0]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[0]);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut.CalculateForVisualization(output, input[1]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[1]);
+        sut.CalculateForVisualization(output[0], input[0]);
+        sut.CalculateForVisualization(output[1], input[1]);
 
         StereoSample temp{ 0, 0 };
         sut(temp, temp);
         sut(temp, temp);
         sut(temp, temp);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut.CalculateForVisualization(output, input[2]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[2]);
+        sut.CalculateForVisualization(output[2], input[2]);
+        sut.CalculateForVisualization(output[3], input[3]);
+        sut.CalculateForVisualization(output[4], input[4]);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut.CalculateForVisualization(output, input[3]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[3]);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut.CalculateForVisualization(output, input[4]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[4]);
+        EXPECT_THAT(output, testing::ElementsAreArray(expected));
     }
 
     TEST_F(DelayTest, operator_audioMixedWithVisualization_correctOutput)
     {
         constexpr auto alpha = 0.5;
-        StereoSample input[] = {
-            {0.10f, -0.10f},
-            {0.20f, -0.20f},
-            {0.30f, -0.30f},
-            {0.40f, -0.40f},
-            {0.50f, -0.50f}
-        };
+        auto output = GetNanArray(5);
+        auto input = GetInputArray(5);
         StereoSample expected[] = {
             { input[0] },
             { input[1] },
@@ -298,30 +258,20 @@ namespace {
         sut.SetAlpha(alpha);
         sut.SetOn(true);
 
-        sut(output, input[0]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[0]);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut(output, input[1]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[1]);
+        sut(output[0], input[0]);
+        sut(output[1], input[1]);
 
         StereoSample temp { 0, 0 };
         sut.CalculateForVisualization(temp,temp);
         sut.CalculateForVisualization(temp,temp);
         sut.CalculateForVisualization(temp,temp);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut(output, input[2]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[2]);
+        sut(output[2], input[2]);
+        sut(output[3], input[3]);
+        sut(output[4], input[4]);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut(output, input[3]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[3]);
 
-        output = { std::nanf(" "), std::nanf(" ") };
-        sut(output, input[4]);
-        EXPECT_STEREOSAMPLE_EQ(output, expected[4]);
+        EXPECT_THAT(output, testing::ElementsAreArray(expected));
     }
-
-
 } // namespace

@@ -30,7 +30,7 @@ namespace {
 
         output = sut.Calculate(input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, expected);
+        EXPECT_EQ(output, expected);
     }
 
     TEST_F(HardClippingTest, operator_inputOnes_returnsOnes){
@@ -39,7 +39,7 @@ namespace {
 
         output = sut.Calculate(input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, expected);
+        EXPECT_EQ(output, expected);
     }
 
     TEST_F(HardClippingTest, operator_inputWithGainEqOne_returnsOnes){
@@ -49,7 +49,7 @@ namespace {
         sut.SetGain(2.0f);
         output = sut.Calculate(input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, expected);
+        EXPECT_EQ(output, expected);
     }
 
     TEST_F(HardClippingTest, operator_inputWithGainAboveOne_returnsOnes){
@@ -59,7 +59,7 @@ namespace {
         sut.SetGain(3.0f);
         output = sut.Calculate(input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, expected);
+        EXPECT_EQ(output, expected);
     }
 
     TEST_F(HardClippingTest, operator_inputWithGainBelowMinusOne_returnsOnes){
@@ -69,7 +69,7 @@ namespace {
         sut.SetGain(3.0f);
         output = sut.Calculate(input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, expected);
+        EXPECT_EQ(output, expected);
     }
 
     TEST_F(HardClippingTest, operator_inputWithGainAboveMax_returnsOnes){
@@ -81,7 +81,7 @@ namespace {
         sut.SetGain(3.0f);
         output = sut.Calculate(input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, expected);
+        EXPECT_EQ(output, expected);
     }
 
     TEST_F(HardClippingTest, operator_inputWithGainBelowMin_returnsOnes){
@@ -93,7 +93,7 @@ namespace {
         sut.SetGain(3.0f);
         output = sut.Calculate(input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, expected);
+        EXPECT_EQ(output, expected);
     }
 
 } // namespace

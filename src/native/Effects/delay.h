@@ -4,10 +4,15 @@
 #include <queue>
 
 #include "IEffect.h"
+#include "DelayAlgorithms/IDelayAlgorithms.h"
+#include "DelayAlgorithms/CombFilter.h"
 
 class Delay : public IEffect {
 public:
-    Delay() = default;
+    Delay(){
+        algorithm = std::make_shared<CombFilter>();
+        algorithmVisualisation = std::make_shared<CombFilter>();
+    };
     Delay(Delay &&) = default;
     Delay(const Delay &) = default;
     Delay &operator=(Delay &&) = default;
@@ -21,12 +26,8 @@ public:
     void SetAlpha(const float value);
 
 private:
-    void Calculate(StereoSample &output, const StereoSample &input, std::queue<StereoSample> &buffor, const int &bufforMaxSize);
-    void AddToBuffor(const StereoSample &input, std::queue<StereoSample> &buffor, const int &bufforMaxSize);
-
-    std::queue<StereoSample> buffor;
-    float alpha = 1.0f;
-    int bufforMaxSize = 1;
+    std::shared_ptr<IDelayAlgorithm> algorithm;
+    std::shared_ptr<IDelayAlgorithm> algorithmVisualisation;
 };
 
 

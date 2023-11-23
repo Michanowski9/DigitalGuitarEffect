@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../IEffect.h"
+#include "../../StereoSample.h"
 #include <string>
 
 class IOverdriveAlgorithm

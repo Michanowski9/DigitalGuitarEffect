@@ -2,52 +2,31 @@
 
 void Delay::operator()(StereoSample &output, const StereoSample &input)
 {
-    auto bufforMaxSizeInProbes = bufforMaxSize / 1000 * settings->GetCurrentSampleRate();
     if(isOn)
     {
-        Calculate(output, input, this->buffor, bufforMaxSizeInProbes);
+        output = algorithm->Calculate(input);
     }
     else
     {
-        output = {input.left, input.right};
+        output = input;
     }
-    AddToBuffor(input, this->buffor, bufforMaxSizeInProbes);
+    algorithm->AddToBuffor(input);
 }
 
 void Delay::CalculateForVisualization(StereoSample &output, const StereoSample &input)
 {
-    static std::queue<StereoSample> _buffor;
-    int _bufforMaxSize = this->bufforMaxSize;
-
-    Calculate(output, input, _buffor, _bufforMaxSize);
-    AddToBuffor(input, _buffor, _bufforMaxSize);
-}
-
-void Delay::AddToBuffor(const StereoSample &input, std::queue<StereoSample> &buff, const int &maxSize)
-{
-    buff.push(input);
-    while(buff.size() > maxSize)
-    {
-        buff.pop();
-    }
-}
-
-void Delay::Calculate(StereoSample &output, const StereoSample &input, std::queue<StereoSample> &buff, const int &maxSize)
-{
-    auto calc = [](auto& out, const auto& in, auto buffSize, auto& buffFront, auto& maxSize, auto& alpha){
-        out = in + (buffSize >= maxSize ? alpha * buffFront : 0);
-    };
-
-    calc(output.left, input.left, buff.size(), buff.front().left, maxSize, alpha);
-    calc(output.right, input.right, buff.size(), buff.front().right, maxSize, alpha);
+    output = this->algorithmVisualisation->Calculate(input);
+    this->algorithmVisualisation->AddToBuffor(input);
 }
 
 void Delay::SetDelayInMilliseconds(const int value)
 {
-    this->bufforMaxSize = value;
+    this->algorithm->SetDelay(static_cast<float>(value) / 1000 * settings->GetCurrentSampleRate());
+    this->algorithmVisualisation->SetDelay(value);
 }
 
 void Delay::SetAlpha(const float value)
 {
-    this->alpha = value;
+    this->algorithm->SetAlpha(value);
+    this->algorithmVisualisation->SetAlpha(value);
 }

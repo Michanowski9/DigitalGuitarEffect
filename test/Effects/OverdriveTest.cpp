@@ -46,7 +46,7 @@ namespace {
         sut.SetOn(false);
         sut(output, input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, input);
+        EXPECT_EQ(output, input);
     }
 
     TEST_F(OverdriveTest, Calculate_effectISOn_returnsModulatedInput){
@@ -62,7 +62,7 @@ namespace {
         sut.SetOn(true);
         sut(output, input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, expected);
+        EXPECT_EQ(output, expected);
     }
 
     TEST_F(OverdriveTest, Calculate_inputWithSecondAlgorithmWhenEffectOn_returnsCorrectModulatedInput){
@@ -82,7 +82,7 @@ namespace {
         sut.SetOn(true);
         sut(output, input);
 
-        EXPECT_STEREOSAMPLE_EQ(output, expected);
+        EXPECT_EQ(output, expected);
     }
 
     TEST_F(OverdriveTest, SetGain_algorithmIsUsingGain_callsSetGain){

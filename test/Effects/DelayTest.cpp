@@ -48,14 +48,16 @@ namespace {
     TEST_F(DelayTest, operator_addingToBufforWithSize1_correctlyAddBufforedSignal)
     {
         auto sut = GetSut();
+        auto alpha = 0.5f;
         auto output = GetNanArray(3);
         auto input = GetInputArray(3);
         StereoSample expected[] = {
             { input[0] },
-            { input[1] + input[0] },
-            { input[2] + input[1] }
+            { input[1] + alpha * input[0] },
+            { input[2] + alpha * input[1] }
         };
         sut.SetDelayInMilliseconds(1000);
+        sut.SetAlpha(alpha);
         sut.SetOn(true);
 
 
@@ -70,16 +72,18 @@ namespace {
     TEST_F(DelayTest, operator_addingToBufforWithSize2_correctlyAddBufforedSignal)
     {
         auto sut = GetSut();
+        auto alpha = 0.5f;
         auto output = GetNanArray(5);
         auto input = GetInputArray(5);
         StereoSample expected[] = {
             { input[0] },
             { input[1] },
-            { input[2] + input[0] },
-            { input[3] + input[1] },
-            { input[4] + input[2] }
+            { input[2] + alpha * input[0] },
+            { input[3] + alpha * input[1] },
+            { input[4] + alpha * input[2] }
         };
         sut.SetDelayInMilliseconds(2000);
+        sut.SetAlpha(alpha);
         sut.SetOn(true);
 
 
@@ -96,16 +100,18 @@ namespace {
     TEST_F(DelayTest, operator_addingToBufforWithSize2SetOnDuringCalculating_correctlyAddBufforedSignal)
     {
         auto sut = GetSut();
+        auto alpha = 0.5f;
         auto output = GetNanArray(5);
         auto input = GetInputArray(5);
         StereoSample expected[] = {
             { input[0] },
             { input[1] },
             { input[2] }, // set of after this probe
-            { input[3] + input[1] },
-            { input[4] + input[2] }
+            { input[3] + alpha * input[1] },
+            { input[4] + alpha * input[2] }
         };
         sut.SetDelayInMilliseconds(2000);
+        sut.SetAlpha(alpha);
 
 
         sut(output[0], input[0]);

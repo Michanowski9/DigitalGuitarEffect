@@ -173,4 +173,22 @@ class CppLib:
 
         self.cpplib.Delay_SetAlpha(ptr, value)
 
+    def Effect_GetAlgorithmsNo(self, ptr):
+        self.cpplib.Effect_GetAlgorithmsNo.argtypes = [ctypes.c_void_p]
+        self.cpplib.Effect_GetAlgorithmsNo.restype = ctypes.c_int
 
+        return self.cpplib.Effect_GetAlgorithmsNo(ptr)
+
+    def Effect_GetAlgorithmName(self, ptr, id):
+        self.cpplib.Effect_GetAlgorithmName.argtypes = [ctypes.c_void_p, ctypes.c_int]
+        self.cpplib.Effect_GetAlgorithmName.restype = ctypes.POINTER(ctypes.c_char_p)
+
+        result_ptr = self.cpplib.Effect_GetAlgorithmName(ptr, id)
+        result = ctypes.c_char_p.from_buffer(result_ptr).value.decode('utf-8')
+        return result
+
+    def Effect_SetAlgorithm(self, ptr, value):
+        self.cpplib.Effect_SetAlgorithm.argtypes = [ctypes.c_void_p, ctypes.c_int]
+        self.cpplib.Effect_SetAlgorithm.restype = None
+
+        self.cpplib.Effect_SetAlgorithm(ptr, value)

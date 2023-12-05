@@ -100,7 +100,13 @@ void* AddEffectOverdrive()
 
 void* AddEffectDelay()
 {
-    return mainProgram->AddEffect(std::make_shared<Delay>());
+    return mainProgram->AddEffect(
+            std::make_shared<Delay>(Delay(
+                {
+                    { std::make_shared<CombFilter>(), std::make_shared<CombFilter>() },
+                    { std::make_shared<RecursiveCombFilter>(), std::make_shared<RecursiveCombFilter>() }
+                }
+                )));
 }
 
 void SetEffectOn(void* ptr, bool value)
@@ -165,3 +171,20 @@ void Delay_SetAlpha(void* ptr, float value)
 {
     static_cast<Delay*>(ptr)->SetAlpha(value);
 }
+
+int Effect_GetAlgorithmsNo(void* ptr)
+{
+    return static_cast<IEffect*>(ptr)->GetAlgorithmsNo();
+}
+
+const char* Effect_GetAlgorithmName(void* ptr, int id)
+{
+    result = std::make_shared<std::string>(static_cast<IEffect*>(ptr)->GetAlgorithmName(id));
+    return result->c_str();
+}
+
+void Effect_SetAlgorithm(void* ptr, int algorithm)
+{
+    static_cast<IEffect*>(ptr)->SetAlgorithm(algorithm);
+}
+

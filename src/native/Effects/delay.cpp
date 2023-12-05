@@ -4,29 +4,45 @@ void Delay::operator()(StereoSample &output, const StereoSample &input)
 {
     if(isOn)
     {
-        output = algorithm->Calculate(input);
+        output = algorithms[currentAlgorithm]->Calculate(input);
     }
     else
     {
         output = input;
     }
-    algorithm->AddToBuffor(input);
+    algorithms[currentAlgorithm]->AddToBuffor(input);
 }
 
 void Delay::CalculateForVisualization(StereoSample &output, const StereoSample &input)
 {
-    output = this->algorithmVisualisation->Calculate(input);
-    this->algorithmVisualisation->AddToBuffor(input);
+    output = this->algorithmsVisualisation[currentAlgorithm]->Calculate(input);
+    this->algorithmsVisualisation[currentAlgorithm]->AddToBuffor(input);
 }
 
 void Delay::SetDelayInMilliseconds(const int value)
 {
-    this->algorithm->SetDelay(static_cast<float>(value) / 1000 * settings->GetCurrentSampleRate());
-    this->algorithmVisualisation->SetDelay(value);
+    this->algorithms[currentAlgorithm]->SetDelay(static_cast<float>(value) / 1000 * settings->GetCurrentSampleRate());
+    this->algorithmsVisualisation[currentAlgorithm]->SetDelay(value);
 }
 
 void Delay::SetAlpha(const float value)
 {
-    this->algorithm->SetAlpha(value);
-    this->algorithmVisualisation->SetAlpha(value);
+    this->algorithms[currentAlgorithm]->SetAlpha(value);
+    this->algorithmsVisualisation[currentAlgorithm]->SetAlpha(value);
 }
+
+void Delay::SetAlgorithm(const int value)
+{
+    this->currentAlgorithm = value;
+}
+
+int Delay::GetAlgorithmsNo()
+{
+    return this->algorithms.size();
+}
+
+std::string Delay::GetAlgorithmName(int id)
+{
+    return this->algorithms[id]->GetName();
+}
+

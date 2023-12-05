@@ -26,9 +26,9 @@ public:
 
     void AddAlgorithm(std::shared_ptr<IOverdriveAlgorithm> algorithm);
 
-    void SetAlgorithm(const int value);
-    int GetAlgorithmsNo();
-    std::string GetAlgorithmName(int id);
+    void SetAlgorithm(const int value) override;
+    int GetAlgorithmsNo() override;
+    std::string GetAlgorithmName(int id) override;
 
     void SetMinValue(const float value);
     void SetMaxValue(const float value);

@@ -1,20 +1,20 @@
 #pragma once
 
 #include <queue>
-#include "../../StereoSample.h"
 #include "IDelayAlgorithms.h"
 
-class CombFilter : public IDelayAlgorithm
+class RecursiveCombFilter : public IDelayAlgorithm
 {
 public:
-    CombFilter() = default;
-    ~CombFilter() = default;
+    RecursiveCombFilter() = default;
+    ~RecursiveCombFilter() = default;
 
     void AddToBuffor(const StereoSample &input) override
     {
         buffor.push(input);
         while(buffor.size() > bufforMaxSize)
         {
+            buffor.back() = buffor.back() + alpha * buffor.front();
             buffor.pop();
         }
     };
@@ -37,7 +37,7 @@ public:
 
     std::string GetName() override
     {
-        return "Comb filter";
+        return "Recursive comb filter";
     }
 private:
     float alpha = 0.5f;

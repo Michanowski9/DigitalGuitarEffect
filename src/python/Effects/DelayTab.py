@@ -1,5 +1,7 @@
 import sys
 
+from PyQt6.QtWidgets import QLabel, QComboBox
+
 sys.path.append("..")
 from Effect import Effect
 
@@ -7,9 +9,26 @@ class DelayTab(Effect):
     def __init__(self, effectPtr, cpplib):
         Effect.__init__(self, effectPtr, cpplib)
 
+        self.SetEffectSettings()
         self.SetDials()
-
         self.delay_edit_changed_value()
+
+
+    def SetEffectSettings(self):
+        self.algorithm_combo = QComboBox()
+
+        algorithms = []
+        for alg_id in range(self.cpplib.Effect_GetAlgorithmsNo(self.effectPtr)):
+            algorithms.append(self.cpplib.Effect_GetAlgorithmName(self.effectPtr, alg_id))
+        self.algorithm_combo.addItems(algorithms)
+        self.algorithm_combo.currentTextChanged.connect(self.algorithm_combo_changed)
+
+        self.SetEffectLayout()
+
+
+    def SetEffectLayout(self):
+        self.effect_settings.addWidget(QLabel("Algorithm"))
+        self.effect_settings.addWidget(self.algorithm_combo)
 
 
     def SetDials(self):
@@ -42,3 +61,7 @@ class DelayTab(Effect):
         self.cpplib.Delay_SetAlpha(self.effectPtr, alpha)
         self.draw_plot()
 
+
+    def algorithm_combo_changed(self):
+        self.cpplib.Effect_SetAlgorithm(self.effectPtr, self.algorithm_combo.currentIndex())
+        self.draw_plot()

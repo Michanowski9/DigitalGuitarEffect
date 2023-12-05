@@ -7,6 +7,7 @@
 #include "mainProgram.h"
 #include "Effects/overdrive.h"
 #include "Effects/delay.h"
+#include "Effects/DelayAlgorithms/RecursiveCombFilter.h"
 
 #include "Effects/IEffect.h"
 #include <memory>
@@ -107,6 +108,17 @@ extern "C"
 
     DLL_EXPORT
         void Delay_SetAlpha(void* ptr, float value);
+
+
+    DLL_EXPORT
+        int Effect_GetAlgorithmsNo(void* ptr);
+
+    DLL_EXPORT
+        const char* Effect_GetAlgorithmName(void* ptr, int id);
+
+    DLL_EXPORT
+        void Effect_SetAlgorithm(void* ptr, int algorithm);
+
 
 }
 

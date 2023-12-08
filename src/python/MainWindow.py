@@ -5,6 +5,7 @@ from SettingsTab import SettingsTab
 from ChooseEffectDialog import ChooseEffectDialog
 from Effects.OverdriveTab import OverdriveTab
 from Effects.DelayTab import DelayTab
+from Effects.ChorusTab import ChorusTab
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -137,6 +138,10 @@ class MainWindow(QWidget):
             case "Delay":
                 effectPtr = self.cpplib.AddEffect("delay")
                 indexTab = self.tab.addTab(DelayTab(effectPtr, self.cpplib), "Delay")
+            case "Chorus":
+                effectPtr = self.cpplib.AddEffect("chorus")
+                indexTab = self.tab.addTab(ChorusTab(effectPtr, self.cpplib), "Chorus")
+
         self.tab.setCurrentIndex(indexTab)
 
 

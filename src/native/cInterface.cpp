@@ -1,8 +1,12 @@
 #include "cInterface.h"
+#include "Effects/Chorus/LFO/TriangleGenerator.h"
+#include "Effects/Chorus/Algorithms/SimpleChorus.h"
+#include "Effects/Chorus/Chorus.h"
 #include "Effects/OverdriveAlgorithms/HyperbolicTangent.h"
 #include "Effects/OverdriveAlgorithms/HardClipping.h"
 #include "Effects/OverdriveAlgorithms/IOverdriveAlgorithm.h"
 #include "Effects/overdrive.h"
+#include "Settings.h"
 #include <memory>
 
 void InitPA()
@@ -109,6 +113,22 @@ void* AddEffectDelay()
                 )));
 }
 
+void* AddEffectChorus()
+{
+    auto visualisationSettings = std::make_shared<Settings>();
+    visualisationSettings->SetCurrentSampleRate(1000);
+    return mainProgram->AddEffect(
+            std::make_shared<Chorus>(Chorus(
+                {
+                    { std::make_shared<SimpleChorus>(), std::make_shared<SimpleChorus>() }
+                },
+                {
+                    { std::make_shared<TriangleGenerator>(mainProgram->GetSettings()), std::make_shared<TriangleGenerator>(visualisationSettings) }
+                }
+                )));
+}
+
+
 void SetEffectOn(void* ptr, bool value)
 {
     static_cast<IEffect*>(ptr)->SetOn(value);
@@ -116,6 +136,7 @@ void SetEffectOn(void* ptr, bool value)
 
 void CalculateExampleData(void* ptr, int size, float* data)
 {
+    static_cast<IEffect*>(ptr)->ResetEffect();
     for(auto i = 0; i < size; i++)
     {
         StereoSample input{data[i], 0};
@@ -187,4 +208,26 @@ void Effect_SetAlgorithm(void* ptr, int algorithm)
 {
     static_cast<IEffect*>(ptr)->SetAlgorithm(algorithm);
 }
+
+void Chorus_SetDelay(void* ptr, int value)
+{
+    static_cast<Chorus*>(ptr)->SetDelayInMilliseconds(value);
+}
+
+void Chorus_SetAlpha(void* ptr, float value)
+{
+    static_cast<Chorus*>(ptr)->SetAlpha(value);
+}
+
+void Chorus_SetDepth(void* ptr, float value)
+{
+    static_cast<Chorus*>(ptr)->SetDepth(value);
+}
+
+void Chorus_SetLFOFrequency(void* ptr, float value)
+{
+    static_cast<Chorus*>(ptr)->SetLFOFrequency(value);
+}
+
+
 

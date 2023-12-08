@@ -20,6 +20,10 @@ class ChooseEffectDialog(QDialog):
         delay_button.clicked.connect(self.on_delay_clicked)
         layout.addWidget(delay_button)
 
+        chorus_button = QPushButton("Chorus", self)
+        chorus_button.clicked.connect(self.on_chorus_clicked)
+        layout.addWidget(chorus_button)
+
         self.setLayout(layout)
 
     def on_overdrive_clicked(self):
@@ -30,3 +34,6 @@ class ChooseEffectDialog(QDialog):
         self.result = "Delay"
         self.accept()
 
+    def on_chorus_clicked(self):
+        self.result = "Chorus"
+        self.accept()

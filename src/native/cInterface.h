@@ -74,6 +74,10 @@ extern "C"
         void* AddEffectDelay();
 
     DLL_EXPORT
+        void* AddEffectChorus();
+
+
+    DLL_EXPORT
         void SetEffectOn(void* ptr, bool value);
 
     DLL_EXPORT
@@ -118,6 +122,22 @@ extern "C"
 
     DLL_EXPORT
         void Effect_SetAlgorithm(void* ptr, int algorithm);
+
+
+    DLL_EXPORT
+        void Chorus_SetDelay(void* ptr, int value);
+
+    DLL_EXPORT
+        void Chorus_SetAlpha(void* ptr, float value);
+
+    DLL_EXPORT
+        void Chorus_SetDepth(void* ptr, float value);
+
+    DLL_EXPORT
+        void Chorus_SetLFOFrequency(void* ptr, float value);
+
+
+
 
 
 }

@@ -34,6 +34,9 @@ public:
     void RemoveEffect(void* effectPtr);
 
     void SwapEffects(int firstId, int secondId);
+    std::shared_ptr<Settings> GetSettings(){
+        return settings;
+    };
 private:
     bool IsBypassOn();
     std::shared_ptr<Settings> settings;

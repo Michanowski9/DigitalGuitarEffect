@@ -93,6 +93,9 @@ class CppLib:
         elif effect == "delay":
             self.cpplib.AddEffectDelay.restype = ctypes.c_void_p
             return self.cpplib.AddEffectDelay()
+        elif effect == "chorus":
+            self.cpplib.AddEffectChorus.restype = ctypes.c_void_p
+            return self.cpplib.AddEffectChorus()
 
 
     def SetEffectOn(self, effectPtr, value):
@@ -192,3 +195,30 @@ class CppLib:
         self.cpplib.Effect_SetAlgorithm.restype = None
 
         self.cpplib.Effect_SetAlgorithm(ptr, value)
+
+    def Chorus_SetDelay(self, ptr, value):
+        self.cpplib.Chorus_SetDelay.argtypes = [ctypes.c_void_p, ctypes.c_int]
+        self.cpplib.Chorus_SetDelay.restype = None
+
+        self.cpplib.Chorus_SetDelay(ptr, int(value))
+
+
+    def Chorus_SetAlpha(self, ptr, value):
+        self.cpplib.Chorus_SetAlpha.argtypes = [ctypes.c_void_p, ctypes.c_float]
+        self.cpplib.Chorus_SetAlpha.restype = None
+
+        self.cpplib.Chorus_SetAlpha(ptr, value)
+
+
+    def Chorus_SetDepth(self, ptr, value):
+        self.cpplib.Chorus_SetDepth.argtypes = [ctypes.c_void_p, ctypes.c_float]
+        self.cpplib.Chorus_SetDepth.restype = None
+
+        self.cpplib.Chorus_SetDepth(ptr, value)
+
+
+    def Chorus_SetLFOFrequency(self, ptr, value):
+        self.cpplib.Chorus_SetLFOFrequency.argtypes = [ctypes.c_void_p, ctypes.c_float]
+        self.cpplib.Chorus_SetLFOFrequency.restype = None
+
+        self.cpplib.Chorus_SetLFOFrequency(ptr, value)

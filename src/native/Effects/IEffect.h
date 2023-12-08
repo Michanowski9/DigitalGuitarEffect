@@ -14,6 +14,7 @@ public:
     virtual int GetAlgorithmsNo() { return 0; }
     virtual void SetAlgorithm(const int value) { }
 
+    virtual void ResetEffect() { }
     void SetSettings(std::shared_ptr<Settings> obj) { settings = obj; };
     void SetOn(const bool value) { isOn = value; }
 protected:

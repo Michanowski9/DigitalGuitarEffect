@@ -1,6 +1,6 @@
-#include "Chorus.h"
+#include "Modulation.h"
 
-Chorus::Chorus(std::initializer_list<AlgorithmPack> algorithms, std::initializer_list<LFOPack> lfos)
+Modulation::Modulation(std::initializer_list<AlgorithmPack> algorithms, std::initializer_list<LFOPack> lfos)
 {
     for(auto& alg : algorithms)
     {
@@ -14,7 +14,7 @@ Chorus::Chorus(std::initializer_list<AlgorithmPack> algorithms, std::initializer
     }
 };
 
-void Chorus::operator()(StereoSample &output, const StereoSample &input)
+void Modulation::operator()(StereoSample &output, const StereoSample &input)
 {
     if(isOn)
     {
@@ -28,13 +28,13 @@ void Chorus::operator()(StereoSample &output, const StereoSample &input)
     algorithms[currentAlgorithm]->AddToBuffor(input);
 }
 
-void Chorus::ResetEffect()
+void Modulation::ResetEffect()
 {
     lfosVisualisation[currentLFO]->ResetCounter();
     algorithmsVisualisation[currentAlgorithm]->ResetBuffor();
 }
 
-void Chorus::CalculateForVisualization(StereoSample &output, const StereoSample &input)
+void Modulation::CalculateForVisualization(StereoSample &output, const StereoSample &input)
 {
     auto lfoValue = lfosVisualisation[currentLFO]->GetNextValue();
     output = this->algorithmsVisualisation[currentAlgorithm]->Calculate(input, lfoValue);
@@ -42,42 +42,42 @@ void Chorus::CalculateForVisualization(StereoSample &output, const StereoSample 
 }
 
 
-void Chorus::SetDelayInMilliseconds(const int value)
+void Modulation::SetDelayInMilliseconds(const int value)
 {
     this->algorithms[currentAlgorithm]->SetDelay(static_cast<float>(value) / 1000 * settings->GetCurrentSampleRate());
     this->algorithmsVisualisation[currentAlgorithm]->SetDelay(value);
 }
 
-void Chorus::SetAlpha(const float value)
+void Modulation::SetAlpha(const float value)
 {
     this->algorithms[currentAlgorithm]->SetAlpha(value);
     this->algorithmsVisualisation[currentAlgorithm]->SetAlpha(value);
 }
 
-void Chorus::SetDepth(const float value)
+void Modulation::SetDepth(const float value)
 {
     this->algorithms[currentAlgorithm]->SetDepth(value);
     this->algorithmsVisualisation[currentAlgorithm]->SetDepth(value);
 }
 
-void Chorus::SetLFOFrequency(const float value)
+void Modulation::SetLFOFrequency(const float value)
 {
     this->lfos[currentLFO]->SetFrequency(value);
     this->lfosVisualisation[currentLFO]->SetFrequency(value);
 }
 
 
-void Chorus::SetAlgorithm(const int value)
+void Modulation::SetAlgorithm(const int value)
 {
     this->currentAlgorithm = value;
 }
 
-int Chorus::GetAlgorithmsNo()
+int Modulation::GetAlgorithmsNo()
 {
     return this->algorithms.size();
 }
 
-std::string Chorus::GetAlgorithmName(int id)
+std::string Modulation::GetAlgorithmName(int id)
 {
     return this->algorithms[id]->GetName();
 }

@@ -32,7 +32,7 @@ class ChorusTab(Effect):
 
 
     def SetDials(self):
-        _, _, self.delay_edit, delay_layout = self.CreateDial("Delay", 0, 5, 0.1, multiplier=1000)
+        _, _, self.delay_edit, delay_layout = self.CreateDial("Delay", 0, 1, 0.01, multiplier=10000)
         self.delay_edit.textChanged.connect(self.delay_edit_changed_value)
 
         _, _, self.alpha_edit, alpha_layout = self.CreateDial("Alpha", 0, 1, 0.5)
@@ -41,7 +41,7 @@ class ChorusTab(Effect):
         _, _, self.depth_edit, depth_layout = self.CreateDial("Depth", 0, 1, 0.1, multiplier=1000)
         self.depth_edit.textChanged.connect(self.depth_edit_changed_value)
 
-        _, _, self.lfoFreq_edit, lfoFreq_layout = self.CreateDial("LFO Freq", 1, 20, 1, multiplier=10)
+        _, _, self.lfoFreq_edit, lfoFreq_layout = self.CreateDial("LFO Freq", 0, 20, 1, multiplier=100)
         self.lfoFreq_edit.textChanged.connect(self.lfoFreq_edit_changed_value)
 
         self.dials.addLayout(delay_layout)

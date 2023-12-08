@@ -1,7 +1,8 @@
 #include "cInterface.h"
-#include "Effects/Chorus/LFO/TriangleGenerator.h"
-#include "Effects/Chorus/Algorithms/SimpleChorus.h"
-#include "Effects/Chorus/Chorus.h"
+#include "Effects/Modulation/LFO/TriangleGenerator.h"
+#include "Effects/Modulation/Algorithms/Chorus.h"
+#include "Effects/Modulation/Algorithms/Flanger.h"
+#include "Effects/Modulation/Modulation.h"
 #include "Effects/OverdriveAlgorithms/HyperbolicTangent.h"
 #include "Effects/OverdriveAlgorithms/HardClipping.h"
 #include "Effects/OverdriveAlgorithms/IOverdriveAlgorithm.h"
@@ -118,9 +119,10 @@ void* AddEffectChorus()
     auto visualisationSettings = std::make_shared<Settings>();
     visualisationSettings->SetCurrentSampleRate(1000);
     return mainProgram->AddEffect(
-            std::make_shared<Chorus>(Chorus(
+            std::make_shared<Modulation>(Modulation(
                 {
-                    { std::make_shared<SimpleChorus>(), std::make_shared<SimpleChorus>() }
+                    { std::make_shared<Flanger>(), std::make_shared<Flanger>() },
+                    { std::make_shared<Chorus>(), std::make_shared<Chorus>() }
                 },
                 {
                     { std::make_shared<TriangleGenerator>(mainProgram->GetSettings()), std::make_shared<TriangleGenerator>(visualisationSettings) }
@@ -211,22 +213,22 @@ void Effect_SetAlgorithm(void* ptr, int algorithm)
 
 void Chorus_SetDelay(void* ptr, int value)
 {
-    static_cast<Chorus*>(ptr)->SetDelayInMilliseconds(value);
+    static_cast<Modulation*>(ptr)->SetDelayInMilliseconds(value);
 }
 
 void Chorus_SetAlpha(void* ptr, float value)
 {
-    static_cast<Chorus*>(ptr)->SetAlpha(value);
+    static_cast<Modulation*>(ptr)->SetAlpha(value);
 }
 
 void Chorus_SetDepth(void* ptr, float value)
 {
-    static_cast<Chorus*>(ptr)->SetDepth(value);
+    static_cast<Modulation*>(ptr)->SetDepth(value);
 }
 
 void Chorus_SetLFOFrequency(void* ptr, float value)
 {
-    static_cast<Chorus*>(ptr)->SetLFOFrequency(value);
+    static_cast<Modulation*>(ptr)->SetLFOFrequency(value);
 }
 
 

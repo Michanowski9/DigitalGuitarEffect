@@ -5,7 +5,7 @@
 #include <cmath>
 #include <memory>
 #include "Settings.h"
-#include "Effects/Chorus/LFO/TriangleGenerator.h"
+#include "Effects/Modulation/LFO/TriangleGenerator.h"
 
 namespace {
 

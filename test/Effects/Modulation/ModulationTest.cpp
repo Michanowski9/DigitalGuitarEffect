@@ -3,8 +3,6 @@
 #include "TestUtils.h"
 
 #include "Effects/IEffect.h"
-#include "Effects/Chorus/Chorus.h"
-#include "Effects/Chorus/Chorus.cpp"
 
 #include <cmath>
 #include <memory>

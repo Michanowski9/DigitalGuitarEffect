@@ -10,16 +10,16 @@
 
 #include <cmath>
 
-class SimpleChorus : public IAlgorithm
+class Chorus : public IAlgorithm
 {
 public:
-    SimpleChorus() = default;
-    ~SimpleChorus() = default;
+    Chorus() = default;
+    ~Chorus() = default;
 
     void AddToBuffor(const StereoSample &input) override
     {
         buffer.push_back(input);
-        while(buffer.size() > bufferMaxSize)
+        while(buffer.size() > bufferMaxSize && bufferMaxSize > 0)
         {
             buffer.pop_front();
         }
@@ -30,7 +30,7 @@ public:
     }
 
     StereoSample Calculate(const StereoSample& input, const float lfoValue) override {
-        if(buffer.size() < bufferMaxSize)
+        if(buffer.size() < bufferMaxSize || bufferMaxSize <= 0)
             return input;
 
         auto currentDelay = (depth * bufferMaxSize-1) * (lfoValue+1) / 2;

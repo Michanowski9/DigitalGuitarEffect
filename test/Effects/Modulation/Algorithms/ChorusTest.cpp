@@ -3,7 +3,7 @@
 #include "TestUtils.h"
 
 #include "Effects/IEffect.h"
-#include "Effects/Chorus/Algorithms/SimpleChorus.h"
+#include "Effects/Modulation/Algorithms/Chorus.h"
 
 #include <cmath>
 #include <memory>
@@ -17,31 +17,31 @@ namespace {
         MOCK_METHOD(void, ResetCounter, (), (override));
     };
 
-    class SimpleChorusTest : public testing::Test
+    class ChorusTest : public testing::Test
     {
     protected:
     };
 
-    TEST_F(SimpleChorusTest, LinearInterpolation_1)
+    TEST_F(ChorusTest, LinearInterpolation_1)
     {
-        auto sut = SimpleChorus();
+        auto sut = Chorus();
         auto output = sut.LinearInterpolation(0.5f, {1,1}, {2,2});
         EXPECT_FLOAT_EQ(output.left, 1.5f);
         EXPECT_FLOAT_EQ(output.right, 1.5f);
     }
 
-    TEST_F(SimpleChorusTest, LinearInterpolation_2)
+    TEST_F(ChorusTest, LinearInterpolation_2)
     {
-        auto sut = SimpleChorus();
+        auto sut = Chorus();
         auto output = sut.LinearInterpolation(0.25f, {1,1}, {2,2});
         EXPECT_FLOAT_EQ(output.left, 1.25f);
         EXPECT_FLOAT_EQ(output.right, 1.25f);
     }
 
-    TEST_F(SimpleChorusTest, Calculate_smallDepthWithArithmeticAverage_correctSignal)
+    TEST_F(ChorusTest, Calculate_smallDepthWithArithmeticAverage_correctSignal)
     {
         auto lfo = LFOMock();
-        auto sut = SimpleChorus();
+        auto sut = Chorus();
         auto output = GetNanArray(13);
         auto input = GetInputArray(13);
 
@@ -90,10 +90,10 @@ namespace {
         }
     }
 
-    TEST_F(SimpleChorusTest, Calculate_smallDepthWithWeightedAverage_correctSignal)
+    TEST_F(ChorusTest, Calculate_smallDepthWithWeightedAverage_correctSignal)
     {
         auto lfo = LFOMock();
-        auto sut = SimpleChorus();
+        auto sut = Chorus();
         auto output = GetNanArray(13);
         auto input = GetInputArray(13);
 
@@ -142,10 +142,10 @@ namespace {
         }
     }
 
-    TEST_F(SimpleChorusTest, Calculate_biggerDepth_correctSignal)
+    TEST_F(ChorusTest, Calculate_biggerDepth_correctSignal)
     {
         auto lfo = LFOMock();
-        auto sut = SimpleChorus();
+        auto sut = Chorus();
         auto output = GetNanArray(13);
         auto input = GetInputArray(13);
 
@@ -194,10 +194,10 @@ namespace {
         }
     }
 
-    TEST_F(SimpleChorusTest, Calculate_alpha_correctSignal)
+    TEST_F(ChorusTest, Calculate_alpha_correctSignal)
     {
         auto lfo = LFOMock();
-        auto sut = SimpleChorus();
+        auto sut = Chorus();
         auto output = GetNanArray(13);
         auto input = GetInputArray(13);
         auto alpha = 0.5f;

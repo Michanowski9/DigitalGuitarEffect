@@ -8,17 +8,17 @@
 #include "Algorithms/IAlgorithm.h"
 #include "LFO/ILFO.h"
 
-class Chorus : public IEffect {
+class Modulation : public IEffect {
 public:
     using AlgorithmPack = std::pair<std::shared_ptr<IAlgorithm>, std::shared_ptr<IAlgorithm>>;
     using LFOPack = std::pair<std::shared_ptr<ILFO>, std::shared_ptr<ILFO>>;
 
-    Chorus(std::initializer_list<AlgorithmPack> algorithms, std::initializer_list<LFOPack> lfos);
-    Chorus(Chorus &&) = default;
-    Chorus(const Chorus &) = default;
-    Chorus &operator=(Chorus &&) = default;
-    Chorus &operator=(const Chorus &) = default;
-    ~Chorus() = default;
+    Modulation(std::initializer_list<AlgorithmPack> algorithms, std::initializer_list<LFOPack> lfos);
+    Modulation(Modulation &&) = default;
+    Modulation(const Modulation &) = default;
+    Modulation &operator=(Modulation &&) = default;
+    Modulation &operator=(const Modulation &) = default;
+    ~Modulation() = default;
 
     void operator()(StereoSample &output, const StereoSample &input) override;
     void CalculateForVisualization(StereoSample &output, const StereoSample &input) override;

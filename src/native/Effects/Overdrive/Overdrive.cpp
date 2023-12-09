@@ -76,4 +76,17 @@ namespace Overdrive
                 [=](auto alg){ alg->SetMaxValue(value); }
             );
     }
+
+    bool Overdrive::IsUsingGain()
+    {
+        return this->algorithms[currentAlgorithm]->IsUsingGain();
+    }
+    bool Overdrive::IsUsingMinValue()
+    {
+        return this->algorithms[currentAlgorithm]->IsUsingMinValue();
+    }
+    bool Overdrive::IsUsingMaxValue()
+    {
+        return this->algorithms[currentAlgorithm]->IsUsingMaxValue();
+    }
 }

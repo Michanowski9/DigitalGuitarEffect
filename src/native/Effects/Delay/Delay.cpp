@@ -23,15 +23,47 @@ namespace Delay
 
     void Delay::SetDelayInMilliseconds(const int value)
     {
-        this->algorithms[currentAlgorithm]->SetDelay(static_cast<float>(value) / 1000 * settings->GetCurrentSampleRate());
-        this->algorithmsVisualisation[currentAlgorithm]->SetDelay(value);
+        SetPropertyInAlgorithmsCalculation(
+                [](auto alg){ return alg->IsUsingDelay(); },
+                [=](auto alg){ alg->SetDelay(value / 1000 * settings->GetCurrentSampleRate()); }
+            );
+        SetPropertyInVisualization(
+                [](auto alg){ return alg->IsUsingDelay(); },
+                [=](auto alg){ alg->SetDelay(value); }
+            );
     }
 
     void Delay::SetAlpha(const float value)
     {
-        this->algorithms[currentAlgorithm]->SetAlpha(value);
-        this->algorithmsVisualisation[currentAlgorithm]->SetAlpha(value);
+        SetPropertyInAlgorithms(
+                [](auto alg){ return alg->IsUsingAlpha(); },
+                [=](auto alg){ alg->SetAlpha(value); }
+            );
     }
+
+    void Delay::SetFeedback(const float value)
+    {
+        SetPropertyInAlgorithms(
+                [](auto alg){ return alg->IsUsingFeedback(); },
+                [=](auto alg){ alg->SetFeedback(value); }
+            );
+    }
+
+    bool Delay::IsUsingDelay()
+    {
+        return this->algorithms[currentAlgorithm]->IsUsingDelay();
+    }
+
+    bool Delay::IsUsingAlpha()
+    {
+        return this->algorithms[currentAlgorithm]->IsUsingAlpha();
+    }
+
+    bool Delay::IsUsingFeedback()
+    {
+        return this->algorithms[currentAlgorithm]->IsUsingFeedback();
+    }
+
 
     void Delay::SetAlgorithm(const int value)
     {
@@ -46,5 +78,34 @@ namespace Delay
     std::string Delay::GetAlgorithmName(int id)
     {
         return this->algorithms[id]->GetName();
+    }
+
+
+    void Delay::SetPropertyInVisualization(std::function<bool(std::shared_ptr<IAlgorithm>)> IsImplemeting, std::function<void(std::shared_ptr<IAlgorithm>)> SetProperty)
+    {
+        for(auto alg : algorithmsVisualisation)
+        {
+            if(IsImplemeting(alg))
+            {
+                SetProperty(alg);
+            }
+        }
+    }
+
+    void Delay::SetPropertyInAlgorithmsCalculation(std::function<bool(std::shared_ptr<IAlgorithm>)> IsImplemeting, std::function<void(std::shared_ptr<IAlgorithm>)> SetProperty)
+    {
+        for(auto alg : algorithms)
+        {
+            if(IsImplemeting(alg))
+            {
+                SetProperty(alg);
+            }
+        }
+    }
+
+    void Delay::SetPropertyInAlgorithms(std::function<bool(std::shared_ptr<IAlgorithm>)> IsImplemeting, std::function<void(std::shared_ptr<IAlgorithm>)> SetProperty)
+    {
+        SetPropertyInAlgorithmsCalculation(IsImplemeting, SetProperty);
+        SetPropertyInVisualization(IsImplemeting, SetProperty);
     }
 }

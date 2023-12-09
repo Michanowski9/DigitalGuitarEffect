@@ -26,21 +26,16 @@ namespace Delay
             return input + (buffor.size() >= bufforMaxSize ? alpha * buffor.front() : StereoSample{ 0, 0 } );
         }
 
-
-        void SetDelay(const int value) override
-        {
-            bufforMaxSize = value;
-        };
-
-        void SetAlpha(const float value) override
-        {
-            alpha = value;
-        };
-
         std::string GetName() override
         {
             return "Comb filter";
         }
+
+        void SetDelay(const int value) override { bufforMaxSize = value; };
+        void SetAlpha(const float value) override { alpha = value; };
+
+        bool IsUsingDelay() override { return true; }
+        bool IsUsingAlpha() override { return true; }
     private:
         float alpha = 0.5f;
         std::queue<StereoSample> buffor;

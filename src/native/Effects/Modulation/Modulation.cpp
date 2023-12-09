@@ -46,20 +46,38 @@ namespace Modulation
 
     void Modulation::SetDelayInMilliseconds(const int value)
     {
-        this->algorithms[currentAlgorithm]->SetDelay(static_cast<float>(value) / 1000 * settings->GetCurrentSampleRate());
-        this->algorithmsVisualisation[currentAlgorithm]->SetDelay(value);
+        SetPropertyInAlgorithmsCalculation(
+                [](auto alg){ return alg->IsUsingDelay(); },
+                [=](auto alg){ alg->SetDelay(value / 1000 * settings->GetCurrentSampleRate()); }
+            );
+        SetPropertyInVisualization(
+                [](auto alg){ return alg->IsUsingDelay(); },
+                [=](auto alg){ alg->SetDelay(value); }
+            );
     }
 
     void Modulation::SetAlpha(const float value)
     {
-        this->algorithms[currentAlgorithm]->SetAlpha(value);
-        this->algorithmsVisualisation[currentAlgorithm]->SetAlpha(value);
+        SetPropertyInAlgorithms(
+                [](auto alg){ return alg->IsUsingAlpha(); },
+                [=](auto alg){ alg->SetAlpha(value); }
+            );
+    }
+
+    void Modulation::SetFeedback(const float value)
+    {
+        SetPropertyInAlgorithms(
+                [](auto alg){ return alg->IsUsingFeedback(); },
+                [=](auto alg){ alg->SetFeedback(value); }
+            );
     }
 
     void Modulation::SetDepth(const float value)
     {
-        this->algorithms[currentAlgorithm]->SetDepth(value);
-        this->algorithmsVisualisation[currentAlgorithm]->SetDepth(value);
+        SetPropertyInAlgorithms(
+                [](auto alg){ return alg->IsUsingDepth(); },
+                [=](auto alg){ alg->SetDepth(value); }
+            );
     }
 
     void Modulation::SetLFOFrequency(const float value)
@@ -68,6 +86,26 @@ namespace Modulation
         this->lfosVisualisation[currentLFO]->SetFrequency(value);
     }
 
+    bool Modulation::IsUsingDelay()
+    {
+        return this->algorithms[currentAlgorithm]->IsUsingDelay();
+    }
+    bool Modulation::IsUsingAlpha()
+    {
+        return this->algorithms[currentAlgorithm]->IsUsingAlpha();
+    }
+    bool Modulation::IsUsingFeedback()
+    {
+        return this->algorithms[currentAlgorithm]->IsUsingFeedback();
+    }
+    bool Modulation::IsUsingDepth()
+    {
+        return this->algorithms[currentAlgorithm]->IsUsingDepth();
+    }
+    bool Modulation::IsUsingLFOFrequency()
+    {
+        return this->lfos[currentLFO]->IsUsingFrequency();
+    }
 
     void Modulation::SetAlgorithm(const int value)
     {
@@ -83,4 +121,34 @@ namespace Modulation
     {
         return this->algorithms[id]->GetName();
     }
+
+
+    void Modulation::SetPropertyInVisualization(std::function<bool(std::shared_ptr<IAlgorithm>)> IsImplemeting, std::function<void(std::shared_ptr<IAlgorithm>)> SetProperty)
+    {
+        for(auto alg : algorithmsVisualisation)
+        {
+            if(IsImplemeting(alg))
+            {
+                SetProperty(alg);
+            }
+        }
+    }
+
+    void Modulation::SetPropertyInAlgorithmsCalculation(std::function<bool(std::shared_ptr<IAlgorithm>)> IsImplemeting, std::function<void(std::shared_ptr<IAlgorithm>)> SetProperty)
+    {
+        for(auto alg : algorithms)
+        {
+            if(IsImplemeting(alg))
+            {
+                SetProperty(alg);
+            }
+        }
+    }
+
+    void Modulation::SetPropertyInAlgorithms(std::function<bool(std::shared_ptr<IAlgorithm>)> IsImplemeting, std::function<void(std::shared_ptr<IAlgorithm>)> SetProperty)
+    {
+        SetPropertyInAlgorithmsCalculation(IsImplemeting, SetProperty);
+        SetPropertyInVisualization(IsImplemeting, SetProperty);
+    }
 }
+

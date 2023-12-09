@@ -5,6 +5,13 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 import math
 
+class PropertyControll:
+    def __init__(self, label, dial, edit, layout):
+        self.label = label
+        self.dial = dial
+        self.edit = edit
+        self.layout = layout
+
 
 class Effect(QWidget):
     def __init__(self, effectPtr, cpplib):
@@ -59,7 +66,6 @@ class Effect(QWidget):
 
 
     def CreateDial(self, label, minValue, maxValue, value, multiplier=100):
-
         result_label = QLabel(label, alignment=Qt.AlignmentFlag.AlignCenter)
 
         result_dial = QDial()
@@ -88,8 +94,22 @@ class Effect(QWidget):
         result_layout.addWidget(result_dial)
         result_layout.addWidget(result_edit)
 
-        return result_label, result_dial, result_edit, result_layout
+        return PropertyControll(result_label, result_dial, result_edit, result_layout)
 
+
+
+    def SetValue(self, controll, setter, multiplier=1):
+        try:
+            val = float(controll.edit.text())
+        except ValueError:
+            return
+
+        setter(self.effectPtr, val * multiplier)
+        self.draw_plot()
+
+    def SetDialEnabled(self, controll, value):
+        controll.dial.setEnabled(value)
+        controll.edit.setEnabled(value)
 
     def draw_plot(self):
         x = []

@@ -5,8 +5,6 @@
 #include <vector>
 
 #include "../IEffect.h"
-#include "Algorithms/HardClipping.h"
-#include "Algorithms/HyperbolicTangent.h"
 #include "Algorithms/IAlgorithm.h"
 
 namespace Overdrive
@@ -32,8 +30,13 @@ namespace Overdrive
         std::string GetAlgorithmName(int id) override;
 
         void SetMinValue(const float value);
+        bool IsUsingMinValue();
+
         void SetMaxValue(const float value);
+        bool IsUsingMaxValue();
+
         void SetGain(const float value);
+        bool IsUsingGain();
 
     private:
         void Calculate(StereoSample &output, const StereoSample &input);

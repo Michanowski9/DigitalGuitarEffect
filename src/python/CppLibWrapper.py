@@ -93,9 +93,9 @@ class CppLib:
         elif effect == "delay":
             self.cpplib.AddEffectDelay.restype = ctypes.c_void_p
             return self.cpplib.AddEffectDelay()
-        elif effect == "chorus":
-            self.cpplib.AddEffectChorus.restype = ctypes.c_void_p
-            return self.cpplib.AddEffectChorus()
+        elif effect == "modulation":
+            self.cpplib.AddEffectModulation.restype = ctypes.c_void_p
+            return self.cpplib.AddEffectModulation()
 
 
     def SetEffectOn(self, effectPtr, value):
@@ -124,19 +124,6 @@ class CppLib:
 
         self.cpplib.SwapEffects(firstId, secondId)
 
-    def Overdrive_GetAlgorithmsNo(self, ptr):
-        self.cpplib.Overdrive_GetAlgorithmsNo.argtypes = [ctypes.c_void_p]
-        self.cpplib.Overdrive_GetAlgorithmsNo.restype = ctypes.c_int
-
-        return self.cpplib.Overdrive_GetAlgorithmsNo(ptr)
-
-    def Overdrive_GetAlgorithmName(self, ptr, id):
-        self.cpplib.Overdrive_GetAlgorithmName.argtypes = [ctypes.c_void_p, ctypes.c_int]
-        self.cpplib.Overdrive_GetAlgorithmName.restype = ctypes.POINTER(ctypes.c_char_p)
-
-        result_ptr = self.cpplib.Overdrive_GetAlgorithmName(ptr, id)
-        result = ctypes.c_char_p.from_buffer(result_ptr).value.decode('utf-8')
-        return result
 
     def Overdrive_SetGain(self, ptr, value):
         self.cpplib.Overdrive_SetGain.argtypes = [ctypes.c_void_p, ctypes.c_float]
@@ -158,11 +145,23 @@ class CppLib:
 
         self.cpplib.Overdrive_SetSoftCutValue(ptr, value)
 
-    def Overdrive_SetAlgorithm(self, ptr, value):
-        self.cpplib.Overdrive_SetAlgorithm.argtypes = [ctypes.c_void_p, ctypes.c_int]
-        self.cpplib.Overdrive_SetAlgorithm.restype = None
+    def Overdrive_IsUsingGain(self, ptr):
+        self.cpplib.Overdrive_IsUsingGain.argtypes = [ctypes.c_void_p]
+        self.cpplib.Overdrive_IsUsingGain.restype = ctypes.c_bool
 
-        self.cpplib.Overdrive_SetAlgorithm(ptr, value)
+        return self.cpplib.Overdrive_IsUsingGain(ptr)
+
+    def Overdrive_IsUsingMinValue(self, ptr):
+        self.cpplib.Overdrive_IsUsingMinValue.argtypes = [ctypes.c_void_p]
+        self.cpplib.Overdrive_IsUsingMinValue.restype = ctypes.c_bool
+
+        return self.cpplib.Overdrive_IsUsingMinValue(ptr)
+
+    def Overdrive_IsUsingMaxValue(self, ptr):
+        self.cpplib.Overdrive_IsUsingMaxValue.argtypes = [ctypes.c_void_p]
+        self.cpplib.Overdrive_IsUsingMaxValue.restype = ctypes.c_bool
+
+        return self.cpplib.Overdrive_IsUsingMaxValue(ptr)
 
     def Delay_SetDelay(self, ptr, value):
         self.cpplib.Delay_SetDelay.argtypes = [ctypes.c_void_p, ctypes.c_int]
@@ -175,6 +174,34 @@ class CppLib:
         self.cpplib.Delay_SetAlpha.restype = None
 
         self.cpplib.Delay_SetAlpha(ptr, value)
+
+    def Delay_SetFeedback(self, ptr, value):
+        self.cpplib.Delay_SetFeedback.argtypes = [ctypes.c_void_p, ctypes.c_float]
+        self.cpplib.Delay_SetFeedback.restype = None
+
+        self.cpplib.Delay_SetFeedback(ptr, value)
+
+    def Delay_IsUsingDelay(self, ptr):
+        self.cpplib.Delay_IsUsingDelay.argtypes = [ctypes.c_void_p]
+        self.cpplib.Delay_IsUsingDelay.restype = ctypes.c_bool
+
+        return self.cpplib.Delay_IsUsingDelay(ptr)
+
+
+    def Delay_IsUsingAlpha(self, ptr):
+        self.cpplib.Delay_IsUsingAlpha.argtypes = [ctypes.c_void_p]
+        self.cpplib.Delay_IsUsingAlpha.restype = ctypes.c_bool
+
+        return self.cpplib.Delay_IsUsingAlpha(ptr)
+
+
+    def Delay_IsUsingFeedback(self, ptr):
+        self.cpplib.Delay_IsUsingFeedback.argtypes = [ctypes.c_void_p]
+        self.cpplib.Delay_IsUsingFeedback.restype = ctypes.c_bool
+
+        return self.cpplib.Delay_IsUsingFeedback(ptr)
+
+
 
     def Effect_GetAlgorithmsNo(self, ptr):
         self.cpplib.Effect_GetAlgorithmsNo.argtypes = [ctypes.c_void_p]
@@ -196,29 +223,72 @@ class CppLib:
 
         self.cpplib.Effect_SetAlgorithm(ptr, value)
 
-    def Chorus_SetDelay(self, ptr, value):
-        self.cpplib.Chorus_SetDelay.argtypes = [ctypes.c_void_p, ctypes.c_int]
-        self.cpplib.Chorus_SetDelay.restype = None
+    def Modulation_SetDelay(self, ptr, value):
+        self.cpplib.Modulation_SetDelay.argtypes = [ctypes.c_void_p, ctypes.c_int]
+        self.cpplib.Modulation_SetDelay.restype = None
 
-        self.cpplib.Chorus_SetDelay(ptr, int(value))
-
-
-    def Chorus_SetAlpha(self, ptr, value):
-        self.cpplib.Chorus_SetAlpha.argtypes = [ctypes.c_void_p, ctypes.c_float]
-        self.cpplib.Chorus_SetAlpha.restype = None
-
-        self.cpplib.Chorus_SetAlpha(ptr, value)
+        self.cpplib.Modulation_SetDelay(ptr, int(value))
 
 
-    def Chorus_SetDepth(self, ptr, value):
-        self.cpplib.Chorus_SetDepth.argtypes = [ctypes.c_void_p, ctypes.c_float]
-        self.cpplib.Chorus_SetDepth.restype = None
+    def Modulation_SetAlpha(self, ptr, value):
+        self.cpplib.Modulation_SetAlpha.argtypes = [ctypes.c_void_p, ctypes.c_float]
+        self.cpplib.Modulation_SetAlpha.restype = None
 
-        self.cpplib.Chorus_SetDepth(ptr, value)
+        self.cpplib.Modulation_SetAlpha(ptr, value)
+
+    def Modulation_SetFeedback(self, ptr, value):
+        self.cpplib.Modulation_SetFeedback.argtypes = [ctypes.c_void_p, ctypes.c_float]
+        self.cpplib.Modulation_SetFeedback.restype = None
+
+        self.cpplib.Modulation_SetFeedback(ptr, value)
 
 
-    def Chorus_SetLFOFrequency(self, ptr, value):
-        self.cpplib.Chorus_SetLFOFrequency.argtypes = [ctypes.c_void_p, ctypes.c_float]
-        self.cpplib.Chorus_SetLFOFrequency.restype = None
 
-        self.cpplib.Chorus_SetLFOFrequency(ptr, value)
+    def Modulation_SetDepth(self, ptr, value):
+        self.cpplib.Modulation_SetDepth.argtypes = [ctypes.c_void_p, ctypes.c_float]
+        self.cpplib.Modulation_SetDepth.restype = None
+
+        self.cpplib.Modulation_SetDepth(ptr, value)
+
+
+    def Modulation_SetLFOFrequency(self, ptr, value):
+        self.cpplib.Modulation_SetLFOFrequency.argtypes = [ctypes.c_void_p, ctypes.c_float]
+        self.cpplib.Modulation_SetLFOFrequency.restype = None
+
+        self.cpplib.Modulation_SetLFOFrequency(ptr, value)
+
+    def Modulation_IsUsingDelay(self, ptr):
+        self.cpplib.Modulation_IsUsingDelay.argtypes = [ctypes.c_void_p]
+        self.cpplib.Modulation_IsUsingDelay.restype = ctypes.c_bool
+
+        return self.cpplib.Modulation_IsUsingDelay(ptr)
+
+
+    def Modulation_IsUsingAlpha(self, ptr):
+        self.cpplib.Modulation_IsUsingAlpha.argtypes = [ctypes.c_void_p]
+        self.cpplib.Modulation_IsUsingAlpha.restype = ctypes.c_bool
+
+        return self.cpplib.Modulation_IsUsingAlpha(ptr)
+
+
+    def Modulation_IsUsingFeedback(self, ptr):
+        self.cpplib.Modulation_IsUsingFeedback.argtypes = [ctypes.c_void_p]
+        self.cpplib.Modulation_IsUsingFeedback.restype = ctypes.c_bool
+
+        return self.cpplib.Modulation_IsUsingFeedback(ptr)
+
+
+    def Modulation_IsUsingDepth(self, ptr):
+        self.cpplib.Modulation_IsUsingDepth.argtypes = [ctypes.c_void_p]
+        self.cpplib.Modulation_IsUsingDepth.restype = ctypes.c_bool
+
+        return self.cpplib.Modulation_IsUsingDepth(ptr)
+
+
+    def Modulation_IsUsingLFOFrequency(self, ptr):
+        self.cpplib.Modulation_IsUsingLFOFrequency.argtypes = [ctypes.c_void_p]
+        self.cpplib.Modulation_IsUsingLFOFrequency.restype = ctypes.c_bool
+
+        return self.cpplib.Modulation_IsUsingLFOFrequency(ptr)
+
+

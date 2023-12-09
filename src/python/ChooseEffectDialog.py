@@ -1,8 +1,7 @@
-from PyQt6.QtWidgets import QApplication, QDialog, QVBoxLayout, QPushButton
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton
 
 class ChooseEffectDialog(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, effects, parent=None):
         super().__init__(parent)
 
         self.result = None
@@ -10,30 +9,18 @@ class ChooseEffectDialog(QDialog):
         self.setWindowTitle("Choose effect to add")
         self.resize(300, 100)
 
-        layout = QVBoxLayout()
+        self.layout = QVBoxLayout()
 
-        overdrive_button = QPushButton("Overdrive", self)
-        overdrive_button.clicked.connect(self.on_overdrive_clicked)
-        layout.addWidget(overdrive_button)
+        for effect in effects:
+            self.CreateButton(effect)
 
-        delay_button = QPushButton("Delay", self)
-        delay_button.clicked.connect(self.on_delay_clicked)
-        layout.addWidget(delay_button)
+        self.setLayout(self.layout)
 
-        chorus_button = QPushButton("Chorus", self)
-        chorus_button.clicked.connect(self.on_chorus_clicked)
-        layout.addWidget(chorus_button)
+    def CreateButton(self, text):
+        def on_click():
+            self.result = text
+            self.accept()
 
-        self.setLayout(layout)
-
-    def on_overdrive_clicked(self):
-        self.result = "Overdrive"
-        self.accept()
-
-    def on_delay_clicked(self):
-        self.result = "Delay"
-        self.accept()
-
-    def on_chorus_clicked(self):
-        self.result = "Chorus"
-        self.accept()
+        effect_button = QPushButton(text, self)
+        effect_button.clicked.connect(on_click)
+        self.layout.addWidget(effect_button)

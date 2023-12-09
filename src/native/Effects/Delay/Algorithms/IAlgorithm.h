@@ -19,5 +19,9 @@ namespace Delay
 
             virtual void SetAlpha(const float value){ };
             virtual bool IsUsingAlpha(){ return false; };
+
+            virtual void SetFeedback(const float value){ };
+            virtual bool IsUsingFeedback(){ return false; };
+
     };
 }

@@ -43,30 +43,22 @@ namespace Modulation
             return input + alpha * delayed;
         }
 
-
         void ResetBuffor() override {
             buffer.clear();
         }
 
-        void SetDelay(const int value) override
-        {
-            bufferMaxSize = value;
-        };
-
-        void SetAlpha(const float value) override
-        {
-            alpha = value;
-        };
-
-        void SetDepth(const float value) override
-        {
-            depth = value;
-        };
-
         std::string GetName() override
         {
-            return "Simple Chorus";
+            return "Chorus";
         }
+
+        void SetDelay(const int value) override { bufferMaxSize = value; };
+        void SetAlpha(const float value) override { alpha = value; };
+        void SetDepth(const float value) override { depth = value; };
+
+        bool IsUsingDelay() override { return true; }
+        bool IsUsingAlpha() override { return true; }
+        bool IsUsingDepth() override { return true; }
 
     private:
         float alpha = 0.5f;

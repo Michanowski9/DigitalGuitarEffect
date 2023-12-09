@@ -5,15 +5,16 @@ from PyQt6.QtWidgets import QLabel, QComboBox
 sys.path.append("..")
 from Effect import Effect
 
-class DelayTab(Effect):
+
+class ModulationTab(Effect):
     def __init__(self, effectPtr, cpplib):
         Effect.__init__(self, effectPtr, cpplib)
 
         self.SetEffectSettings()
         self.SetDials()
         self.delay_edit_changed_value()
-        self.algorithm_combo_changed()
 
+        self.algorithm_combo_changed()
 
     def SetEffectSettings(self):
         self.algorithm_combo = QComboBox()
@@ -33,36 +34,54 @@ class DelayTab(Effect):
 
 
     def SetDials(self):
-        self.delay_controll = self.CreateDial("Delay", 0, 5, 0.1, multiplier=1000)
+        self.delay_controll = self.CreateDial("Delay", 0, 1, 0.01, multiplier=10000)
         self.delay_controll.edit.textChanged.connect(self.delay_edit_changed_value)
 
         self.alpha_controll = self.CreateDial("Alpha", 0, 1, 0.5)
         self.alpha_controll.edit.textChanged.connect(self.alpha_edit_changed_value)
+
+        self.depth_controll = self.CreateDial("Depth", 0, 1, 0.1, multiplier=1000)
+        self.depth_controll.edit.textChanged.connect(self.depth_edit_changed_value)
+
+        self.lfoFreq_controll = self.CreateDial("LFO Freq", 0, 20, 1, multiplier=100)
+        self.lfoFreq_controll.edit.textChanged.connect(self.lfoFreq_edit_changed_value)
 
         self.feedback_controll = self.CreateDial("Feedback", 0, 1, 0.5)
         self.feedback_controll.edit.textChanged.connect(self.feedback_edit_changed_value)
 
         self.dials.addLayout(self.delay_controll.layout)
         self.dials.addLayout(self.alpha_controll.layout)
+        self.dials.addLayout(self.depth_controll.layout)
+        self.dials.addLayout(self.lfoFreq_controll.layout)
         self.dials.addLayout(self.feedback_controll.layout)
 
 
     def delay_edit_changed_value(self):
-        self.SetValue(self.delay_controll, self.cpplib.Delay_SetDelay, multiplier=1000)
+        self.SetValue(self.delay_controll, self.cpplib.Modulation_SetDelay, multiplier=1000)
 
 
     def alpha_edit_changed_value(self):
-        self.SetValue(self.alpha_controll, self.cpplib.Delay_SetAlpha)
+        self.SetValue(self.alpha_controll, self.cpplib.Modulation_SetAlpha)
+
+
+    def depth_edit_changed_value(self):
+        self.SetValue(self.depth_controll, self.cpplib.Modulation_SetDepth)
+
+
+    def lfoFreq_edit_changed_value(self):
+        self.SetValue(self.lfoFreq_controll, self.cpplib.Modulation_SetLFOFrequency)
 
 
     def feedback_edit_changed_value(self):
-        self.SetValue(self.feedback_controll, self.cpplib.Delay_SetFeedback)
+        self.SetValue(self.feedback_controll, self.cpplib.Modulation_SetFeedback)
 
 
     def algorithm_combo_changed(self):
         self.cpplib.Effect_SetAlgorithm(self.effectPtr, self.algorithm_combo.currentIndex())
         self.draw_plot()
 
-        self.SetDialEnabled(self.delay_controll, self.cpplib.Delay_IsUsingDelay(self.effectPtr))
-        self.SetDialEnabled(self.alpha_controll, self.cpplib.Delay_IsUsingAlpha(self.effectPtr))
-        self.SetDialEnabled(self.feedback_controll, self.cpplib.Delay_IsUsingFeedback(self.effectPtr))
+        self.SetDialEnabled(self.delay_controll, self.cpplib.Modulation_IsUsingDelay(self.effectPtr))
+        self.SetDialEnabled(self.alpha_controll, self.cpplib.Modulation_IsUsingAlpha(self.effectPtr))
+        self.SetDialEnabled(self.feedback_controll, self.cpplib.Modulation_IsUsingFeedback(self.effectPtr))
+        self.SetDialEnabled(self.depth_controll, self.cpplib.Modulation_IsUsingDepth(self.effectPtr))
+        self.SetDialEnabled(self.lfoFreq_controll, self.cpplib.Modulation_IsUsingLFOFrequency(self.effectPtr))

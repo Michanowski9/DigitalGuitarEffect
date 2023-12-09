@@ -29,6 +29,8 @@ namespace Modulation {
             frequency = value;
         }
 
+        bool IsUsingFrequency() override { return true; }
+
         void ResetCounter() override {
             counter = 0;
         }

@@ -38,40 +38,35 @@ namespace Modulation
             auto index1 = static_cast<int>(floor(currentDelay)) % buffer.size();
             auto index2 = static_cast<int>(ceil(currentDelay)) % buffer.size();
 
-            auto delayed = LinearInterpolation(currentDelay - floor(currentDelay), buffer[index1], buffer[index2]) * alpha;
+            auto delayed = LinearInterpolation(currentDelay - floor(currentDelay), buffer[index1], buffer[index2]);
 
-            buffer[buffer.size()-1] = buffer[buffer.size()-1] + delayed;
+            buffer[buffer.size()-1] = buffer[buffer.size()-1] + feedback * delayed;
 
-            return input + delayed;
+            return input + alpha * delayed;
         }
-
 
         void ResetBuffor() override {
             buffer.clear();
         }
-
-        void SetDelay(const int value) override
-        {
-            bufferMaxSize = value;
-        };
-
-        void SetAlpha(const float value) override
-        {
-            alpha = value;
-        };
-
-        void SetDepth(const float value) override
-        {
-            depth = value;
-        };
 
         std::string GetName() override
         {
             return "Flanger";
         }
 
+        void SetDelay(const int value) override { bufferMaxSize = value; };
+        void SetAlpha(const float value) override { alpha = value; };
+        void SetFeedback(const float value) override { alpha = value; };
+        void SetDepth(const float value) override { depth = value; };
+
+        bool IsUsingDelay() override { return true; }
+        bool IsUsingAlpha() override { return true; }
+        bool IsUsingDepth() override { return true; }
+        bool IsUsingFeedback() override { return true; }
+
     private:
         float alpha = 0.5f;
+        float feedback = 0.5f;
         float depth = 0.1f;
         int bufferMaxSize = 2;
 

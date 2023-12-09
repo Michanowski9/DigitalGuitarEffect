@@ -1,17 +1,29 @@
 #ifndef C_INTERFACE_H
 #define C_INTERFACE_H
 
-#include <memory>
-#include <vector>
-
-#include "mainProgram.h"
-#include "Effects/Overdrive/Overdrive.h"
 #include "Effects/Delay/Delay.h"
 #include "Effects/Delay/Algorithms/RecursiveCombFilter.h"
 #include "Effects/Delay/Algorithms/CombFilter.h"
 
 #include "Effects/IEffect.h"
+
+#include "Effects/Modulation/Algorithms/Chorus.h"
+#include "Effects/Modulation/Algorithms/Flanger.h"
+#include "Effects/Modulation/LFO/TriangleGenerator.h"
+#include "Effects/Modulation/LFO/SinusGenerator.h"
+#include "Effects/Modulation/LFO/SquareGenerator.h"
+#include "Effects/Modulation/Modulation.h"
+
+#include "Effects/Overdrive/Algorithms/HardClipping.h"
+#include "Effects/Overdrive/Algorithms/HyperbolicTangent.h"
+#include "Effects/Overdrive/Algorithms/IAlgorithm.h"
+#include "Effects/Overdrive/Overdrive.h"
+
+#include "mainProgram.h"
+#include "Settings.h"
+
 #include <memory>
+#include <vector>
 
 std::shared_ptr<MainProgram> mainProgram;
 
@@ -75,7 +87,7 @@ extern "C"
         void* AddEffectDelay();
 
     DLL_EXPORT
-        void* AddEffectChorus();
+        void* AddEffectModulation();
 
 
     DLL_EXPORT
@@ -92,20 +104,20 @@ extern "C"
 
 
     DLL_EXPORT
-        int Overdrive_GetAlgorithmsNo(void* ptr);
-
-    std::shared_ptr<std::string> result;
-    DLL_EXPORT
-        const char* Overdrive_GetAlgorithmName(void* ptr, int id);
-
-    DLL_EXPORT
         void Overdrive_SetGain(void* ptr, float data);
 
     DLL_EXPORT
         void Overdrive_SetMinMaxValue(void* ptr, float minValue, float maxValue);
 
     DLL_EXPORT
-        void Overdrive_SetAlgorithm(void* ptr, int algorithm);
+        bool Overdrive_IsUsingMinValue(void* ptr);
+
+    DLL_EXPORT
+        bool Overdrive_IsUsingMaxValue(void* ptr);
+
+    DLL_EXPORT
+        bool Overdrive_IsUsingGain(void* ptr);
+
 
 
     DLL_EXPORT
@@ -113,6 +125,19 @@ extern "C"
 
     DLL_EXPORT
         void Delay_SetAlpha(void* ptr, float value);
+
+    DLL_EXPORT
+        void Delay_SetFeedback(void* ptr, float value);
+
+
+    DLL_EXPORT
+        bool Delay_IsUsingDelay(void* ptr);
+
+    DLL_EXPORT
+        bool Delay_IsUsingAlpha(void* ptr);
+
+    DLL_EXPORT
+        bool Delay_IsUsingFeedback(void* ptr);
 
 
     DLL_EXPORT
@@ -126,18 +151,38 @@ extern "C"
 
 
     DLL_EXPORT
-        void Chorus_SetDelay(void* ptr, int value);
+        void Modulation_SetDelay(void* ptr, int value);
 
     DLL_EXPORT
-        void Chorus_SetAlpha(void* ptr, float value);
+        void Modulation_SetAlpha(void* ptr, float value);
+    DLL_EXPORT
+        void Modulation_SetFeedback(void* ptr, float value);
+
 
     DLL_EXPORT
-        void Chorus_SetDepth(void* ptr, float value);
+        void Modulation_SetDepth(void* ptr, float value);
 
     DLL_EXPORT
-        void Chorus_SetLFOFrequency(void* ptr, float value);
+        void Modulation_SetLFOFrequency(void* ptr, float value);
+
+    DLL_EXPORT
+        bool Modulation_IsUsingDelay(void* ptr);
+    DLL_EXPORT
+        bool Modulation_IsUsingAlpha(void* ptr);
+    DLL_EXPORT
+        bool Modulation_IsUsingFeedback(void* ptr);
+    DLL_EXPORT
+        bool Modulation_IsUsingDepth(void* ptr);
+    DLL_EXPORT
+        bool Modulation_IsUsingLFOFrequency(void* ptr);
 
 
+
+
+
+
+
+    std::shared_ptr<std::string> result;
 
 
 

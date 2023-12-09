@@ -23,5 +23,8 @@ namespace Modulation
 
             virtual void SetDepth(const float value){ };
             virtual bool IsUsingDepth(){ return false; };
+
+            virtual void SetFeedback(const float value){ };
+            virtual bool IsUsingFeedback(){ return false; };
     };
 }

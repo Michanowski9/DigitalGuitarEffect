@@ -1,13 +1,4 @@
 #include "cInterface.h"
-#include "Effects/Modulation/LFO/TriangleGenerator.h"
-#include "Effects/Modulation/Algorithms/Chorus.h"
-#include "Effects/Modulation/Algorithms/Flanger.h"
-#include "Effects/Modulation/Modulation.h"
-#include "Effects/Overdrive/Algorithms/HyperbolicTangent.h"
-#include "Effects/Overdrive/Algorithms/HardClipping.h"
-#include "Effects/Overdrive/Algorithms/IAlgorithm.h"
-#include "Settings.h"
-#include <memory>
 
 void InitPA()
 {
@@ -113,18 +104,20 @@ void* AddEffectDelay()
                 )));
 }
 
-void* AddEffectChorus()
+void* AddEffectModulation()
 {
     auto visualisationSettings = std::make_shared<Settings>();
     visualisationSettings->SetCurrentSampleRate(1000);
     return mainProgram->AddEffect(
             std::make_shared<Modulation::Modulation>(Modulation::Modulation(
                 {
-                    { std::make_shared<Modulation::Flanger>(), std::make_shared<Modulation::Flanger>() },
-                    { std::make_shared<Modulation::Chorus>(), std::make_shared<Modulation::Chorus>() }
+                    { std::make_shared<Modulation::Chorus>(), std::make_shared<Modulation::Chorus>() },
+                    { std::make_shared<Modulation::Flanger>(), std::make_shared<Modulation::Flanger>() }
                 },
                 {
-                    { std::make_shared<Modulation::TriangleGenerator>(mainProgram->GetSettings()), std::make_shared<Modulation::TriangleGenerator>(visualisationSettings) }
+                    { std::make_shared<Modulation::TriangleGenerator>(mainProgram->GetSettings()), std::make_shared<Modulation::TriangleGenerator>(visualisationSettings) },
+                    { std::make_shared<Modulation::SinusGenerator>(mainProgram->GetSettings()), std::make_shared<Modulation::SinusGenerator>(visualisationSettings) },
+                    { std::make_shared<Modulation::SquareGenerator>(mainProgram->GetSettings()), std::make_shared<Modulation::SquareGenerator>(visualisationSettings) }
                 }
                 )));
 }
@@ -157,17 +150,6 @@ void SwapEffects(int firstId, int secondId)
     mainProgram->SwapEffects(firstId, secondId);
 }
 
-int Overdrive_GetAlgorithmsNo(void* ptr)
-{
-    return static_cast<Overdrive::Overdrive*>(ptr)->GetAlgorithmsNo();
-}
-
-const char* Overdrive_GetAlgorithmName(void* ptr, int id)
-{
-    result = std::make_shared<std::string>(static_cast<Overdrive::Overdrive*>(ptr)->GetAlgorithmName(id));
-    return result->c_str();
-}
-
 void Overdrive_SetGain(void* ptr, float value)
 {
     static_cast<Overdrive::Overdrive*>(ptr)->SetGain(value);
@@ -179,15 +161,50 @@ void Overdrive_SetMinMaxValue(void* ptr, float minValue, float maxValue)
     static_cast<Overdrive::Overdrive*>(ptr)->SetMaxValue(maxValue);
 }
 
-void Overdrive_SetAlgorithm(void* ptr, int algorithm)
+bool Overdrive_IsUsingGain(void* ptr)
 {
-    static_cast<Overdrive::Overdrive*>(ptr)->SetAlgorithm(algorithm);
+    return static_cast<Overdrive::Overdrive*>(ptr)->IsUsingGain();
 }
+
+bool Overdrive_IsUsingMinValue(void* ptr)
+{
+    return static_cast<Overdrive::Overdrive*>(ptr)->IsUsingMinValue();
+}
+
+bool Overdrive_IsUsingMaxValue(void* ptr)
+{
+    return static_cast<Overdrive::Overdrive*>(ptr)->IsUsingMaxValue();
+}
+
 
 void Delay_SetDelay(void* ptr, int value)
 {
     static_cast<Delay::Delay*>(ptr)->SetDelayInMilliseconds(value);
 }
+
+bool Delay_IsUsingDelay(void* ptr)
+{
+    return static_cast<Delay::Delay*>(ptr)->IsUsingDelay();
+}
+
+
+bool Delay_IsUsingAlpha(void* ptr)
+{
+    return static_cast<Delay::Delay*>(ptr)->IsUsingAlpha();
+}
+
+
+bool Delay_IsUsingFeedback(void* ptr)
+{
+    return static_cast<Delay::Delay*>(ptr)->IsUsingFeedback();
+}
+
+
+void Delay_SetFeedback(void* ptr, float value)
+{
+    static_cast<Delay::Delay*>(ptr)->SetFeedback(value);
+}
+
 
 void Delay_SetAlpha(void* ptr, float value)
 {
@@ -210,25 +227,50 @@ void Effect_SetAlgorithm(void* ptr, int algorithm)
     static_cast<IEffect*>(ptr)->SetAlgorithm(algorithm);
 }
 
-void Chorus_SetDelay(void* ptr, int value)
+void Modulation_SetDelay(void* ptr, int value)
 {
     static_cast<Modulation::Modulation*>(ptr)->SetDelayInMilliseconds(value);
 }
 
-void Chorus_SetAlpha(void* ptr, float value)
+void Modulation_SetAlpha(void* ptr, float value)
 {
     static_cast<Modulation::Modulation*>(ptr)->SetAlpha(value);
 }
 
-void Chorus_SetDepth(void* ptr, float value)
+
+void Modulation_SetFeedback(void* ptr, float value)
+{
+    static_cast<Modulation::Modulation*>(ptr)->SetFeedback(value);
+}
+
+void Modulation_SetDepth(void* ptr, float value)
 {
     static_cast<Modulation::Modulation*>(ptr)->SetDepth(value);
 }
 
-void Chorus_SetLFOFrequency(void* ptr, float value)
+void Modulation_SetLFOFrequency(void* ptr, float value)
 {
     static_cast<Modulation::Modulation*>(ptr)->SetLFOFrequency(value);
 }
 
 
-
+bool Modulation_IsUsingDelay(void* ptr)
+{
+    return static_cast<Modulation::Modulation*>(ptr)->IsUsingDelay();
+}
+bool Modulation_IsUsingAlpha(void* ptr)
+{
+    return static_cast<Modulation::Modulation*>(ptr)->IsUsingAlpha();
+}
+bool Modulation_IsUsingFeedback(void* ptr)
+{
+    return static_cast<Modulation::Modulation*>(ptr)->IsUsingFeedback();
+}
+bool Modulation_IsUsingDepth(void* ptr)
+{
+    return static_cast<Modulation::Modulation*>(ptr)->IsUsingDepth();
+}
+bool Modulation_IsUsingLFOFrequency(void* ptr)
+{
+    return static_cast<Modulation::Modulation*>(ptr)->IsUsingLFOFrequency();
+}

@@ -3,6 +3,7 @@
 #include "../IEffect.h"
 #include "Algorithms/IAlgorithm.h"
 
+#include <functional>
 #include <initializer_list>
 #include <memory>
 #include <queue>
@@ -31,12 +32,22 @@ namespace Delay
 
         void SetDelayInMilliseconds(const int value);
         void SetAlpha(const float value);
+        void SetFeedback(const float value);
+
+        bool IsUsingDelay();
+        bool IsUsingAlpha();
+        bool IsUsingFeedback();
+
 
         void SetAlgorithm(const int value) override;
         int GetAlgorithmsNo() override;
         std::string GetAlgorithmName(int id) override;
 
     private:
+        void SetPropertyInAlgorithms(std::function<bool(std::shared_ptr<IAlgorithm>)> IsImplemeting, std::function<void(std::shared_ptr<IAlgorithm>)> SetProperty);
+        void SetPropertyInVisualization(std::function<bool(std::shared_ptr<IAlgorithm>)> IsImplemeting, std::function<void(std::shared_ptr<IAlgorithm>)> SetProperty);
+        void SetPropertyInAlgorithmsCalculation(std::function<bool(std::shared_ptr<IAlgorithm>)> IsImplemeting, std::function<void(std::shared_ptr<IAlgorithm>)> SetProperty);
+
         int currentAlgorithm = 0;
         std::vector<std::shared_ptr<IAlgorithm>> algorithms;
         std::vector<std::shared_ptr<IAlgorithm>> algorithmsVisualisation;

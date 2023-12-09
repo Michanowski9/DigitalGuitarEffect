@@ -5,7 +5,7 @@ from SettingsTab import SettingsTab
 from ChooseEffectDialog import ChooseEffectDialog
 from Effects.OverdriveTab import OverdriveTab
 from Effects.DelayTab import DelayTab
-from Effects.ChorusTab import ChorusTab
+from Effects.ModulationTab import ModulationTab
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -126,7 +126,8 @@ class MainWindow(QWidget):
 
 
     def add_effect_button_on_click(self):
-        dialog = ChooseEffectDialog()
+        effects = ["Overdrive", "Delay", "Modulation"]
+        dialog = ChooseEffectDialog(effects, self.tab)
 
         if not dialog.exec():
             return
@@ -138,9 +139,9 @@ class MainWindow(QWidget):
             case "Delay":
                 effectPtr = self.cpplib.AddEffect("delay")
                 indexTab = self.tab.addTab(DelayTab(effectPtr, self.cpplib), "Delay")
-            case "Chorus":
-                effectPtr = self.cpplib.AddEffect("chorus")
-                indexTab = self.tab.addTab(ChorusTab(effectPtr, self.cpplib), "Chorus")
+            case "Modulation":
+                effectPtr = self.cpplib.AddEffect("modulation")
+                indexTab = self.tab.addTab(ModulationTab(effectPtr, self.cpplib), "Modulation")
 
         self.tab.setCurrentIndex(indexTab)
 

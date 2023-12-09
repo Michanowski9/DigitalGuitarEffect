@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "TestUtils.h"
 
-#include "Effects/OverdriveAlgorithms/HardClipping.h"
+#include "Effects/Overdrive/Algorithms/HardClipping.h"
 
 #include <cmath>
 
@@ -10,13 +10,13 @@ namespace {
     class HardClippingTest : public testing::Test
     {
     protected:
-        HardClipping sut;
+        Overdrive::HardClipping sut;
         StereoSample output;
 
         // runs before each test
         void SetUp() override
         {
-            sut = HardClipping();
+            sut = Overdrive::HardClipping();
             output = {
                 std::nanf(" "),
                 std::nanf(" ")

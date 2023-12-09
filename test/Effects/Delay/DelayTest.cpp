@@ -3,9 +3,9 @@
 #include "TestUtils.h"
 
 #include "Effects/IEffect.h"
-#include "Effects/delay.h"
-#include "Effects/delay.cpp"
-#include "Effects/DelayAlgorithms/CombFilter.h"
+#include "Effects/Delay/Delay.h"
+#include "Effects/Delay/Delay.cpp"
+#include "Effects/Delay/Algorithms/CombFilter.h"
 
 #include <cmath>
 #include <memory>
@@ -19,11 +19,11 @@ namespace {
         {
         }
 
-        Delay GetSut(){
+        Delay::Delay GetSut(){
             auto settings = std::make_shared<Settings>();
-            auto result = Delay(
+            auto result = Delay::Delay(
                     {
-                        { std::make_shared<CombFilter>(), std::make_shared<CombFilter>() }
+                        { std::make_shared<Delay::CombFilter>(), std::make_shared<Delay::CombFilter>() }
                     });
 
             settings->SetCurrentSampleRate(1);

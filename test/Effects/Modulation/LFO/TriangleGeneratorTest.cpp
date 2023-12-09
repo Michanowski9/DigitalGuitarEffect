@@ -20,7 +20,7 @@ namespace {
     TEST_F(TriangleGeneratorTest, GetNextValue_smallSampleRate_correctSignal)
     {
         auto settings = std::make_shared<Settings>();
-        auto sut = TriangleGenerator(settings);
+        auto sut = Modulation::TriangleGenerator(settings);
         settings->SetCurrentSampleRate(8);
 
         float output[12];
@@ -46,7 +46,7 @@ namespace {
     TEST_F(TriangleGeneratorTest, GetNextValue_smallSampleRate2Hz_correctSignal)
     {
         auto settings = std::make_shared<Settings>();
-        auto sut = TriangleGenerator(settings);
+        auto sut = Modulation::TriangleGenerator(settings);
         settings->SetCurrentSampleRate(8);
         float output[12];
 

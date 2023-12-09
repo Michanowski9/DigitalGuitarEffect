@@ -6,30 +6,31 @@
 
 #include "../IEffect.h"
 #include "Algorithms/IAlgorithm.h"
-#include "LFO/ILFO.h"
 
-namespace Modulation
+namespace Delay
 {
-    class Modulation : public IEffect {
+    class Delay : public IEffect {
     public:
         using AlgorithmPack = std::pair<std::shared_ptr<IAlgorithm>, std::shared_ptr<IAlgorithm>>;
-        using LFOPack = std::pair<std::shared_ptr<ILFO>, std::shared_ptr<ILFO>>;
-
-        Modulation(std::initializer_list<AlgorithmPack> algorithms, std::initializer_list<LFOPack> lfos);
-        Modulation(Modulation &&) = default;
-        Modulation(const Modulation &) = default;
-        Modulation &operator=(Modulation &&) = default;
-        Modulation &operator=(const Modulation &) = default;
-        ~Modulation() = default;
+        Delay(std::initializer_list<AlgorithmPack> algorithms)
+        {
+            for(auto& alg : algorithms)
+            {
+                this->algorithms.push_back(alg.first);
+                this->algorithmsVisualisation.push_back(alg.second);
+            }
+        };
+        Delay(Delay &&) = default;
+        Delay(const Delay &) = default;
+        Delay &operator=(Delay &&) = default;
+        Delay &operator=(const Delay &) = default;
+        ~Delay() = default;
 
         void operator()(StereoSample &output, const StereoSample &input) override;
         void CalculateForVisualization(StereoSample &output, const StereoSample &input) override;
-        void ResetEffect() override;
 
         void SetDelayInMilliseconds(const int value);
         void SetAlpha(const float value);
-        void SetDepth(const float value);
-        void SetLFOFrequency(const float value);
 
         void SetAlgorithm(const int value) override;
         int GetAlgorithmsNo() override;
@@ -39,9 +40,5 @@ namespace Modulation
         int currentAlgorithm = 0;
         std::vector<std::shared_ptr<IAlgorithm>> algorithms;
         std::vector<std::shared_ptr<IAlgorithm>> algorithmsVisualisation;
-
-        int currentLFO = 0;
-        std::vector<std::shared_ptr<ILFO>> lfos;
-        std::vector<std::shared_ptr<ILFO>> lfosVisualisation;
     };
 }

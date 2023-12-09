@@ -10,7 +10,7 @@
 
 namespace {
 
-    class LFOMock : public ILFO {
+    class LFOMock : public Modulation::ILFO {
     public:
         MOCK_METHOD(float, GetNextValue, (), (override));
         MOCK_METHOD(void, SetFrequency, (const float), (override));
@@ -24,7 +24,7 @@ namespace {
 
     TEST_F(ChorusTest, LinearInterpolation_1)
     {
-        auto sut = Chorus();
+        auto sut = Modulation::Chorus();
         auto output = sut.LinearInterpolation(0.5f, {1,1}, {2,2});
         EXPECT_FLOAT_EQ(output.left, 1.5f);
         EXPECT_FLOAT_EQ(output.right, 1.5f);
@@ -32,7 +32,7 @@ namespace {
 
     TEST_F(ChorusTest, LinearInterpolation_2)
     {
-        auto sut = Chorus();
+        auto sut = Modulation::Chorus();
         auto output = sut.LinearInterpolation(0.25f, {1,1}, {2,2});
         EXPECT_FLOAT_EQ(output.left, 1.25f);
         EXPECT_FLOAT_EQ(output.right, 1.25f);
@@ -41,7 +41,7 @@ namespace {
     TEST_F(ChorusTest, Calculate_smallDepthWithArithmeticAverage_correctSignal)
     {
         auto lfo = LFOMock();
-        auto sut = Chorus();
+        auto sut = Modulation::Chorus();
         auto output = GetNanArray(13);
         auto input = GetInputArray(13);
 
@@ -93,7 +93,7 @@ namespace {
     TEST_F(ChorusTest, Calculate_smallDepthWithWeightedAverage_correctSignal)
     {
         auto lfo = LFOMock();
-        auto sut = Chorus();
+        auto sut = Modulation::Chorus();
         auto output = GetNanArray(13);
         auto input = GetInputArray(13);
 
@@ -145,7 +145,7 @@ namespace {
     TEST_F(ChorusTest, Calculate_biggerDepth_correctSignal)
     {
         auto lfo = LFOMock();
-        auto sut = Chorus();
+        auto sut = Modulation::Chorus();
         auto output = GetNanArray(13);
         auto input = GetInputArray(13);
 
@@ -197,7 +197,7 @@ namespace {
     TEST_F(ChorusTest, Calculate_alpha_correctSignal)
     {
         auto lfo = LFOMock();
-        auto sut = Chorus();
+        auto sut = Modulation::Chorus();
         auto output = GetNanArray(13);
         auto input = GetInputArray(13);
         auto alpha = 0.5f;

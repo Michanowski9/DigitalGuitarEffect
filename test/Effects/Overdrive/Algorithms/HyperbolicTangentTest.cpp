@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "TestUtils.h"
 
-#include "Effects/OverdriveAlgorithms/HyperbolicTangent.h"
+#include "Effects/Overdrive/Algorithms/HyperbolicTangent.h"
 
 #include <cmath>
 
@@ -10,13 +10,13 @@ namespace {
     class HyperbolicTangentTest : public testing::Test
     {
     protected:
-        HyperbolicTangent sut;
+        Overdrive::HyperbolicTangent sut;
         StereoSample output;
 
         // runs before each test
         void SetUp() override
         {
-            sut = HyperbolicTangent();
+            sut = Overdrive::HyperbolicTangent();
             output = {
                 std::nanf(" "),
                 std::nanf(" ")

@@ -3,10 +3,9 @@
 #include "Effects/Modulation/Algorithms/Chorus.h"
 #include "Effects/Modulation/Algorithms/Flanger.h"
 #include "Effects/Modulation/Modulation.h"
-#include "Effects/OverdriveAlgorithms/HyperbolicTangent.h"
-#include "Effects/OverdriveAlgorithms/HardClipping.h"
-#include "Effects/OverdriveAlgorithms/IOverdriveAlgorithm.h"
-#include "Effects/overdrive.h"
+#include "Effects/Overdrive/Algorithms/HyperbolicTangent.h"
+#include "Effects/Overdrive/Algorithms/HardClipping.h"
+#include "Effects/Overdrive/Algorithms/IAlgorithm.h"
 #include "Settings.h"
 #include <memory>
 
@@ -95,10 +94,10 @@ void BypassSwitch(bool value)
 
 void* AddEffectOverdrive()
 {
-    auto effect = std::make_shared<Overdrive>();
+    auto effect = std::make_shared<Overdrive::Overdrive>();
 
-    effect->AddAlgorithm(std::make_shared<HardClipping>());
-    effect->AddAlgorithm(std::make_shared<HyperbolicTangent>());
+    effect->AddAlgorithm(std::make_shared<Overdrive::HardClipping>());
+    effect->AddAlgorithm(std::make_shared<Overdrive::HyperbolicTangent>());
 
     return mainProgram->AddEffect(effect);
 }
@@ -106,10 +105,10 @@ void* AddEffectOverdrive()
 void* AddEffectDelay()
 {
     return mainProgram->AddEffect(
-            std::make_shared<Delay>(Delay(
+            std::make_shared<Delay::Delay>(Delay::Delay(
                 {
-                    { std::make_shared<CombFilter>(), std::make_shared<CombFilter>() },
-                    { std::make_shared<RecursiveCombFilter>(), std::make_shared<RecursiveCombFilter>() }
+                    { std::make_shared<Delay::CombFilter>(), std::make_shared<Delay::CombFilter>() },
+                    { std::make_shared<Delay::RecursiveCombFilter>(), std::make_shared<Delay::RecursiveCombFilter>() }
                 }
                 )));
 }
@@ -119,13 +118,13 @@ void* AddEffectChorus()
     auto visualisationSettings = std::make_shared<Settings>();
     visualisationSettings->SetCurrentSampleRate(1000);
     return mainProgram->AddEffect(
-            std::make_shared<Modulation>(Modulation(
+            std::make_shared<Modulation::Modulation>(Modulation::Modulation(
                 {
-                    { std::make_shared<Flanger>(), std::make_shared<Flanger>() },
-                    { std::make_shared<Chorus>(), std::make_shared<Chorus>() }
+                    { std::make_shared<Modulation::Flanger>(), std::make_shared<Modulation::Flanger>() },
+                    { std::make_shared<Modulation::Chorus>(), std::make_shared<Modulation::Chorus>() }
                 },
                 {
-                    { std::make_shared<TriangleGenerator>(mainProgram->GetSettings()), std::make_shared<TriangleGenerator>(visualisationSettings) }
+                    { std::make_shared<Modulation::TriangleGenerator>(mainProgram->GetSettings()), std::make_shared<Modulation::TriangleGenerator>(visualisationSettings) }
                 }
                 )));
 }
@@ -160,39 +159,39 @@ void SwapEffects(int firstId, int secondId)
 
 int Overdrive_GetAlgorithmsNo(void* ptr)
 {
-    return static_cast<Overdrive*>(ptr)->GetAlgorithmsNo();
+    return static_cast<Overdrive::Overdrive*>(ptr)->GetAlgorithmsNo();
 }
 
 const char* Overdrive_GetAlgorithmName(void* ptr, int id)
 {
-    result = std::make_shared<std::string>(static_cast<Overdrive*>(ptr)->GetAlgorithmName(id));
+    result = std::make_shared<std::string>(static_cast<Overdrive::Overdrive*>(ptr)->GetAlgorithmName(id));
     return result->c_str();
 }
 
 void Overdrive_SetGain(void* ptr, float value)
 {
-    static_cast<Overdrive*>(ptr)->SetGain(value);
+    static_cast<Overdrive::Overdrive*>(ptr)->SetGain(value);
 }
 
 void Overdrive_SetMinMaxValue(void* ptr, float minValue, float maxValue)
 {
-    static_cast<Overdrive*>(ptr)->SetMinValue(minValue);
-    static_cast<Overdrive*>(ptr)->SetMaxValue(maxValue);
+    static_cast<Overdrive::Overdrive*>(ptr)->SetMinValue(minValue);
+    static_cast<Overdrive::Overdrive*>(ptr)->SetMaxValue(maxValue);
 }
 
 void Overdrive_SetAlgorithm(void* ptr, int algorithm)
 {
-    static_cast<Overdrive*>(ptr)->SetAlgorithm(algorithm);
+    static_cast<Overdrive::Overdrive*>(ptr)->SetAlgorithm(algorithm);
 }
 
 void Delay_SetDelay(void* ptr, int value)
 {
-    static_cast<Delay*>(ptr)->SetDelayInMilliseconds(value);
+    static_cast<Delay::Delay*>(ptr)->SetDelayInMilliseconds(value);
 }
 
 void Delay_SetAlpha(void* ptr, float value)
 {
-    static_cast<Delay*>(ptr)->SetAlpha(value);
+    static_cast<Delay::Delay*>(ptr)->SetAlpha(value);
 }
 
 int Effect_GetAlgorithmsNo(void* ptr)
@@ -213,22 +212,22 @@ void Effect_SetAlgorithm(void* ptr, int algorithm)
 
 void Chorus_SetDelay(void* ptr, int value)
 {
-    static_cast<Modulation*>(ptr)->SetDelayInMilliseconds(value);
+    static_cast<Modulation::Modulation*>(ptr)->SetDelayInMilliseconds(value);
 }
 
 void Chorus_SetAlpha(void* ptr, float value)
 {
-    static_cast<Modulation*>(ptr)->SetAlpha(value);
+    static_cast<Modulation::Modulation*>(ptr)->SetAlpha(value);
 }
 
 void Chorus_SetDepth(void* ptr, float value)
 {
-    static_cast<Modulation*>(ptr)->SetDepth(value);
+    static_cast<Modulation::Modulation*>(ptr)->SetDepth(value);
 }
 
 void Chorus_SetLFOFrequency(void* ptr, float value)
 {
-    static_cast<Modulation*>(ptr)->SetLFOFrequency(value);
+    static_cast<Modulation::Modulation*>(ptr)->SetLFOFrequency(value);
 }
 
 

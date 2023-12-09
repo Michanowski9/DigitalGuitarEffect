@@ -2,15 +2,15 @@
 #include "gmock/gmock.h"
 #include "TestUtils.h"
 
-#include "Effects/OverdriveAlgorithms/IOverdriveAlgorithm.h"
-#include "Effects/overdrive.h"
-#include "Effects/overdrive.cpp"
+#include "Effects/Overdrive/Algorithms/IAlgorithm.h"
+#include "Effects/Overdrive/Overdrive.h"
+#include "Effects/Overdrive/Overdrive.cpp"
 
 #include <cmath>
 
 namespace {
 
-    class OverdriveAlgorithmMock : public IOverdriveAlgorithm
+    class OverdriveAlgorithmMock : public Overdrive::IAlgorithm
     {
     public:
         MOCK_METHOD(StereoSample, Calculate, (const StereoSample& input), (override));
@@ -26,13 +26,13 @@ namespace {
     class OverdriveTest : public testing::Test
     {
     protected:
-        Overdrive sut;
+        Overdrive::Overdrive sut;
         StereoSample output;
 
         // runs before each test
         void SetUp() override
         {
-            sut = Overdrive();
+            sut = Overdrive::Overdrive();
             output = {
                 std::nanf(" "),
                 std::nanf(" ")

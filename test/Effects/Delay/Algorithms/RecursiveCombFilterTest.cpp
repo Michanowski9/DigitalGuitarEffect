@@ -2,12 +2,14 @@
 #include "gmock/gmock.h"
 #include "TestUtils.h"
 
-#include "Effects/DelayAlgorithms/RecursiveCombFilter.h"
+#include "Effects/Delay/Algorithms/RecursiveCombFilter.h"
 
 #include <cmath>
 #include <memory>
 
 namespace {
+    using namespace Delay;
+
     class RecursiveCombFilterTest : public testing::Test
     {
 

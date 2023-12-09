@@ -5,9 +5,10 @@
 #include <vector>
 
 #include "mainProgram.h"
-#include "Effects/overdrive.h"
-#include "Effects/delay.h"
-#include "Effects/DelayAlgorithms/RecursiveCombFilter.h"
+#include "Effects/Overdrive/Overdrive.h"
+#include "Effects/Delay/Delay.h"
+#include "Effects/Delay/Algorithms/RecursiveCombFilter.h"
+#include "Effects/Delay/Algorithms/CombFilter.h"
 
 #include "Effects/IEffect.h"
 #include <memory>

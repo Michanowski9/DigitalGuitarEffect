@@ -2,6 +2,7 @@
 
 #include "../Settings.h"
 #include "../StereoSample.h"
+
 #include <memory>
 #include <string>
 

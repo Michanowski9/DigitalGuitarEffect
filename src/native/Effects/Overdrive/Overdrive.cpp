@@ -1,5 +1,4 @@
 #include "Overdrive.h"
-#include <memory>
 
 namespace Overdrive
 {

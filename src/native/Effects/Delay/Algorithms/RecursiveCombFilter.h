@@ -1,13 +1,13 @@
 #pragma once
 
-#include <queue>
 #include "IAlgorithm.h"
+
+#include <queue>
 
 namespace Delay
 {
-
-class RecursiveCombFilter : public IAlgorithm
-{
+    class RecursiveCombFilter : public IAlgorithm
+    {
     public:
         RecursiveCombFilter() = default;
         ~RecursiveCombFilter() = default;

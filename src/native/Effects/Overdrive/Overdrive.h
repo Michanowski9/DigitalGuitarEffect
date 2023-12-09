@@ -1,13 +1,13 @@
 #pragma once
 
+#include <functional>
 #include <memory>
 #include <vector>
-#include <functional>
 
 #include "../IEffect.h"
-#include "Algorithms/IAlgorithm.h"
 #include "Algorithms/HardClipping.h"
 #include "Algorithms/HyperbolicTangent.h"
+#include "Algorithms/IAlgorithm.h"
 
 namespace Overdrive
 {

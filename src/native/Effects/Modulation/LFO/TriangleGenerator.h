@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ILFO.h"
 #include "../../../Settings.h"
+#include "ILFO.h"
+
 #include <cmath>
 #include <memory>
-#include <iostream>
 
 #ifndef M_PI
     #define M_PI 3.14159265358979323846

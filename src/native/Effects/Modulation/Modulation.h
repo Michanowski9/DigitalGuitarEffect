@@ -1,12 +1,12 @@
 #pragma once
 
-#include <memory>
-#include <queue>
-#include <initializer_list>
-
 #include "../IEffect.h"
 #include "Algorithms/IAlgorithm.h"
 #include "LFO/ILFO.h"
+
+#include <initializer_list>
+#include <memory>
+#include <queue>
 
 namespace Modulation
 {

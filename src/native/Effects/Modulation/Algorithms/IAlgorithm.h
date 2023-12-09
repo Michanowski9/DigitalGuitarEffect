@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../../StereoSample.h"
+
 #include <string>
 
 namespace Modulation

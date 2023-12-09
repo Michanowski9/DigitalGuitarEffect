@@ -1,11 +1,11 @@
 #pragma once
 
-#include <memory>
-#include <queue>
-#include <initializer_list>
-
 #include "../IEffect.h"
 #include "Algorithms/IAlgorithm.h"
+
+#include <initializer_list>
+#include <memory>
+#include <queue>
 
 namespace Delay
 {

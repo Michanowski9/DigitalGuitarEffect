@@ -1,7 +1,8 @@
 #pragma once
 
-#include <queue>
 #include "IAlgorithm.h"
+
+#include <queue>
 
 namespace Delay
 {

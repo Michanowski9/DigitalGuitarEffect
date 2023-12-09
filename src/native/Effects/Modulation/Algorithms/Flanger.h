@@ -1,14 +1,12 @@
 #pragma once
 
-#include <deque>
-#include <iostream>
-#include <memory>
-
 #include "../../../StereoSample.h"
-#include "IAlgorithm.h"
 #include "../LFO/ILFO.h"
+#include "IAlgorithm.h"
 
 #include <cmath>
+#include <deque>
+#include <memory>
 
 namespace Modulation
 {

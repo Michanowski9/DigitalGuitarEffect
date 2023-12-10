@@ -291,4 +291,25 @@ class CppLib:
 
         return self.cpplib.Modulation_IsUsingLFOFrequency(ptr)
 
+    def Modulation_GetLFOsNo(self, ptr):
+        self.cpplib.Modulation_GetLFOsNo.argtypes = [ctypes.c_void_p]
+        self.cpplib.Modulation_GetLFOsNo.restype = ctypes.c_int
+
+        return self.cpplib.Modulation_GetLFOsNo(ptr)
+
+    def Modulation_GetLFOName(self, ptr, id):
+        self.cpplib.Modulation_GetLFOName.argtypes = [ctypes.c_void_p, ctypes.c_int]
+        self.cpplib.Modulation_GetLFOName.restype = ctypes.POINTER(ctypes.c_char_p)
+
+        result_ptr = self.cpplib.Modulation_GetLFOName(ptr, id)
+        result = ctypes.c_char_p.from_buffer(result_ptr).value.decode('utf-8')
+        return result
+
+
+    def Modulation_SetLFO(self, ptr, value):
+        self.cpplib.Modulation_SetLFO.argtypes = [ctypes.c_void_p, ctypes.c_int]
+        self.cpplib.Modulation_SetLFO.restype = None
+
+        self.cpplib.Modulation_SetLFO(ptr, value)
+
 

@@ -25,12 +25,22 @@ class ModulationTab(Effect):
         self.algorithm_combo.addItems(algorithms)
         self.algorithm_combo.currentTextChanged.connect(self.algorithm_combo_changed)
 
+        self.lfo_combo = QComboBox()
+        lfos = []
+        for lfo_id in range(self.cpplib.Modulation_GetLFOsNo(self.effectPtr)):
+            lfos.append(self.cpplib.Modulation_GetLFOName(self.effectPtr, lfo_id))
+        self.lfo_combo.addItems(lfos)
+        self.lfo_combo.currentTextChanged.connect(self.lfo_combo_changed)
+
+
         self.SetEffectLayout()
 
 
     def SetEffectLayout(self):
-        self.effect_settings.addWidget(QLabel("Algorithm"))
+        self.effect_settings.addWidget(QLabel("Algorithm:"))
         self.effect_settings.addWidget(self.algorithm_combo)
+        self.effect_settings.addWidget(QLabel("LFO signal:"))
+        self.effect_settings.addWidget(self.lfo_combo)
 
 
     def SetDials(self):
@@ -74,6 +84,11 @@ class ModulationTab(Effect):
 
     def feedback_edit_changed_value(self):
         self.SetValue(self.feedback_controll, self.cpplib.Modulation_SetFeedback)
+
+
+    def lfo_combo_changed(self):
+        self.cpplib.Modulation_SetLFO(self.effectPtr, self.lfo_combo.currentIndex())
+        self.draw_plot()
 
 
     def algorithm_combo_changed(self):

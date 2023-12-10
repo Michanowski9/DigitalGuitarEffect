@@ -274,3 +274,19 @@ bool Modulation_IsUsingLFOFrequency(void* ptr)
 {
     return static_cast<Modulation::Modulation*>(ptr)->IsUsingLFOFrequency();
 }
+
+int Modulation_GetLFOsNo(void* ptr)
+{
+    return static_cast<Modulation::Modulation*>(ptr)->GetLFOsNo();
+}
+
+const char* Modulation_GetLFOName(void* ptr, int id)
+{
+    result = std::make_shared<std::string>(static_cast<Modulation::Modulation*>(ptr)->GetLFOName(id));
+    return result->c_str();
+}
+
+void Modulation_SetLFO(void* ptr, int lfo)
+{
+    static_cast<Modulation::Modulation*>(ptr)->SetLFO(lfo);
+}

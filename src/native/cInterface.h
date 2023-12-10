@@ -175,6 +175,15 @@ extern "C"
         bool Modulation_IsUsingDepth(void* ptr);
     DLL_EXPORT
         bool Modulation_IsUsingLFOFrequency(void* ptr);
+    DLL_EXPORT
+        int Modulation_GetLFOsNo(void* ptr);
+
+    DLL_EXPORT
+        const char* Modulation_GetLFOName(void* ptr, int id);
+
+    DLL_EXPORT
+        void Modulation_SetLFO(void* ptr, int lfo);
+
 
 
 

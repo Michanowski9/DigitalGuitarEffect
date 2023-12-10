@@ -107,6 +107,21 @@ namespace Modulation
         return this->lfos[currentLFO]->IsUsingFrequency();
     }
 
+    int Modulation::GetLFOsNo()
+    {
+        return this->lfos.size();
+    }
+
+    std::string Modulation::GetLFOName(int id)
+    {
+        return this->lfos[id]->GetName();
+    }
+
+    void Modulation::SetLFO(const int value)
+    {
+        this->currentLFO = value;
+    }
+
     void Modulation::SetAlgorithm(const int value)
     {
         this->currentAlgorithm = value;

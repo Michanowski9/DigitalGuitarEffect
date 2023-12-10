@@ -28,7 +28,7 @@ class DelayTab(Effect):
 
 
     def SetEffectLayout(self):
-        self.effect_settings.addWidget(QLabel("Algorithm"))
+        self.effect_settings.addWidget(QLabel("Algorithm:"))
         self.effect_settings.addWidget(self.algorithm_combo)
 
 

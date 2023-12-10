@@ -11,18 +11,18 @@
 #endif
 
 namespace Modulation {
-    class TriangleGenerator : public ILFO {
+    class SquareGenerator : public ILFO {
     public:
-        TriangleGenerator(std::shared_ptr<Settings> settings)
+        SquareGenerator(std::shared_ptr<Settings> settings)
             :settings(settings)
         {
 
         };
-        TriangleGenerator(TriangleGenerator &&) = default;
-        TriangleGenerator(const TriangleGenerator &) = default;
-        TriangleGenerator &operator=(TriangleGenerator &&) = default;
-        TriangleGenerator &operator=(const TriangleGenerator &) = default;
-        ~TriangleGenerator() = default;
+        SquareGenerator(SquareGenerator &&) = default;
+        SquareGenerator(const SquareGenerator &) = default;
+        SquareGenerator &operator=(SquareGenerator &&) = default;
+        SquareGenerator &operator=(const SquareGenerator &) = default;
+        ~SquareGenerator() = default;
 
         void SetFrequency(const float value) override
         {
@@ -37,13 +37,12 @@ namespace Modulation {
 
         float GetNextValue() override {
             auto t = static_cast<float>(counter) / settings->GetCurrentSampleRate();
-            auto sinValue = std::sin(2 * M_PI * frequency * t);
-            auto result = 2 * std::asin(sinValue) / M_PI;
+            auto result = sin(2 * M_PI * frequency * t) >= 0.0 ? 1.0 : -1.0;
             counter++;
-            return static_cast<float>(std::round(result*1.0e10) / 1.0e10);
+            return result;
         }
 
-        std::string GetName() override { return "Triangle"; }
+        std::string GetName() override { return "Square"; }
     private:
         float frequency = 1.0f;
         int counter = 0;

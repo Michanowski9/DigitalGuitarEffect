@@ -39,6 +39,10 @@ namespace Modulation
         bool IsUsingDepth();
         bool IsUsingLFOFrequency();
 
+        int GetLFOsNo();
+        std::string GetLFOName(int id);
+        void SetLFO(const int value);
+
         void SetAlgorithm(const int value) override;
         int GetAlgorithmsNo() override;
         std::string GetAlgorithmName(int id) override;

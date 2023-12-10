@@ -15,6 +15,7 @@ namespace {
         MOCK_METHOD(float, GetNextValue, (), (override));
         MOCK_METHOD(void, SetFrequency, (const float), (override));
         MOCK_METHOD(void, ResetCounter, (), (override));
+        MOCK_METHOD(std::string, GetName, (), (override));
     };
 
     class ChorusTest : public testing::Test

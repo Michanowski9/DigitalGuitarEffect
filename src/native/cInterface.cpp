@@ -162,6 +162,12 @@ void Overdrive_SetMinMaxValue(void* ptr, float minValue, float maxValue)
     static_cast<Overdrive::Overdrive*>(ptr)->SetMaxValue(maxValue);
 }
 
+void Overdrive_SetOffset(void* ptr, float value)
+{
+    static_cast<Overdrive::Overdrive*>(ptr)->SetOffset(value);
+}
+
+
 bool Overdrive_IsUsingGain(void* ptr)
 {
     return static_cast<Overdrive::Overdrive*>(ptr)->IsUsingGain();
@@ -177,6 +183,10 @@ bool Overdrive_IsUsingMaxValue(void* ptr)
     return static_cast<Overdrive::Overdrive*>(ptr)->IsUsingMaxValue();
 }
 
+bool Overdrive_IsUsingOffset(void* ptr)
+{
+    return static_cast<Overdrive::Overdrive*>(ptr)->IsUsingOffset();
+}
 
 void Delay_SetDelay(void* ptr, int value)
 {

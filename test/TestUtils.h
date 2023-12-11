@@ -17,10 +17,3 @@ inline std::ostream& operator<<(std::ostream& os, const StereoSample& arg)
 
 std::vector<StereoSample> GetNanArray(size_t size);
 std::vector<StereoSample> GetInputArray(size_t size);
-
-inline StereoSample operator+(StereoSample lhs, const float &rhs)
-{
-    lhs.left += rhs;
-    lhs.right += rhs;
-    return lhs;
-}

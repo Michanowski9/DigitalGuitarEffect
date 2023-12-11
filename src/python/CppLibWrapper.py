@@ -136,6 +136,13 @@ class CppLib:
 
         self.cpplib.Overdrive_SetGain(ptr, value)
 
+    def Overdrive_SetOffset(self, ptr, value):
+        self.cpplib.Overdrive_SetOffset.argtypes = [ctypes.c_void_p, ctypes.c_float]
+        self.cpplib.Overdrive_SetOffset.restype = None
+
+        self.cpplib.Overdrive_SetOffset(ptr, value)
+
+
 
     def Overdrive_SetMinMaxValue(self, ptr, minValue, maxValue):
         self.cpplib.Overdrive_SetMinMaxValue.argtypes = [ctypes.c_void_p, ctypes.c_float, ctypes.c_float]
@@ -155,6 +162,13 @@ class CppLib:
         self.cpplib.Overdrive_IsUsingGain.restype = ctypes.c_bool
 
         return self.cpplib.Overdrive_IsUsingGain(ptr)
+
+    def Overdrive_IsUsingOffset(self, ptr):
+        self.cpplib.Overdrive_IsUsingOffset.argtypes = [ctypes.c_void_p]
+        self.cpplib.Overdrive_IsUsingOffset.restype = ctypes.c_bool
+
+        return self.cpplib.Overdrive_IsUsingOffset(ptr)
+
 
     def Overdrive_IsUsingMinValue(self, ptr):
         self.cpplib.Overdrive_IsUsingMinValue.argtypes = [ctypes.c_void_p]

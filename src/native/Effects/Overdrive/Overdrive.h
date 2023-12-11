@@ -38,6 +38,9 @@ namespace Overdrive
         void SetGain(const float value);
         bool IsUsingGain();
 
+        void SetOffset(const float value);
+        bool IsUsingOffset();
+
     private:
         void Calculate(StereoSample &output, const StereoSample &input);
         void SetPropertyInAlgorithms(std::function<bool(std::shared_ptr<IAlgorithm>)> IsImplemeting, std::function<void(std::shared_ptr<IAlgorithm>)> SetProperty);

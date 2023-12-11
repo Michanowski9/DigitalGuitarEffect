@@ -41,13 +41,21 @@ class OverdriveTab(Effect):
         self.maxValue_controll = self.CreateDial("Max Value", -1, 1, 1)
         self.maxValue_controll.edit.textChanged.connect(self.min_max_refresh)
 
+        self.offset_controll = self.CreateDial("Offset", -1, 1, 1)
+        self.offset_controll.edit.textChanged.connect(self.offset_refresh)
+
         self.dials.addLayout(self.gain_controll.layout)
+        self.dials.addLayout(self.offset_controll.layout)
         self.dials.addLayout(self.minValue_controll.layout)
         self.dials.addLayout(self.maxValue_controll.layout)
 
 
     def gain_edit_changed_value(self):
         self.SetValue(self.gain_controll, self.cpplib.Overdrive_SetGain)
+
+    def offset_refresh(self):
+        self.SetValue(self.offset_controll, self.cpplib.Overdrive_SetOffset)
+
 
 
     def min_max_refresh(self):
@@ -68,3 +76,4 @@ class OverdriveTab(Effect):
         self.SetDialEnabled(self.gain_controll, self.cpplib.Overdrive_IsUsingGain(self.effectPtr))
         self.SetDialEnabled(self.minValue_controll, self.cpplib.Overdrive_IsUsingMinValue(self.effectPtr))
         self.SetDialEnabled(self.maxValue_controll, self.cpplib.Overdrive_IsUsingMaxValue(self.effectPtr))
+        self.SetDialEnabled(self.offset_controll, self.cpplib.Overdrive_IsUsingOffset(self.effectPtr))

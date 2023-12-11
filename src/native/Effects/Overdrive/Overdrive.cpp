@@ -77,6 +77,15 @@ namespace Overdrive
             );
     }
 
+    void Overdrive::SetOffset(const float value)
+    {
+        SetPropertyInAlgorithms(
+                [](auto alg){ return alg->IsUsingOffset(); },
+                [=](auto alg){ alg->SetOffset(value); }
+            );
+    }
+
+
     bool Overdrive::IsUsingGain()
     {
         return this->algorithms[currentAlgorithm]->IsUsingGain();
@@ -88,5 +97,9 @@ namespace Overdrive
     bool Overdrive::IsUsingMaxValue()
     {
         return this->algorithms[currentAlgorithm]->IsUsingMaxValue();
+    }
+    bool Overdrive::IsUsingOffset()
+    {
+        return this->algorithms[currentAlgorithm]->IsUsingOffset();
     }
 }

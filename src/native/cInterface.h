@@ -111,6 +111,10 @@ extern "C"
         void Overdrive_SetMinMaxValue(void* ptr, float minValue, float maxValue);
 
     DLL_EXPORT
+        void Overdrive_SetOffset(void* ptr, float data);
+
+
+    DLL_EXPORT
         bool Overdrive_IsUsingMinValue(void* ptr);
 
     DLL_EXPORT
@@ -119,6 +123,8 @@ extern "C"
     DLL_EXPORT
         bool Overdrive_IsUsingGain(void* ptr);
 
+    DLL_EXPORT
+        bool Overdrive_IsUsingOffset(void* ptr);
 
 
     DLL_EXPORT

@@ -21,5 +21,8 @@ namespace Overdrive
 
             virtual void SetMaxValue(const float value){ };
             virtual bool IsUsingMaxValue(){ return false; };
+
+            virtual void SetOffset(const float value){ };
+            virtual bool IsUsingOffset(){ return false; };
     };
 }

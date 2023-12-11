@@ -40,4 +40,16 @@ inline StereoSample operator-(StereoSample lhs, const StereoSample &rhs)
     return lhs;
 }
 
+inline StereoSample operator+(StereoSample lhs, const float &rhs)
+{
+    lhs.left += rhs;
+    lhs.right += rhs;
+    return lhs;
+}
 
+inline StereoSample operator-(StereoSample lhs, const float &rhs)
+{
+    lhs.left -= rhs;
+    lhs.right -= rhs;
+    return lhs;
+}

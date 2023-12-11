@@ -13,17 +13,11 @@ namespace Overdrive
         StereoSample Calculate(const StereoSample &input) override
         {
             StereoSample output;
-            output = input * this->gain;
+
+            output = (input - this->offset) * this->gain + this->offset;
 
             auto calc = [](const auto obj, auto& output){
-                if(output > obj->maxValue)
-                {
-                    output = obj->maxValue;
-                }
-                else if(output < obj->minValue)
-                {
-                    output = obj->minValue;
-                }
+                output = std::max(std::min(output,obj->maxValue), obj->minValue);
             };
 
             calc(this, output.left);
@@ -45,7 +39,10 @@ namespace Overdrive
         void SetMinValue(const float value) override { minValue = value; };
         bool IsUsingMinValue() override { return true; }
 
+        void SetOffset(const float value) override { offset = value; };
+        bool IsUsingOffset() override { return true; }
     private:
+        float offset = 0.0f;
         float gain = 1.0f;
         float maxValue = 1.0f;
         float minValue = -1.0f;

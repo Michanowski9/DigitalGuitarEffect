@@ -23,5 +23,10 @@ namespace Delay
             virtual void SetFeedback(const float value){ };
             virtual bool IsUsingFeedback(){ return false; };
 
+            virtual void SetLeftInputVolume(const float value){ };
+            virtual bool IsUsingLeftInputVolume(){ return false; };
+
+            virtual void SetRightInputVolume(const float value){ };
+            virtual bool IsUsingRightInputVolume(){ return false; };
     };
 }

@@ -33,10 +33,14 @@ namespace Delay
         void SetDelayInMilliseconds(const int value);
         void SetAlpha(const float value);
         void SetFeedback(const float value);
+        void SetLeftInputVolume(const float value);
+        void SetRightInputVolume(const float value);
 
         bool IsUsingDelay();
         bool IsUsingAlpha();
         bool IsUsingFeedback();
+        bool IsUsingLeftInputVolume();
+        bool IsUsingRightInputVolume();
 
 
         void SetAlgorithm(const int value) override;

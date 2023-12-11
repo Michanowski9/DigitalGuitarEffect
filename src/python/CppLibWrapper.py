@@ -107,14 +107,16 @@ class CppLib:
         self.cpplib.SetEffectOn.argtypes = [ctypes.c_void_p, ctypes.c_bool]
         self.cpplib.SetEffectOn(effectPtr, value)
 
-    def CalculateExampleData(self, effectPtr, data):
-        self.cpplib.CalculateExampleData.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.POINTER(ctypes.c_float)]
-        dataArray = (ctypes.c_float * len(data))(*data)
+    def CalculateExampleData(self, effectPtr, dataLeft, dataRight):
+        self.cpplib.CalculateExampleData.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float)]
+        dataLeftArray = (ctypes.c_float * len(dataLeft))(*dataLeft)
+        dataRightArray = (ctypes.c_float * len(dataRight))(*dataRight)
 
-        self.cpplib.CalculateExampleData(effectPtr, len(data), dataArray)
+        self.cpplib.CalculateExampleData(effectPtr, len(dataLeft), dataLeftArray, dataRightArray)
 
-        for i in range(len(data)):
-            data[i] = dataArray[i]
+        for i in range(len(dataLeft)):
+            dataLeft[i] = dataLeftArray[i]
+            dataRight[i] = dataRightArray[i]
 
 
     def RemoveEffect(self, ptr):
@@ -200,6 +202,18 @@ class CppLib:
 
         self.cpplib.Delay_SetFeedback(ptr, value)
 
+    def Delay_SetLeftInputVolume(self, ptr, value):
+        self.cpplib.Delay_SetLeftInputVolume.argtypes = [ctypes.c_void_p, ctypes.c_float]
+        self.cpplib.Delay_SetLeftInputVolume.restype = None
+
+        self.cpplib.Delay_SetLeftInputVolume(ptr, value)
+
+    def Delay_SetRightInputVolume(self, ptr, value):
+        self.cpplib.Delay_SetRightInputVolume.argtypes = [ctypes.c_void_p, ctypes.c_float]
+        self.cpplib.Delay_SetRightInputVolume.restype = None
+
+        self.cpplib.Delay_SetRightInputVolume(ptr, value)
+
     def Delay_IsUsingDelay(self, ptr):
         self.cpplib.Delay_IsUsingDelay.argtypes = [ctypes.c_void_p]
         self.cpplib.Delay_IsUsingDelay.restype = ctypes.c_bool
@@ -219,6 +233,19 @@ class CppLib:
         self.cpplib.Delay_IsUsingFeedback.restype = ctypes.c_bool
 
         return self.cpplib.Delay_IsUsingFeedback(ptr)
+
+    def Delay_IsUsingLeftInputVolume(self, ptr):
+        self.cpplib.Delay_IsUsingLeftInputVolume.argtypes = [ctypes.c_void_p]
+        self.cpplib.Delay_IsUsingLeftInputVolume.restype = ctypes.c_bool
+
+        return self.cpplib.Delay_IsUsingLeftInputVolume(ptr)
+
+    def Delay_IsUsingRightInputVolume(self, ptr):
+        self.cpplib.Delay_IsUsingRightInputVolume.argtypes = [ctypes.c_void_p]
+        self.cpplib.Delay_IsUsingRightInputVolume.restype = ctypes.c_bool
+
+        return self.cpplib.Delay_IsUsingRightInputVolume(ptr)
+
 
 
 

@@ -113,7 +113,8 @@ class Effect(QWidget):
 
     def draw_plot(self):
         x = []
-        y = []
+        yLeft = []
+        yRight = []
         time = 5 # sec
         sampling = 1000 # in 1 sec
 
@@ -136,22 +137,37 @@ class Effect(QWidget):
 
         y1 = [0 for _ in range(sampling * time)]
         y2 = [y for y in x]
-        y = y1 + y2
+        yLeft = y1 + y2
+        yRight = [y for y in yLeft]
 
-        self.cpplib.CalculateExampleData(self.effectPtr, y)
+        self.cpplib.CalculateExampleData(self.effectPtr, yLeft, yRight)
 
-        y = y[(sampling * time):]
+        yLeft = yLeft[(sampling * time):]
+        yRight = yRight[(sampling * time):]
 
         self.figure.clear()
 
         ax = self.figure.add_subplot(111)
         ax.plot(x, color="r", alpha=0.2)
-        ax.plot(y, color="b")
+        legend = ['input']
+        if self.CheckIfEquals(yLeft, yRight):
+            legend.append('output')
+        else:
+            legend.append('output R')
+            legend.append('output L')
+            ax.plot(yRight, color="g")
+
+        ax.plot(yLeft, color="b")
         ax.set_ylim([-1.05,1.05])
-        ax.legend(['input', 'output'], loc=1)
+        ax.legend(legend, loc=1)
 
         self.canvas.draw()
 
+    def CheckIfEquals(self, a, b):
+        for i in range(len(a)):
+            if a[i] != b[i]:
+                return False
+        return True
 
     def GetDampingSin(self, hz, damping_coefficient, time, sampling):
         periods_no = time * hz

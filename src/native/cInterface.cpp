@@ -100,7 +100,8 @@ void* AddEffectDelay()
             std::make_shared<Delay::Delay>(Delay::Delay(
                 {
                     { std::make_shared<Delay::CombFilter>(), std::make_shared<Delay::CombFilter>() },
-                    { std::make_shared<Delay::RecursiveCombFilter>(), std::make_shared<Delay::RecursiveCombFilter>() }
+                    { std::make_shared<Delay::RecursiveCombFilter>(), std::make_shared<Delay::RecursiveCombFilter>() },
+                    { std::make_shared<Delay::PingPong>(), std::make_shared<Delay::PingPong>() }
                 }
                 )));
 }
@@ -129,15 +130,16 @@ void SetEffectOn(void* ptr, bool value)
     static_cast<IEffect*>(ptr)->SetOn(value);
 }
 
-void CalculateExampleData(void* ptr, int size, float* data)
+void CalculateExampleData(void* ptr, int size, float* dataLeft, float* dataRight)
 {
     static_cast<IEffect*>(ptr)->ResetEffect();
     for(auto i = 0; i < size; i++)
     {
-        StereoSample input{data[i], 0};
+        StereoSample input{dataLeft[i], dataRight[i]};
         StereoSample output{0, 0};
         static_cast<IEffect*>(ptr)->CalculateForVisualization(output,input);
-        data[i] = output.left;
+        dataLeft[i] = output.left;
+        dataRight[i] = output.right;
     }
 }
 
@@ -205,6 +207,18 @@ bool Delay_IsUsingAlpha(void* ptr)
 }
 
 
+bool Delay_IsUsingLeftInputVolume(void* ptr)
+{
+    return static_cast<Delay::Delay*>(ptr)->IsUsingLeftInputVolume();
+}
+
+
+bool Delay_IsUsingRightInputVolume(void* ptr)
+{
+    return static_cast<Delay::Delay*>(ptr)->IsUsingRightInputVolume();
+}
+
+
 bool Delay_IsUsingFeedback(void* ptr)
 {
     return static_cast<Delay::Delay*>(ptr)->IsUsingFeedback();
@@ -214,6 +228,18 @@ bool Delay_IsUsingFeedback(void* ptr)
 void Delay_SetFeedback(void* ptr, float value)
 {
     static_cast<Delay::Delay*>(ptr)->SetFeedback(value);
+}
+
+
+void Delay_SetLeftInputVolume(void* ptr, float value)
+{
+    static_cast<Delay::Delay*>(ptr)->SetLeftInputVolume(value);
+}
+
+
+void Delay_SetRightInputVolume(void* ptr, float value)
+{
+    static_cast<Delay::Delay*>(ptr)->SetRightInputVolume(value);
 }
 
 

@@ -4,6 +4,7 @@
 #include "Effects/Delay/Delay.h"
 #include "Effects/Delay/Algorithms/RecursiveCombFilter.h"
 #include "Effects/Delay/Algorithms/CombFilter.h"
+#include "Effects/Delay/Algorithms/PingPong.h"
 
 #include "Effects/IEffect.h"
 
@@ -95,7 +96,7 @@ extern "C"
         void SetEffectOn(void* ptr, bool value);
 
     DLL_EXPORT
-        void CalculateExampleData(void* ptr, int size, float* data);
+        void CalculateExampleData(void* ptr, int size, float* dataLeft, float* dataRight);
 
     DLL_EXPORT
         void RemoveEffect(void* ptr);
@@ -135,6 +136,12 @@ extern "C"
 
     DLL_EXPORT
         void Delay_SetFeedback(void* ptr, float value);
+    DLL_EXPORT
+        void Delay_SetLeftInputVolume(void* ptr, float value);
+    DLL_EXPORT
+        void Delay_SetRightInputVolume(void* ptr, float value);
+
+
 
 
     DLL_EXPORT
@@ -145,6 +152,11 @@ extern "C"
 
     DLL_EXPORT
         bool Delay_IsUsingFeedback(void* ptr);
+    DLL_EXPORT
+        bool Delay_IsUsingLeftInputVolume(void* ptr);
+    DLL_EXPORT
+        bool Delay_IsUsingRightInputVolume(void* ptr);
+
 
 
     DLL_EXPORT

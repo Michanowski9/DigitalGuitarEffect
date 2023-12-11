@@ -25,7 +25,7 @@ namespace Delay
     {
         SetPropertyInAlgorithmsCalculation(
                 [](auto alg){ return alg->IsUsingDelay(); },
-                [=](auto alg){ alg->SetDelay(value / 1000 * settings->GetCurrentSampleRate()); }
+                [=](auto alg){ alg->SetDelay(static_cast<float>(value) / 1000 * settings->GetCurrentSampleRate()); }
             );
         SetPropertyInVisualization(
                 [](auto alg){ return alg->IsUsingDelay(); },
@@ -49,6 +49,22 @@ namespace Delay
             );
     }
 
+    void Delay::SetLeftInputVolume(const float value)
+    {
+        SetPropertyInAlgorithms(
+                [](auto alg){ return alg->IsUsingLeftInputVolume(); },
+                [=](auto alg){ alg->SetLeftInputVolume(value); }
+            );
+    }
+
+    void Delay::SetRightInputVolume(const float value)
+    {
+        SetPropertyInAlgorithms(
+                [](auto alg){ return alg->IsUsingRightInputVolume(); },
+                [=](auto alg){ alg->SetRightInputVolume(value); }
+            );
+    }
+
     bool Delay::IsUsingDelay()
     {
         return this->algorithms[currentAlgorithm]->IsUsingDelay();
@@ -63,6 +79,16 @@ namespace Delay
     {
         return this->algorithms[currentAlgorithm]->IsUsingFeedback();
     }
+    bool Delay::IsUsingLeftInputVolume()
+    {
+        return this->algorithms[currentAlgorithm]->IsUsingLeftInputVolume();
+    }
+
+   bool Delay::IsUsingRightInputVolume()
+    {
+        return this->algorithms[currentAlgorithm]->IsUsingRightInputVolume();
+    }
+
 
 
     void Delay::SetAlgorithm(const int value)

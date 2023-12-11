@@ -80,7 +80,12 @@ class CppLib:
 
         deviceName_ptr = GetDeviceName(deviceId)
         deviceName = ctypes.c_char_p.from_buffer(deviceName_ptr)
-        return deviceName.value.decode('utf-8')
+
+        try:
+            result = deviceName.value.decode('utf-8')
+        except:
+            result = "no name (unknown encoding)"
+        return result
 
     def BypassSwitch(self, value):
         self.cpplib.BypassSwitch.argtypes = [ctypes.c_bool]

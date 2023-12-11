@@ -71,6 +71,17 @@ cmake -G "Visual Studio 17 2022" -A x64 -DPA_USE_ASIO=ON ..
 - Copy folder portaudio/include and lib file portaudio/build/Release/portaudio.lib to DigitalGuitarEffect/lib/portaudio
 
 #### Linux:
+- install alsa:
+
+    - (Ubuntu):
+```
+sudo apt install libasound2-dev
+```
+
+    - (Fedora):
+```
+sudo dnf install alsa-lib-devel
+```
 - clone portaudio repository: https://github.com/PortAudio/portaudio.git
 ```
 git clone https://github.com/PortAudio/portaudio.git
@@ -79,8 +90,12 @@ git clone https://github.com/PortAudio/portaudio.git
 ```
 cd portaudio
 ```
+- set -fPIC flag:
+```
+export CFLAGS="-fPIC"
+```
 - compile project:
 ```
-cmake -B build && cmake --build build
+./configure & make
 ```
 - Copy folder portaudio/include and lib file portaudio/build/libportaudio.a to DigitalGuitarEffect/lib/portaudio

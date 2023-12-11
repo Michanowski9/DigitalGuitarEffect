@@ -89,6 +89,7 @@ void* AddEffectOverdrive()
 
     effect->AddAlgorithm(std::make_shared<Overdrive::HardClipping>());
     effect->AddAlgorithm(std::make_shared<Overdrive::HyperbolicTangent>());
+    effect->AddAlgorithm(std::make_shared<Overdrive::Exponential>());
 
     return mainProgram->AddEffect(effect);
 }

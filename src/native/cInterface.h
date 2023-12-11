@@ -14,6 +14,7 @@
 #include "Effects/Modulation/LFO/SquareGenerator.h"
 #include "Effects/Modulation/Modulation.h"
 
+#include "Effects/Overdrive/Algorithms/Exponential.h"
 #include "Effects/Overdrive/Algorithms/HardClipping.h"
 #include "Effects/Overdrive/Algorithms/HyperbolicTangent.h"
 #include "Effects/Overdrive/Algorithms/IAlgorithm.h"

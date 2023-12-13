@@ -5,6 +5,7 @@
 #include "Effects/Delay/Algorithms/RecursiveCombFilter.h"
 #include "Effects/Delay/Algorithms/CombFilter.h"
 #include "Effects/Delay/Algorithms/PingPong.h"
+#include "Effects/Delay/Algorithms/MultiTap.h"
 
 #include "Effects/IEffect.h"
 
@@ -140,6 +141,9 @@ extern "C"
         void Delay_SetLeftInputVolume(void* ptr, float value);
     DLL_EXPORT
         void Delay_SetRightInputVolume(void* ptr, float value);
+    DLL_EXPORT
+        void Delay_SetMultiTap(void* ptr, int value);
+
 
 
 
@@ -156,6 +160,9 @@ extern "C"
         bool Delay_IsUsingLeftInputVolume(void* ptr);
     DLL_EXPORT
         bool Delay_IsUsingRightInputVolume(void* ptr);
+    DLL_EXPORT
+        bool Delay_IsUsingTaps(void* ptr);
+
 
 
 

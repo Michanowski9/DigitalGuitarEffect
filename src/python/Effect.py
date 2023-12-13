@@ -82,12 +82,17 @@ class Effect(QWidget):
                 return
             result_dial.setValue(int(result_edit_new_value*multiplier))
 
-        result_dial.valueChanged.connect(lambda: result_edit.setText(str(result_dial.value() / multiplier)))
+        if multiplier == 1:
+            result_dial.valueChanged.connect(lambda: result_edit.setText(str(int(result_dial.value()))))
+        else:
+            result_dial.valueChanged.connect(lambda: result_edit.setText(str(result_dial.value() / multiplier)))
         result_edit.textChanged.connect(refresh_dial)
 
-        result_dial.setMinimum(minValue * multiplier)
-        result_dial.setMaximum(maxValue * multiplier)
+        result_dial.setMinimum(int(minValue * multiplier))
+        result_dial.setMaximum(int(maxValue * multiplier))
         result_dial.setValue(int(value * multiplier))
+        if value == 0:
+            result_edit.setText("0")
 
         result_layout = QVBoxLayout()
         result_layout.addWidget(result_label)
@@ -98,10 +103,11 @@ class Effect(QWidget):
 
 
 
-    def SetValue(self, controll, setter, multiplier=1):
+    def SetValue(self, controll, setter, multiplier=1, valType=float):
         try:
-            val = float(controll.edit.text())
+            val = valType(controll.edit.text())
         except ValueError:
+            print("failed to set")
             return
 
         setter(self.effectPtr, val * multiplier)

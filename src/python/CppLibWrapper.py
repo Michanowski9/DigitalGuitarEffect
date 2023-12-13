@@ -214,11 +214,24 @@ class CppLib:
 
         self.cpplib.Delay_SetRightInputVolume(ptr, value)
 
+    def Delay_SetMultiTap(self, ptr, value):
+        self.cpplib.Delay_SetMultiTap.argtypes = [ctypes.c_void_p, ctypes.c_int]
+        self.cpplib.Delay_SetMultiTap.restype = None
+
+        self.cpplib.Delay_SetMultiTap(ptr, value)
+
     def Delay_IsUsingDelay(self, ptr):
         self.cpplib.Delay_IsUsingDelay.argtypes = [ctypes.c_void_p]
         self.cpplib.Delay_IsUsingDelay.restype = ctypes.c_bool
 
         return self.cpplib.Delay_IsUsingDelay(ptr)
+
+    def Delay_IsUsingTaps(self, ptr):
+        self.cpplib.Delay_IsUsingTaps.argtypes = [ctypes.c_void_p]
+        self.cpplib.Delay_IsUsingTaps.restype = ctypes.c_bool
+
+        return self.cpplib.Delay_IsUsingTaps(ptr)
+
 
 
     def Delay_IsUsingAlpha(self, ptr):
@@ -245,7 +258,6 @@ class CppLib:
         self.cpplib.Delay_IsUsingRightInputVolume.restype = ctypes.c_bool
 
         return self.cpplib.Delay_IsUsingRightInputVolume(ptr)
-
 
 
 

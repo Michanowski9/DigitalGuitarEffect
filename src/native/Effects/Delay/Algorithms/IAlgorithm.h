@@ -12,6 +12,7 @@ namespace Delay
             virtual StereoSample Calculate(const StereoSample &input) = 0;
             virtual void AddToBuffor(const StereoSample &input) = 0;
             virtual std::string GetName() = 0;
+            virtual void ResetBuffer() = 0;
 
 
             virtual void SetDelay(const int value){ };
@@ -28,5 +29,8 @@ namespace Delay
 
             virtual void SetRightInputVolume(const float value){ };
             virtual bool IsUsingRightInputVolume(){ return false; };
+
+            virtual void SetTaps(const int value){ };
+            virtual bool IsUsingTaps(){ return false; };
     };
 }

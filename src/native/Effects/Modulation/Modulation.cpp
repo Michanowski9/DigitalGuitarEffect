@@ -48,7 +48,7 @@ namespace Modulation
     {
         SetPropertyInAlgorithmsCalculation(
                 [](auto alg){ return alg->IsUsingDelay(); },
-                [=](auto alg){ alg->SetDelay(value / 1000 * settings->GetCurrentSampleRate()); }
+                [=](auto alg){ alg->SetDelay(static_cast<int>(static_cast<float>(value) / 1000 * settings->GetCurrentSampleRate())); }
             );
         SetPropertyInVisualization(
                 [](auto alg){ return alg->IsUsingDelay(); },

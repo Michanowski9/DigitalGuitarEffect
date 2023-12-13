@@ -101,6 +101,7 @@ void* AddEffectDelay()
                 {
                     { std::make_shared<Delay::CombFilter>(), std::make_shared<Delay::CombFilter>() },
                     { std::make_shared<Delay::RecursiveCombFilter>(), std::make_shared<Delay::RecursiveCombFilter>() },
+                    { std::make_shared<Delay::MultiTap>(), std::make_shared<Delay::MultiTap>() },
                     { std::make_shared<Delay::PingPong>(), std::make_shared<Delay::PingPong>() }
                 }
                 )));
@@ -195,11 +196,20 @@ void Delay_SetDelay(void* ptr, int value)
     static_cast<Delay::Delay*>(ptr)->SetDelayInMilliseconds(value);
 }
 
+void Delay_SetMultiTap(void* ptr, int value)
+{
+    static_cast<Delay::Delay*>(ptr)->SetTaps(value);
+}
+
 bool Delay_IsUsingDelay(void* ptr)
 {
     return static_cast<Delay::Delay*>(ptr)->IsUsingDelay();
 }
 
+bool Delay_IsUsingTaps(void* ptr)
+{
+    return static_cast<Delay::Delay*>(ptr)->IsUsingTaps();
+}
 
 bool Delay_IsUsingAlpha(void* ptr)
 {

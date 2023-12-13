@@ -28,6 +28,12 @@ namespace Delay
             return input + (buffor.size() >= bufforMaxSize ? alpha * buffor.front() : StereoSample{ 0, 0 } );
         }
 
+        void ResetBuffer() override {
+            while(buffor.size() > 0){
+                buffor.pop();
+            }
+        }
+
         std::string GetName() override
         {
             return "Ping Pong";

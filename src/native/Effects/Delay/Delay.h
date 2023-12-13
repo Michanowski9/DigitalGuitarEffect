@@ -29,18 +29,21 @@ namespace Delay
 
         void operator()(StereoSample &output, const StereoSample &input) override;
         void CalculateForVisualization(StereoSample &output, const StereoSample &input) override;
+        void ResetEffect() override;
 
         void SetDelayInMilliseconds(const int value);
         void SetAlpha(const float value);
         void SetFeedback(const float value);
         void SetLeftInputVolume(const float value);
         void SetRightInputVolume(const float value);
+        void SetTaps(const float value);
 
         bool IsUsingDelay();
         bool IsUsingAlpha();
         bool IsUsingFeedback();
         bool IsUsingLeftInputVolume();
         bool IsUsingRightInputVolume();
+        bool IsUsingTaps();
 
 
         void SetAlgorithm(const int value) override;

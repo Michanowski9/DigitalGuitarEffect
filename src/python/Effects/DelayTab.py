@@ -48,12 +48,16 @@ class DelayTab(Effect):
         self.rightInputVolume_controll = self.CreateDial("Right Input Volume", 0, 1, 0)
         self.rightInputVolume_controll.edit.textChanged.connect(self.rightInputVolume_edit_changed_value)
 
+        self.multiTap_controll = self.CreateDial("Taps", 1, 20, 3, multiplier=1)
+        self.multiTap_controll.edit.textChanged.connect(self.multiTap_edit_changed_value)
+
 
         self.dials.addLayout(self.delay_controll.layout)
         self.dials.addLayout(self.alpha_controll.layout)
         self.dials.addLayout(self.feedback_controll.layout)
         self.dials.addLayout(self.leftInputVolume_controll.layout)
         self.dials.addLayout(self.rightInputVolume_controll.layout)
+        self.dials.addLayout(self.multiTap_controll.layout)
 
 
     def delay_edit_changed_value(self):
@@ -75,6 +79,9 @@ class DelayTab(Effect):
         self.SetValue(self.rightInputVolume_controll, self.cpplib.Delay_SetRightInputVolume)
 
 
+    def multiTap_edit_changed_value(self):
+        self.SetValue(self.multiTap_controll, self.cpplib.Delay_SetMultiTap, valType=int)
+
 
     def algorithm_combo_changed(self):
         self.cpplib.Effect_SetAlgorithm(self.effectPtr, self.algorithm_combo.currentIndex())
@@ -85,3 +92,5 @@ class DelayTab(Effect):
         self.SetDialEnabled(self.feedback_controll, self.cpplib.Delay_IsUsingFeedback(self.effectPtr))
         self.SetDialEnabled(self.leftInputVolume_controll, self.cpplib.Delay_IsUsingLeftInputVolume(self.effectPtr))
         self.SetDialEnabled(self.rightInputVolume_controll, self.cpplib.Delay_IsUsingRightInputVolume(self.effectPtr))
+        self.SetDialEnabled(self.multiTap_controll, self.cpplib.Delay_IsUsingTaps(self.effectPtr))
+

@@ -44,26 +44,26 @@ class ModulationTab(Effect):
 
 
     def SetDials(self):
-        self.delay_controll = self.CreateDial("Delay", 0, 1, 0.01, multiplier=10000)
+        self.delay_controll = self.CreateDial("Delay", 0, 0.1, 0.01, multiplier=10000)
         self.delay_controll.edit.textChanged.connect(self.delay_edit_changed_value)
+
+        self.depth_controll = self.CreateDial("Depth", 0, 1, 0.5, multiplier=1000)
+        self.depth_controll.edit.textChanged.connect(self.depth_edit_changed_value)
 
         self.alpha_controll = self.CreateDial("Alpha", 0, 1, 0.5)
         self.alpha_controll.edit.textChanged.connect(self.alpha_edit_changed_value)
 
-        self.depth_controll = self.CreateDial("Depth", 0, 1, 0.1, multiplier=1000)
-        self.depth_controll.edit.textChanged.connect(self.depth_edit_changed_value)
+        self.feedback_controll = self.CreateDial("Feedback", 0, 1, 0.5)
+        self.feedback_controll.edit.textChanged.connect(self.feedback_edit_changed_value)
 
         self.lfoFreq_controll = self.CreateDial("LFO Freq", 0, 20, 1, multiplier=100)
         self.lfoFreq_controll.edit.textChanged.connect(self.lfoFreq_edit_changed_value)
 
-        self.feedback_controll = self.CreateDial("Feedback", 0, 1, 0.5)
-        self.feedback_controll.edit.textChanged.connect(self.feedback_edit_changed_value)
-
         self.dials.addLayout(self.delay_controll.layout)
-        self.dials.addLayout(self.alpha_controll.layout)
         self.dials.addLayout(self.depth_controll.layout)
-        self.dials.addLayout(self.lfoFreq_controll.layout)
+        self.dials.addLayout(self.alpha_controll.layout)
         self.dials.addLayout(self.feedback_controll.layout)
+        self.dials.addLayout(self.lfoFreq_controll.layout)
 
 
     def delay_edit_changed_value(self):

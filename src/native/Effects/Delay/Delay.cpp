@@ -21,6 +21,13 @@ namespace Delay
         this->algorithmsVisualisation[currentAlgorithm]->AddToBuffor(input);
     }
 
+    void Delay::ResetEffect()
+    {
+        for(auto alg : algorithmsVisualisation) {
+            alg->ResetBuffer();
+        }
+    }
+
     void Delay::SetDelayInMilliseconds(const int value)
     {
         SetPropertyInAlgorithmsCalculation(
@@ -65,6 +72,15 @@ namespace Delay
             );
     }
 
+    void Delay::SetTaps(const float value)
+    {
+        SetPropertyInAlgorithms(
+                [](auto alg){ return alg->IsUsingTaps(); },
+                [=](auto alg){ alg->SetTaps(value); }
+            );
+    }
+
+
     bool Delay::IsUsingDelay()
     {
         return this->algorithms[currentAlgorithm]->IsUsingDelay();
@@ -89,6 +105,10 @@ namespace Delay
         return this->algorithms[currentAlgorithm]->IsUsingRightInputVolume();
     }
 
+   bool Delay::IsUsingTaps()
+    {
+        return this->algorithms[currentAlgorithm]->IsUsingTaps();
+    }
 
 
     void Delay::SetAlgorithm(const int value)

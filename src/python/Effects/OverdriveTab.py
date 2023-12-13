@@ -41,7 +41,7 @@ class OverdriveTab(Effect):
         self.maxValue_controll = self.CreateDial("Max Value", -1, 1, 1)
         self.maxValue_controll.edit.textChanged.connect(self.min_max_refresh)
 
-        self.offset_controll = self.CreateDial("Offset", -1, 1, 1)
+        self.offset_controll = self.CreateDial("Zero Reference", -1, 1, 1)
         self.offset_controll.edit.textChanged.connect(self.offset_refresh)
 
         self.dials.addLayout(self.gain_controll.layout)

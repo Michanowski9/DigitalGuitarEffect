@@ -48,7 +48,7 @@ class DelayTab(Effect):
         self.rightInputVolume_controll = self.CreateDial("Right Input Volume", 0, 1, 0)
         self.rightInputVolume_controll.edit.textChanged.connect(self.rightInputVolume_edit_changed_value)
 
-        self.multiTap_controll = self.CreateDial("Taps", 1, 20, 3, multiplier=1)
+        self.multiTap_controll = self.CreateDial("Taps", 2, 20, 3, multiplier=1)
         self.multiTap_controll.edit.textChanged.connect(self.multiTap_edit_changed_value)
 
 

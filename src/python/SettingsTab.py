@@ -95,6 +95,10 @@ class SettingsTab(QWidget):
         return list(self.cpplib.GetOutputDevices().keys())[self.output_device_comboBox.currentIndex()]
 
     def GetSampleRates(self):
-        return int(self.sample_rates_comboBox.currentText())
+        try:
+            result = int(self.sample_rates_comboBox.currentText())
+        except:
+            result = -1
+        return result
 
 

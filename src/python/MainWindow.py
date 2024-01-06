@@ -92,14 +92,17 @@ class MainWindow(QWidget):
 #######################################################
 
     def start_button_on_click(self):
+        inputIndex = self.settingsTab.GetInputIndex()
+        outputIndex = self.settingsTab.GetOutputIndex()
+        sampleRates = self.settingsTab.GetSampleRates()
+        if sampleRates == -1:
+            return
+
         self.start_button.setStyleSheet("background-color: #00ff00")
         self.start_button.setEnabled(False)
         self.stop_button.setEnabled(True)
         self.bypass_button.setEnabled(True)
 
-        inputIndex = self.settingsTab.GetInputIndex()
-        outputIndex = self.settingsTab.GetOutputIndex()
-        sampleRates = self.settingsTab.GetSampleRates()
         self.cpplib.Start(inputIndex, outputIndex, sampleRates)
 
 

@@ -73,12 +73,12 @@ cmake -G "Visual Studio 17 2022" -A x64 -DPA_USE_ASIO=ON ..
 #### Linux:
 - install alsa:
 
-    - (Ubuntu):
+(Ubuntu):
 ```
 sudo apt install libasound2-dev
 ```
 
-    - (Fedora):
+(Fedora):
 ```
 sudo dnf install alsa-lib-devel
 ```
